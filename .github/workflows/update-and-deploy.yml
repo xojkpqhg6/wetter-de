@@ -29,6 +29,8 @@ jobs:
     steps:
       - name: Repo auschecken
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # volle Historie -> rebase beim Daten-Commit funktioniert
 
       - name: DWD-Daten aktualisieren
         run: bash temp-leaderboard.sh
@@ -40,10 +42,19 @@ jobs:
           git add web/public/data
           if git diff --cached --quiet; then
             echo "Keine Datenänderung – nichts zu committen."
-          else
-            git commit -m "chore(data): update $(date -u +'%Y-%m-%dT%H:%MZ') [skip ci]"
-            git push
+            exit 0
           fi
+          git commit -m "chore(data): update $(date -u +'%Y-%m-%dT%H:%MZ') [skip ci]"
+          # robust gegen zwischenzeitliche Remote-Änderungen: rebase + erneut versuchen
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Push ok (Versuch $attempt)"; exit 0
+            fi
+            echo "Push abgelehnt – rebase auf origin/main, neuer Versuch …"
+            git pull --rebase --autostash origin main || exit 1
+          done
+          echo "Push nach 5 Versuchen fehlgeschlagen" >&2
+          exit 1
 
       - name: Node einrichten
         uses: actions/setup-node@v4
