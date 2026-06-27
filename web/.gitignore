@@ -9,3 +9,7 @@ public/data/poi/
 public/data/stations.cfg
 public/data/de_stations.tsv
 public/data/_*
+# weitere abgeleitete Dateien (werden je Lauf neu erzeugt & deployed)
+public/data/series.json
+public/data/stations.json
+public/data/stats.json

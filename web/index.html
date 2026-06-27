@@ -4,14 +4,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Temperatur-Leaderboard Deutschland</title>
+    <meta name="description" content="Live-Rangliste der Lufttemperatur aller DWD-Messstationen in Deutschland — mit Tages-, Wochen-, Monats- und Jahreshöchstwerten, Karte und Stationsverlauf." />
+    <meta name="theme-color" content="#f4efe3" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Temperatur-Leaderboard Deutschland" />
+    <meta property="og:description" content="Live wer ist gerade am heißesten? Rangliste aller DWD-Stationen, plus Höchstwerte für Tag/Woche/Monat/Jahr." />
+    <!-- Favicon: kleines Thermometer als Inline-SVG -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23f4efe3'/%3E%3Cpath d='M16 5a3 3 0 0 0-3 3v9.6a5 5 0 1 0 6 0V8a3 3 0 0 0-3-3z' fill='none' stroke='%237c1d10' stroke-width='2'/%3E%3Ccircle cx='16' cy='22' r='3.4' fill='%237c1d10'/%3E%3Crect x='15' y='12' width='2' height='9' fill='%237c1d10'/%3E%3C/svg%3E" />
   </head>
   <body>
     <main class="sheet">
       <header class="masthead">
+        <button class="theme-toggle" id="theme" type="button" title="Hell/Dunkel" aria-label="Hell/Dunkel umschalten">☾</button>
         <h1>Temperatur&#8202;-&#8202;Leaderboard</h1>
         <div class="subtitle">Lufttemperatur (2&nbsp;m) der Messstationen in Deutschland</div>
         <div class="rule"></div>
       </header>
+
+      <div class="ticker" id="ticker">
+        <span class="ticker-tag">Wusstest du?</span>
+        <div class="ticker-viewport"><div class="ticker-track" id="ticker-track"></div></div>
+      </div>
+
+      <div class="statstrip" id="stats"></div>
 
       <nav class="periods" id="periods">
         <button type="button" data-period="now" class="active">Jetzt</button>
@@ -21,6 +36,17 @@
         <button type="button" data-period="year">Jahr</button>
       </nav>
 
+      <div class="subcontrols">
+        <div class="seg metric" id="metric" hidden>
+          <button type="button" data-metric="max" class="active">▲ Höchst</button>
+          <button type="button" data-metric="min">▼ Tiefst</button>
+        </div>
+        <div class="seg viewtoggle" id="viewtoggle">
+          <button type="button" data-view="table" class="active">☰ Tabelle</button>
+          <button type="button" data-view="map">◵ Karte</button>
+        </div>
+      </div>
+
       <div class="meta" id="meta">Lade Daten&nbsp;…</div>
 
       <div class="controls">
@@ -29,7 +55,11 @@
         <button id="reload" type="button" title="Neu laden">&#8635;</button>
       </div>
 
-      <table class="board">
+      <div class="legend" id="legend" aria-hidden="true"></div>
+
+      <div class="mapwrap" id="mapwrap" hidden></div>
+
+      <table class="board" id="boardtable">
         <thead>
           <tr>
             <th class="rank">#</th>
@@ -47,6 +77,14 @@
         · Zeiten in Berlin-Zeit · gespeichert wird UTC
       </footer>
     </main>
+
+    <!-- Stations-Detail (Modal) -->
+    <div class="detail-backdrop" id="detail" hidden>
+      <div class="detail-card" role="dialog" aria-modal="true">
+        <button class="detail-close" id="detail-close" type="button" aria-label="Schließen">×</button>
+        <div id="detail-body"></div>
+      </div>
+    </div>
 
     <script type="module" src="/src/main.ts"></script>
   </body>
