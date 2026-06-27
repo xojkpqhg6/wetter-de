@@ -168,32 +168,28 @@ fi
 rm -f "$NEED"
 
 # ---------------------------------------------------------------------------
-# 4) Aktuellste gültige Temperatur je Station extrahieren
-#    POI-CSV: ';'-getrennt, 3 Kopfzeilen, Dezimalkomma.
+# 4) ALLE gültigen Stundenwerte je Station extrahieren
+#    POI-CSV: ';'-getrennt, 3 Kopfzeilen, Dezimalkomma. Eine Datei enthält die
+#    letzten ~24 h stündlich -> wir lesen alle Zeilen, nicht nur die neueste.
+#    So gehen bei verspätetem/seltenem Cron keine Stunden verloren (Dedup per
+#    obs_utc in 4b), und das Tages-Min/Max wird aus allen Stundenwerten exakt.
 #    Feld 1=Datum, 2=Uhrzeit(UTC), 10=Temperatur(2m). '---' = kein Wert.
-#    Ergebnis: temp <tab> id <tab> name <tab> datum <tab> zeit
+#    Ergebnis je Zeile: temp <tab> id <tab> name <tab> datum <tab> zeit
 # ---------------------------------------------------------------------------
 RES="$DATA/_results.tsv"; : > "$RES"
 while IFS=$'\t' read -r id name; do
   f="$POI_DIR/$id-BEOB.csv"
   [ -s "$f" ] || continue
-  line="$(awk -F';' '
+  awk -F';' -v id="$id" -v name="$name" '
     NR>3 {
       t=$10; gsub(/\r/,"",t); gsub(/^[ \t]+|[ \t]+$/,"",t)
       if (t!="" && t!="---") {
         gsub(/,/,".",t)
         d=$1; gsub(/\r/,"",d)
         u=$2; gsub(/\r/,"",u)
-        printf "%s\t%s\t%s", t, d, u
-        exit
+        print t"\t"id"\t"name"\t"d"\t"u
       }
-    }' "$f")"
-  [ -n "$line" ] || continue
-  t="${line%%$'\t'*}"
-  rest="${line#*$'\t'}"
-  d="${rest%%$'\t'*}"
-  u="${rest#*$'\t'}"
-  printf '%s\t%s\t%s\t%s\t%s\n' "$t" "$id" "$name" "$d" "$u" >> "$RES"
+    }' "$f" >> "$RES"
 done < "$DE_FILE"
 
 VALID="$(wc -l < "$RES" | tr -d ' ')"
@@ -236,29 +232,31 @@ with io.open(res_path, encoding="utf-8") as f:
 
 names = {sid: name for _, sid, name, _, _ in rows}
 
-# --- latest.json: aktuelle Rangliste ---
-snap = sorted([{"id": sid, "name": name, "temp_c": t, "obs_utc": obs_iso}
-               for t, sid, name, obs_iso, _ in rows],
-              key=lambda x: x["temp_c"], reverse=True)
+# --- latest.json: neueste gültige Messung je Station (rows enthält jetzt alle Stunden) ---
+latest_by = {}
+for t, sid, name, obs_iso, _ in rows:
+    cur = latest_by.get(sid)
+    if cur is None or obs_iso > cur["obs_utc"]:
+        latest_by[sid] = {"id": sid, "name": name, "temp_c": t, "obs_utc": obs_iso}
+snap = sorted(latest_by.values(), key=lambda x: x["temp_c"], reverse=True)
 json.dump({"generated_utc": run_utc, "station_count": len(snap), "stations": snap},
           io.open(os.path.join(data_dir, "latest.json"), "w", encoding="utf-8"),
           ensure_ascii=False, indent=2)
 
-# --- history.csv + daily/ (Dedup, nur neue Messungen) ---
+# --- history.csv + daily/ (Dedup per (Station, obs_utc)) ---
+# Set statt "neuer als Max" -> auch nachträglich verpasste Stunden (Lücken)
+# werden aus der ~24h-POI-Datei gefüllt, nicht nur die jeweils neueste.
 hist = os.path.join(data_dir, "history.csv")
 daily_dir = os.path.join(data_dir, "daily")
 os.makedirs(daily_dir, exist_ok=True)
-last_obs = {}
+seen = set()
 if os.path.exists(hist):
     with io.open(hist, encoding="utf-8", newline="") as f:
         r = csv.reader(f); next(r, None)
         for rec in r:
-            if len(rec) < 4:
-                continue
-            so, oo = rec[1], rec[3]
-            if oo and oo > last_obs.get(so, ""):
-                last_obs[so] = oo
-fresh = [row for row in rows if row[3] and row[3] > last_obs.get(row[1], "")]
+            if len(rec) >= 4 and rec[3]:
+                seen.add((rec[1], rec[3]))
+fresh = [row for row in rows if row[3] and (row[1], row[3]) not in seen]
 if fresh:
     new = not os.path.exists(hist)
     with io.open(hist, "a", encoding="utf-8", newline="") as f:
