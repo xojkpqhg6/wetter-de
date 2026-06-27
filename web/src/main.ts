@@ -354,9 +354,14 @@ function renderDetail(id: string): void {
   if (y && y.max_c != null) facts.push(fact('Jahres-Max', `${y.max_c.toFixed(1)}°`, tempClass(y.max_c), fmtTime(y.max_obs_utc)))
   if (y && y.min_c != null) facts.push(fact('Jahres-Min', `${y.min_c.toFixed(1)}°`, tempClass(y.min_c), fmtTime(y.min_obs_utc)))
 
+  // Zeitraum-Label aus der tatsächlichen Datenspanne (z. B. „2025–2026")
+  const yFrom = dates.length ? dates[0].slice(0, 4) : ''
+  const yTo = dates.length ? dates[dates.length - 1].slice(0, 4) : ''
+  const span = yFrom ? (yFrom === yTo ? yFrom : `${yFrom}–${yTo}`) : ''
+
   detailBody.innerHTML =
     `<h2>${esc(name)}${isRecordToday ? '<span class="detail-badge">★ Jahresrekord heute</span>' : ''}</h2>` +
-    `<div class="detail-sub">Temperaturverlauf 2026 · Tagesmaximum & -minimum</div>` +
+    `<div class="detail-sub">Temperaturverlauf ${span} · Tagesmaximum & -minimum</div>` +
     `<div class="facts">${facts.join('')}</div>` +
     (ser ? sparkSvg(ser, dates) : '<p class="empty">Kein Verlauf verfügbar.</p>') +
     (ser ? '<div class="spark-legend"><span class="mx">— Max</span>　<span class="mn">— Min</span></div>' : '')

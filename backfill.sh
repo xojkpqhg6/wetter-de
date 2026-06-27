@@ -1,36 +1,47 @@
 #!/usr/bin/env bash
 #
-# backfill-2026.sh — Backfill der Tages-Höchst/Tiefstwerte für 2026
+# backfill.sh — Backfill der Tages-Höchst/Tiefstwerte für ein Jahr
+#
+# Verwendung:  ./backfill.sh [JAHR] [--gaps]
+#   JAHR     vierstellig; Standard = aktuelles Jahr.
+#   --gaps   nur Stationen, die für dieses Jahr noch keine Backfill-Daten haben
+#            (z. B. nach Download-Abbrüchen). Idempotent, beliebig wiederholbar.
 #
 # Quelle: DWD-Klimaarchiv, tägliche KL-Werte (recent), je Station:
 #   TXK = Tagesmaximum (2 m), TNK = Tagesminimum (2 m), -999 = fehlend.
+#   Hinweis: 'recent' deckt ~die letzten 1,5 Jahre ab (aktuelles + Vorjahr).
+#   Für ältere Jahre KL_BASE auf .../daily/kl/historical zeigen lassen.
 #
 # Das Klimaarchiv nutzt INTERNE DWD-IDs, unsere Live-Daten WMO-IDs (10xxx).
 # Zuordnung: zuerst über Koordinaten (MOSMIX-Katalog, Grad-Minuten -> Dezimal,
 # Schwelle ~2.5 km), sonst über Stationsnamen (nächste namensgleiche Station),
 # sonst relaxte Koordinaten (~5 km). Ergebnis wird in daily/<datum>.json
 # gemerged (Extremwerte), danach tops.json + latest.json neu gebaut.
-#
-# Modi:
-#   (ohne)   Vollständiger Backfill für alle Stationen.
-#   --gaps   Nur Stationen, die noch keine 2026-Backfill-Daten haben
-#            (z. B. nach Download-Abbrüchen). Idempotent, beliebig wiederholbar.
 
 set -u
 
 GAPS=0
-[ "${1:-}" = "--gaps" ] && GAPS=1
+YEAR="$(date +%Y)"
+for a in "$@"; do
+  case "$a" in
+    --gaps) GAPS=1 ;;
+    [0-9][0-9][0-9][0-9]) YEAR="$a" ;;
+    -h|--help) echo "Verwendung: $(basename "$0") [JAHR] [--gaps]"; exit 0 ;;
+    *) echo "Unbekanntes Argument: $a" >&2; exit 1 ;;
+  esac
+done
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 DATA="$ROOT/web/public/data"
 KL_BASE="https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/daily/kl/recent"
 JOBS=6
-YEAR=2026
 
 if [ ! -s "$DATA/stations.cfg" ] || [ ! -s "$DATA/de_stations.tsv" ]; then
   echo "Fehlt: stations.cfg / de_stations.tsv — bitte zuerst ./temp-leaderboard.sh ausführen." >&2
   exit 1
 fi
+
+echo "» Backfill für $YEAR$([ "$GAPS" -eq 1 ] && echo ' (nur fehlende Stationen)')"
 
 WORK="${TMPDIR:-/tmp}/kl_backfill_$$"
 mkdir -p "$WORK/zips"
@@ -75,11 +86,14 @@ with io.open(os.path.join(data_dir, "stations.cfg"), encoding="latin-1") as f:
             except ValueError:
                 pass
 
-# Zielmenge: bei --gaps nur Stationen ohne bisherige Backfill-Daten
+# Zielmenge: bei --gaps nur Stationen ohne Backfill-Daten FÜR DIESES JAHR
 targets = [s for s in wmo if s in coord]
 if gaps:
     covered = set()
+    ystr = "%04d-" % year
     for fn in glob.glob(os.path.join(data_dir, "daily", "*.json")):
+        if not os.path.basename(fn).startswith(ystr):
+            continue
         try:
             doc = json.load(io.open(fn, encoding="utf-8"))
         except (ValueError, OSError):
@@ -255,4 +269,4 @@ PY
 echo "» Baue tops.json & latest.json neu …"
 "$ROOT/temp-leaderboard.sh" --top 1 >/dev/null 2>&1 || true
 
-echo "Fertig."
+echo "Fertig — Backfill $YEAR abgeschlossen."

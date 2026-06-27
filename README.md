@@ -25,7 +25,7 @@ aktualisiert per GitHub Actions und über GitHub Pages ausgeliefert.
 ```
 .
 ├─ temp-leaderboard.sh        # holt DWD-Daten, erzeugt latest/tops/series/stations/stats + daily + history
-├─ backfill-2026.sh           # einmaliger Backfill der 2026-Tageshistorie aus dem DWD-Klimaarchiv
+├─ backfill.sh                # Backfill der Tageshistorie eines Jahres aus dem DWD-Klimaarchiv
 ├─ web/                       # Vite + TypeScript (kein Framework)
 │  ├─ index.html
 │  ├─ src/main.ts             # Rendering: Tabelle, Karte, Detail, Banderole, Theme, URL-State
@@ -59,9 +59,10 @@ Gespeichert wird durchgängig **UTC**; die Website rechnet für die Anzeige in
   führt die Tages-Min/Max in `daily/` fort und hängt neue Messungen dedupliziert an
   `history.csv` an. Gibt zusätzlich ein Leaderboard im Terminal aus
   (`--help` zeigt alle Optionen).
-- **`backfill-2026.sh`** füllt einmalig die Tageshistorie 2026 (Höchst-/Tiefstwerte)
-  aus dem DWD-Klimaarchiv nach. Zuordnung der internen DWD-IDs zu den WMO-IDs über
-  Koordinaten + Namens-Fallback. `--gaps` zieht nur fehlende Stationen nach.
+- **`backfill.sh [JAHR] [--gaps]`** füllt die Tageshistorie eines Jahres (Höchst-/
+  Tiefstwerte) aus dem DWD-Klimaarchiv nach (Standard: aktuelles Jahr; `recent`
+  deckt aktuelles + Vorjahr ab). Zuordnung der internen DWD-IDs zu den WMO-IDs über
+  Koordinaten + Namens-Fallback. `--gaps` zieht nur für das Jahr fehlende Stationen nach.
 - **GitHub Actions** (`update-and-deploy.yml`) führt stündlich `temp-leaderboard.sh`
   aus, committet die aktualisierten Daten zurück, baut die Seite und deployt sie auf
   GitHub Pages.
