@@ -1,0 +1,71 @@
+name: Update & Deploy
+
+# Stündlich neue DWD-Werte ziehen, Daten zurück-committen, Site bauen & auf
+# GitHub Pages deployen. Läuft außerdem bei jedem Push auf main und manuell.
+on:
+  schedule:
+    - cron: "7 * * * *" # stündlich, 7 min nach der vollen Stunde (UTC)
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write # aktualisierte Daten zurück-committen
+  pages: write # Deploy auf GitHub Pages
+  id-token: write # OIDC für den Pages-Deploy
+
+# Parallele Läufe serialisieren (kein Konflikt beim Daten-Commit / Pages-Deploy)
+concurrency:
+  group: update-and-deploy
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Repo auschecken
+        uses: actions/checkout@v4
+
+      - name: DWD-Daten aktualisieren
+        run: bash temp-leaderboard.sh
+
+      - name: Aktualisierte Daten committen
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add web/public/data
+          if git diff --cached --quiet; then
+            echo "Keine Datenänderung – nichts zu committen."
+          else
+            git commit -m "chore(data): update $(date -u +'%Y-%m-%dT%H:%MZ') [skip ci]"
+            git push
+          fi
+
+      - name: Node einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Abhängigkeiten installieren & bauen
+        run: |
+          npm --prefix web ci
+          rm -rf web/public/data/poi   # Roh-Cache nicht mit deployen
+          npm --prefix web run build
+
+      - name: GitHub Pages konfigurieren
+        uses: actions/configure-pages@v5
+
+      - name: Build-Artefakt hochladen
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+
+      - name: Auf GitHub Pages deployen
+        id: deploy
+        uses: actions/deploy-pages@v4

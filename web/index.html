@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Temperatur-Leaderboard Deutschland</title>
+  </head>
+  <body>
+    <main class="sheet">
+      <header class="masthead">
+        <h1>Temperatur&#8202;-&#8202;Leaderboard</h1>
+        <div class="subtitle">Lufttemperatur (2&nbsp;m) der Messstationen in Deutschland</div>
+        <div class="rule"></div>
+      </header>
+
+      <nav class="periods" id="periods">
+        <button type="button" data-period="now" class="active">Jetzt</button>
+        <button type="button" data-period="day">Tag</button>
+        <button type="button" data-period="week">Woche</button>
+        <button type="button" data-period="month">Monat</button>
+        <button type="button" data-period="year">Jahr</button>
+      </nav>
+
+      <div class="meta" id="meta">Lade Daten&nbsp;…</div>
+
+      <div class="controls">
+        <input id="filter" type="text" placeholder="Station suchen…" autocomplete="off" spellcheck="false" />
+        <button id="sortdir" type="button">&#8595; Heißeste zuerst</button>
+        <button id="reload" type="button" title="Neu laden">&#8635;</button>
+      </div>
+
+      <table class="board">
+        <thead>
+          <tr>
+            <th class="rank">#</th>
+            <th class="name">Station</th>
+            <th class="bar"></th>
+            <th class="temp">°C</th>
+            <th class="time" id="th-time">Messzeit</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+
+      <footer class="colophon">
+        Daten: <a href="https://opendata.dwd.de" target="_blank" rel="noopener">opendata.dwd.de</a>
+        · Zeiten in Berlin-Zeit · gespeichert wird UTC
+      </footer>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

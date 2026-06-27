@@ -1,0 +1,12 @@
+# Betriebssystem
+.DS_Store
+
+# lokale Tooling-Konfiguration (Claude Code / Preview)
+.claude/
+
+# Node
+node_modules/
+
+# temporäre Dateien
+*.log
+*.tmp

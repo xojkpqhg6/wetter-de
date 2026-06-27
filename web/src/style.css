@@ -1,0 +1,268 @@
+/* ------------------------------------------------------------------ *
+ * Temperatur-Leaderboard — cleanes Oldschool-Design
+ * Papier-Hintergrund, Serif-Headline, Monospace-Zahlentabelle.
+ * ------------------------------------------------------------------ */
+
+:root {
+  --paper:   #f4efe3;
+  --paper-2: #efe9da;
+  --ink:     #20201c;
+  --ink-soft:#6b6457;
+  --line:    #cdc4ad;
+  --line-2:  #b7ac8f;
+  --accent:  #7a2618;
+
+  /* Temperatur-Skala (gedämpft, oldschool) */
+  --t-scorch:#7c1d10;
+  --t-hot:   #a8381c;
+  --t-warm:  #b0701a;
+  --t-mild:  #4d5238;
+  --t-cool:  #3a5d6b;
+  --t-cold:  #2f4a6b;
+
+  --mono: "Courier New", Courier, ui-monospace, monospace;
+  --serif: Georgia, "Times New Roman", Times, serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  /* feines Papier-Raster */
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(120,108,80,.05) 28px);
+  padding: 32px 16px 64px;
+}
+
+.sheet {
+  max-width: 760px;
+  margin: 0 auto;
+  background: var(--paper);
+  border: 1px solid var(--line-2);
+  box-shadow: 0 1px 0 #fff inset, 3px 4px 0 rgba(60,50,30,.08);
+  padding: 34px 38px 30px;
+}
+
+/* ---- Kopf ---- */
+.masthead { text-align: center; }
+.masthead h1 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(28px, 6vw, 44px);
+  letter-spacing: .02em;
+  margin: 10px 0 6px;
+  line-height: 1.05;
+}
+.subtitle {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+.rule {
+  margin: 16px 0 0;
+  border-top: 3px double var(--line-2);
+}
+
+/* ---- Zeitraum-Umschalter (Jetzt / Tag / Woche / Monat / Jahr) ---- */
+.periods {
+  display: flex;
+  justify-content: center;
+  margin: 18px 0 2px;
+}
+.periods button {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  background: var(--paper-2);
+  border: 1px solid var(--line-2);
+  border-left-width: 0;
+  padding: 7px 16px;
+  cursor: pointer;
+}
+.periods button:first-child { border-left-width: 1px; }
+.periods button:hover { background: #e7dfcc; color: var(--ink); }
+.periods button.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.periods button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* ---- Meta-Zeile ---- */
+.meta {
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  letter-spacing: .02em;
+  margin: 14px 0 18px;
+}
+.meta strong { color: var(--ink); font-weight: 700; }
+.meta .err { color: var(--accent); }
+.meta code {
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  padding: 1px 5px;
+}
+
+/* ---- Steuerung ---- */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.controls input,
+.controls button {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink);
+  background: var(--paper-2);
+  border: 1px solid var(--line-2);
+  padding: 7px 11px;
+}
+.controls input {
+  flex: 1;
+}
+.controls input::placeholder { color: var(--ink-soft); }
+.controls input:focus,
+.controls button:focus {
+  outline: 2px solid var(--line-2);
+  outline-offset: 1px;
+}
+.controls button {
+  cursor: pointer;
+  white-space: nowrap;
+  letter-spacing: .03em;
+}
+.controls button:hover { background: #e7dfcc; }
+#reload { font-size: 16px; line-height: 1; }
+
+/* ---- Tabelle ---- */
+.board {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.board thead th {
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: left;
+  font-weight: 400;
+  padding: 0 8px 6px;
+  border-bottom: 1px solid var(--line-2);
+}
+.board th.temp { text-align: right; }
+.board th.time { text-align: right; }
+
+.board tbody td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+}
+.board tbody tr:hover { background: rgba(180,160,110,.10); }
+
+.rank {
+  width: 2.4em;
+  color: var(--ink-soft);
+  text-align: right;
+  padding-right: 14px !important;
+}
+.name {
+  letter-spacing: .02em;
+}
+.is-top .name { font-weight: 700; }
+.is-top .rank { color: var(--accent); font-weight: 700; }
+
+.temp {
+  text-align: right;
+  font-weight: 700;
+  width: 4.6em;
+  white-space: nowrap;
+}
+.time {
+  text-align: right;
+  color: var(--ink-soft);
+  font-size: 12.5px;
+  width: 7.2em;
+  white-space: nowrap;
+}
+
+/* Balken (Leaderboard-Gefühl, dezent) */
+.bar {
+  width: 34%;
+  min-width: 70px;
+}
+.bar .fill {
+  display: block;
+  height: 9px;
+  background: currentColor;
+  opacity: .32;
+}
+
+/* Temperatur-Farbe je Zeile (färbt Wert + Balken via currentColor) */
+.tx-scorch { color: var(--t-scorch); }
+.tx-hot    { color: var(--t-hot); }
+.tx-warm   { color: var(--t-warm); }
+.tx-mild   { color: var(--t-mild); }
+.tx-cool   { color: var(--t-cool); }
+.tx-cold   { color: var(--t-cold); }
+/* Name/Rang/Zeit sollen ihre eigene Farbe behalten */
+.board tbody td.name,
+.board tbody td.rank,
+.board tbody td.time { color: var(--ink); }
+.board tbody td.time { color: var(--ink-soft); }
+.is-top td.rank { color: var(--accent); }
+
+.empty {
+  text-align: center;
+  color: var(--ink-soft);
+  font-style: italic;
+  padding: 24px 8px !important;
+}
+
+/* ---- Fuß ---- */
+.colophon {
+  margin-top: 22px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}
+.colophon a { color: var(--accent); text-decoration: none; }
+.colophon a:hover { text-decoration: underline; }
+
+@media (max-width: 540px) {
+  body { padding: 14px 8px 48px; }
+  .sheet { padding: 20px 14px; }
+
+  /* Balken weg, Platz für Name + Werte */
+  .board th.bar, .board td.bar { display: none; }
+
+  .board { font-size: 13px; }
+  .board tbody td { padding: 7px 4px; }
+
+  /* lange Stationsnamen umbrechen statt überlaufen */
+  .name { letter-spacing: 0; white-space: normal; word-break: break-word; }
+
+  .rank { width: 1.8em; padding-right: 8px !important; }
+  .temp { width: 3.8em; }
+  .time { width: 5em; font-size: 11px; line-height: 1.25; }
+
+  .controls input { flex: 1 1 100%; }
+  .controls button { flex: 1 1 auto; }
+
+  .periods button { padding: 7px 9px; font-size: 11px; letter-spacing: .04em; }
+}

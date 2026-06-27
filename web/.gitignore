@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.log
+
+# Abgeleitete Daten WERDEN versioniert (latest.json, tops.json, history.csv, daily/),
+# damit der Verlauf über die GitHub-Action-Läufe erhalten bleibt.
+# Roh-Caches dagegen nicht — die werden bei jedem Lauf neu erzeugt:
+public/data/poi/
+public/data/stations.cfg
+public/data/de_stations.tsv
+public/data/_*
