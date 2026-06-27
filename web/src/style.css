@@ -304,6 +304,20 @@ body {
 .spark-legend { font-size: 11px; color: var(--ink-soft); margin-top: 6px; text-align: center; }
 .spark-legend .mx { color: var(--t-hot); font-weight: 700; }
 .spark-legend .mn { color: var(--t-cool); font-weight: 700; }
+.spark-legend .faintlbl { color: var(--ink-soft); }
+.spark-max.faint, .spark-min.faint { opacity: .3; stroke-width: 1; }
+
+/* Detail: Zähler + Tabs + Kalender-Heatmap */
+.counters { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: -4px 0 14px; font-size: 12.5px; }
+.counters .ctr b { font-weight: 700; }
+.counters .dim { color: var(--ink-soft); font-size: 11px; }
+.detail-tabs { margin: 2px 0 12px; }
+.detail-tabs button { font-size: 12px; padding: 5px 14px; }
+.cal-wrap { display: flex; flex-direction: column; gap: 10px; margin: 2px 0 6px; }
+.cal-label { font-size: 11px; color: var(--ink-soft); letter-spacing: .12em; margin-bottom: 3px; }
+.cal-svg { width: 100%; height: auto; }
+.cal { fill: currentColor; }
+.cal-empty { fill: var(--line); }
 
 /* ---- Fuß ---- */
 .colophon {

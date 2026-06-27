@@ -430,6 +430,27 @@ if n >= 1 and date_list[-1] == today.strftime("%Y-%m-%d"):
             stats["top_riser"] = {"name": best[0], "delta_c": best[1]}
         if worst:
             stats["top_faller"] = {"name": worst[0], "delta_c": worst[1]}
+
+# nationale Vorjahres-Anomalie: heutiges Tagesmax vs. selbes Kalenderdatum im Vorjahr
+if n >= 1 and date_list[-1] == today.strftime("%Y-%m-%d"):
+    try:
+        ly = today.replace(year=today.year - 1)
+    except ValueError:            # 29.2. -> 28.2.
+        ly = today.replace(year=today.year - 1, day=28)
+    dmap = dict(daily_data)
+    cur_st = dmap.get(today.strftime("%Y-%m-%d"), {})
+    ly_st = dmap.get(ly.strftime("%Y-%m-%d"), {})
+    deltas = []
+    for sid, e in cur_st.items():
+        a = e.get("max_c")
+        b = ly_st.get(sid, {}).get("max_c")
+        if a is not None and b is not None:
+            deltas.append(a - b)
+    if deltas:
+        stats["vs_last_year"] = {"date": ly.strftime("%Y-%m-%d"),
+                                 "delta_c": round(sum(deltas) / len(deltas), 1),
+                                 "n": len(deltas)}
+
 json.dump(stats, io.open(os.path.join(data_dir, "stats.json"), "w", encoding="utf-8"),
           ensure_ascii=False, indent=2)
 
