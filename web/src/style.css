@@ -319,6 +319,41 @@ body {
 .cal { fill: currentColor; }
 .cal-empty { fill: var(--line); }
 
+/* ---- Rekorde-Tafel ---- */
+.rec-filter { display: flex; justify-content: center; margin: 0 0 16px; }
+.rec-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.rec-card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 3px;
+  text-align: left;
+  background: var(--paper-2);
+  border: 1px solid var(--line-2);
+  padding: 12px 14px;
+  font-family: var(--mono);
+  color: var(--ink);
+  cursor: pointer;
+}
+.rec-card:hover { background: rgba(180, 160, 110, .14); border-color: var(--ink-soft); }
+.rec-card.is-empty { cursor: default; opacity: .65; }
+.rec-card.is-stat { cursor: default; }
+.rec-card.is-stat:hover { background: var(--paper-2); border-color: var(--line-2); }
+.rec-ico { font-size: 18px; line-height: 1; }
+.rec-k { font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
+.rec-note { text-transform: none; letter-spacing: 0; font-style: italic; }
+.rec-v { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.rec-sub { font-size: 12px; color: var(--ink-soft); }
+.rec-info {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 22px;
+  margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line);
+  font-size: 12.5px; color: var(--ink);
+}
+.rec-info b { font-weight: 700; }
+.rec-info .dim { color: var(--ink-soft); font-size: 11px; }
+
 /* ---- Fuß ---- */
 .colophon {
   margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--line);

@@ -93,6 +93,8 @@ const mapWrap = $<HTMLElement>('#mapwrap')
 const themeEl = $<HTMLButtonElement>('#theme')
 const detailEl = $<HTMLElement>('#detail')
 const detailBody = $<HTMLElement>('#detail-body')
+const recordsEl = $<HTMLElement>('#records')
+const controlsEl = $<HTMLElement>('.controls')
 
 /* ---------- Zustand ---------- */
 let latest: Snapshot | null = null
@@ -106,9 +108,10 @@ let seriesPromise: Promise<void> | null = null
 let view: View = 'now'
 let metric: Metric = 'max'
 let sortDir: SortDir = 'hot'
-let mapView = false
+let viewMode: 'table' | 'map' | 'rekorde' = 'table'
 let filter = ''
 let yearSel = 'current'              // bei view==='year': 'current' | '<jahr>' | 'all'
+let recYear = 'all'                  // Rekorde-Filter: 'all' | '<jahr>'
 let detailId: string | null = null
 let detailTab: 'verlauf' | 'kalender' = 'verlauf'
 
@@ -221,6 +224,185 @@ function buildYearSel(): void {
     `<button type="button" data-year="${v}">${l}</button>`).join('')
 }
 
+/* ---------- Rekorde-Tafel (aus series.json) ---------- */
+type RecResult = { id: string; name: string; valueText: string; sub: string; cls: string }
+
+function recExtreme(yr: number | null, key: 'max' | 'min', wantMax: boolean): RecResult | null {
+  if (!series) return null
+  const { dates, stations } = series
+  let best: { id: string; v: number; date: string; name: string } | null = null
+  for (const id in stations) {
+    const arr = key === 'max' ? stations[id].max : stations[id].min
+    for (let i = 0; i < dates.length; i++) {
+      if (yr !== null && +dates[i].slice(0, 4) !== yr) continue
+      const v = arr[i]
+      if (v == null) continue
+      if (best === null || (wantMax ? v > best.v : v < best.v))
+        best = { id, v, date: dates[i], name: coords[id]?.name ?? id }
+    }
+  }
+  if (!best) return null
+  return { id: best.id, name: best.name, valueText: `${best.v.toFixed(1)}°`, sub: `${best.name} · ${fmtDate(best.date)}`, cls: tempClass(best.v) }
+}
+
+function recWarmestNight(yr: number | null): RecResult | null {
+  if (!series) return null
+  const { dates, stations } = series
+  const today = dates[dates.length - 1]            // laufenden Tag auslassen: Min noch unvollständig
+  let best: { id: string; v: number; date: string; name: string } | null = null
+  for (const id in stations) {
+    const mn = stations[id].min
+    for (let i = 0; i < dates.length; i++) {
+      if (dates[i] === today) continue
+      if (yr !== null && +dates[i].slice(0, 4) !== yr) continue
+      const v = mn[i]
+      if (v == null) continue
+      if (best === null || v > best.v) best = { id, v, date: dates[i], name: coords[id]?.name ?? id }
+    }
+  }
+  if (!best) return null
+  return { id: best.id, name: best.name, valueText: `${best.v.toFixed(1)}°`, sub: `${best.name} · ${fmtDate(best.date)}`, cls: tempClass(best.v) }
+}
+
+function recLargestSpan(yr: number | null): RecResult | null {
+  if (!series) return null
+  const { dates, stations } = series
+  let best: { id: string; sp: number; mx: number; mn: number; date: string; name: string } | null = null
+  for (const id in stations) {
+    const s = stations[id]
+    for (let i = 0; i < dates.length; i++) {
+      if (yr !== null && +dates[i].slice(0, 4) !== yr) continue
+      const mx = s.max[i], mn = s.min[i]
+      if (mx == null || mn == null) continue
+      const sp = mx - mn
+      if (best === null || sp > best.sp) best = { id, sp, mx, mn, date: dates[i], name: coords[id]?.name ?? id }
+    }
+  }
+  if (!best) return null
+  return { id: best.id, name: best.name, valueText: `${best.sp.toFixed(1)}°`, sub: `${best.name} · ${fmtDate(best.date)} (${best.mn.toFixed(1)}…${best.mx.toFixed(1)}°)`, cls: '' }
+}
+
+function recStreak(yr: number | null, thr: number, above: boolean): RecResult | null {
+  if (!series) return null
+  const { dates, stations } = series
+  let best: { id: string; name: string; len: number; start: string; end: string } | null = null
+  for (const id in stations) {
+    const mx = stations[id].max
+    let run = 0, startIdx = -1
+    for (let i = 0; i < dates.length; i++) {
+      if (yr !== null && +dates[i].slice(0, 4) !== yr) { run = 0; continue }
+      const v = mx[i]
+      const ok = v != null && (above ? v >= thr : v < thr)
+      if (ok) {
+        if (run === 0) startIdx = i
+        run++
+        if (best === null || run > best.len)
+          best = { id, name: coords[id]?.name ?? id, len: run, start: dates[startIdx], end: dates[i] }
+      } else run = 0
+    }
+  }
+  if (!best || best.len < 2) return null
+  return { id: best.id, name: best.name, valueText: `${best.len} Tage`, sub: `${best.name} · ${fmtDate(best.start)}–${fmtDate(best.end)}`, cls: '' }
+}
+
+function recMostDays(yr: number | null, thr: number, key: 'max' | 'min', unit: string): RecResult | null {
+  if (!series) return null
+  const { dates, stations } = series
+  let best: { id: string; name: string; count: number; year: string } | null = null
+  for (const id in stations) {
+    const arr = key === 'max' ? stations[id].max : stations[id].min
+    const byYear: Record<string, number> = {}
+    for (let i = 0; i < dates.length; i++) {
+      const Y = dates[i].slice(0, 4)
+      if (yr !== null && +Y !== yr) continue
+      const v = arr[i]
+      if (v != null && v >= thr) byYear[Y] = (byYear[Y] || 0) + 1
+    }
+    for (const Y in byYear) {
+      if (best === null || byYear[Y] > best.count) best = { id, name: coords[id]?.name ?? id, count: byYear[Y], year: Y }
+    }
+  }
+  if (!best) return null
+  return { id: best.id, name: best.name, valueText: `${best.count} ${unit}`, sub: `${best.name} · ${best.year}`, cls: '' }
+}
+
+// Anzahl DISTINKTER Tage in einem Jahr, an denen mind. eine Station die Bedingung erfüllt
+function distinctEventDays(yr: number, thr: number, key: 'max' | 'min'): number {
+  if (!series) return 0
+  const { dates, stations } = series
+  const hit = new Array(dates.length).fill(false)
+  for (const id in stations) {
+    const arr = key === 'max' ? stations[id].max : stations[id].min
+    for (let i = 0; i < dates.length; i++) {
+      if (hit[i]) continue
+      if (+dates[i].slice(0, 4) !== yr) continue
+      const v = arr[i]
+      if (v != null && v >= thr) hit[i] = true
+    }
+  }
+  return hit.filter(Boolean).length
+}
+
+// Kennzahl für die Info-Zeile: konkretes Jahr -> dessen Wert; "Gesamt" -> bestes
+// Einzeljahr (über Jahre zu addieren wäre sinnlos).
+function eventHeadline(thr: number, key: 'max' | 'min'): { count: number; year: string } {
+  if (!series) return { count: 0, year: '' }
+  if (recYear !== 'all') return { count: distinctEventDays(+recYear, thr, key), year: recYear }
+  const years = [...new Set(series.dates.map((d) => +d.slice(0, 4)))]
+  let best = { count: -1, year: '' }
+  for (const y of years) {
+    const c = distinctEventDays(y, thr, key)
+    if (c > best.count) best = { count: c, year: String(y) }
+  }
+  return best
+}
+
+function recCard(icon: string, label: string, rec: RecResult | null, note?: string): string {
+  const head = `<span class="rec-ico">${icon}</span><span class="rec-k">${label}${note ? ` <span class="rec-note">${note}</span>` : ''}</span>`
+  if (!rec) return `<div class="rec-card is-empty">${head}<span class="rec-sub">keine Daten</span></div>`
+  return `<button type="button" class="rec-card" data-id="${rec.id}">${head}` +
+    `<span class="rec-v ${rec.cls}">${rec.valueText}</span>` +
+    `<span class="rec-sub">${esc(rec.sub)}</span></button>`
+}
+
+// nicht-klickbare Karte für nationale Kennzahlen (keine Einzelstation)
+function statCard(icon: string, label: string, valueText: string, sub: string): string {
+  return `<div class="rec-card is-stat"><span class="rec-ico">${icon}</span>` +
+    `<span class="rec-k">${label}</span><span class="rec-v">${valueText}</span>` +
+    `<span class="rec-sub">${esc(sub)}</span></div>`
+}
+
+function renderRecords(): void {
+  if (!series) return
+  const years = [...new Set(series.dates.map((d) => +d.slice(0, 4)))].sort((a, b) => a - b)
+  const opts = ['all', ...years.map(String)]
+  const bar = `<div class="seg rec-filter">` + opts.map((v) =>
+    `<button type="button" data-recyear="${v}" class="${recYear === v ? 'active' : ''}">${v === 'all' ? 'Gesamt' : v}</button>`).join('') + `</div>`
+  const yr = recYear === 'all' ? null : +recYear
+  const hot = eventHeadline(30, 'max')
+  const trop = eventHeadline(20, 'min')
+  const yrNote = (y: string) => (recYear === 'all' ? `Rekordjahr ${y}` : y)
+  const cards = [
+    // Reihe 1 — Extreme
+    recCard('🔥', 'Höchste Temperatur', recExtreme(yr, 'max', true)),
+    recCard('❄', 'Tiefste Temperatur', recExtreme(yr, 'min', false)),
+    recCard('🌡', 'Größte Tagesspanne', recLargestSpan(yr)),
+    // Reihe 2 — Nächte
+    recCard('🌴', 'Wärmste Nacht', recWarmestNight(yr), 'ohne heute'),
+    recCard('🌙', 'Meiste Tropennächte', recMostDays(yr, 20, 'min', 'Nächte')),
+    statCard('📅', 'Tropennächte gesamt', `${trop.count} Nächte`, yrNote(trop.year)),
+    // Reihe 3 — Hitze
+    recCard('♨', 'Längste Hitzeserie', recStreak(yr, 30, true)),
+    recCard('☀', 'Meiste Hitzetage', recMostDays(yr, 30, 'max', 'Tage')),
+    statCard('📅', 'Hitzetage gesamt', `${hot.count} Tage`, yrNote(hot.year)),
+  ]
+  const ice = recStreak(yr, 0, false)
+  const info = ice
+    ? `<div class="rec-info"><span>🧊 Längste Eisserie <b>${ice.valueText}</b> <span class="dim">${esc(ice.sub)}</span></span></div>`
+    : ''
+  recordsEl.innerHTML = bar + `<div class="rec-grid">${cards.join('')}</div>` + info
+}
+
 function freshnessHtml(genUtc: string): string {
   const ageMin = (Date.now() - Date.parse(genUtc)) / 60000
   let rel: string
@@ -235,12 +417,29 @@ function freshnessHtml(genUtc: string): string {
 
 /* ---------- Rendering ---------- */
 function render(): void {
-  // Sichtbarkeit der Sekundär-Controls
-  metricEl.hidden = view === 'now'
-  yearSelEl.hidden = view !== 'year'
+  const rek = viewMode === 'rekorde'
+  // Sichtbarkeit der Controls (in Rekorde-Ansicht ist das meiste irrelevant)
+  periodsEl.hidden = rek
+  controlsEl.hidden = rek
+  legendEl.hidden = rek
+  metricEl.hidden = rek || view === 'now'
+  yearSelEl.hidden = rek || view !== 'year'
   thTimeEl.textContent = view === 'now' ? 'Messzeit' : (metric === 'max' ? 'Höchstwert am' : 'Tiefstwert am')
 
   renderStats()
+
+  // --- Rekorde-Tafel ---
+  if (rek) {
+    tableEl.hidden = true; mapWrap.hidden = true; recordsEl.hidden = false
+    if (!series) {
+      metaEl.textContent = 'lädt Verlaufsdaten …'; recordsEl.innerHTML = ''
+      void ensureSeries().then(render); return
+    }
+    metaEl.innerHTML = `Rekorde · <strong>${recYear === 'all' ? 'seit Aufzeichnung 2025' : recYear}</strong>`
+    renderRecords()
+    return
+  }
+  recordsEl.hidden = true
 
   // Jahr-Sub-Ansicht braucht series.json -> ggf. nachladen, dann erneut rendern
   if (view === 'year' && yearSel !== 'current' && !series) {
@@ -263,9 +462,9 @@ function render(): void {
     .filter((it) => !q || it.name.toLowerCase().includes(q))
     .sort((a, b) => (sortDir === 'hot' ? b.value - a.value : a.value - b.value))
 
-  tableEl.hidden = mapView
-  mapWrap.hidden = !mapView
-  if (mapView) renderMap(list)
+  tableEl.hidden = viewMode !== 'table'
+  mapWrap.hidden = viewMode !== 'map'
+  if (viewMode === 'map') renderMap(list)
   else renderTable(list, data.items)
 }
 
@@ -574,7 +773,7 @@ function readHash(): void {
   const validP: View[] = ['now', 'day', 'week', 'month', 'year']
   if (parts[0] && validP.includes(parts[0] as View)) view = parts[0] as View
   if (parts.includes('min')) metric = 'min'; else if (parts.includes('max')) metric = 'max'
-  mapView = parts.includes('map')
+  viewMode = parts.includes('rekorde') ? 'rekorde' : parts.includes('map') ? 'map' : 'table'
   const yr = parts.find((p) => /^\d{4}$/.test(p))
   yearSel = parts.includes('all') ? 'all' : (yr ?? 'current')
   sortDir = metric === 'min' ? 'cold' : 'hot'
@@ -583,7 +782,7 @@ function writeHash(): void {
   const parts: string[] = [view]
   if (view !== 'now') parts.push(metric)
   if (view === 'year' && yearSel !== 'current') parts.push(yearSel)
-  if (mapView) parts.push('map')
+  if (viewMode !== 'table') parts.push(viewMode)
   const h = '#' + parts.join('/')
   if (location.hash !== h) history.replaceState(null, '', h)
 }
@@ -593,7 +792,7 @@ function syncControls(): void {
   for (const b of metricEl.querySelectorAll('button'))
     b.classList.toggle('active', (b as HTMLElement).dataset.metric === metric)
   for (const b of viewEl.querySelectorAll('button'))
-    b.classList.toggle('active', (b as HTMLElement).dataset.view === (mapView ? 'map' : 'table'))
+    b.classList.toggle('active', (b as HTMLElement).dataset.view === viewMode)
   for (const b of yearSelEl.querySelectorAll('button'))
     b.classList.toggle('active', (b as HTMLElement).dataset.year === yearSel)
 }
@@ -624,8 +823,14 @@ metricEl.addEventListener('click', (e) => {
 viewEl.addEventListener('click', (e) => {
   const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-view]')
   if (!b) return
-  mapView = b.dataset.view === 'map'
+  viewMode = b.dataset.view as 'table' | 'map' | 'rekorde'
   syncControls(); writeHash(); render()
+})
+recordsEl.addEventListener('click', (e) => {
+  const yb = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-recyear]')
+  if (yb) { recYear = yb.dataset.recyear!; render(); return }
+  const card = (e.target as HTMLElement).closest<HTMLElement>('[data-id]')
+  if (card) void openDetail(card.dataset.id!)
 })
 yearSelEl.addEventListener('click', (e) => {
   const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-year]')

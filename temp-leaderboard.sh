@@ -308,6 +308,14 @@ for f in sorted(glob.glob(os.path.join(daily_dir, "*.json"))):
 date_list = [b for b, _ in daily_data]
 all_names.update(names)
 
+# Tagesminimum nur vertrauen, wenn der Tag echt abgedeckt ist: backfilled (echtes
+# TNK) ODER nahezu voll (samples>=20). Teiltage (z. B. nur Nachmittag) liefern
+# sonst ein viel zu hohes "Min" (= Tageswert). Max bleibt unkritisch.
+def trust_min(e):
+    if e.get("source") == "dwd-kl" or e.get("samples", 0) >= 20:
+        return e.get("min_c")
+    return None
+
 # --- tops.json: Hoechst- UND Tiefstwert je Zeitraum ---
 today = now_dt.date()
 ty, tw, _ = today.isocalendar()
@@ -337,7 +345,7 @@ for base, st in daily_data:
     if not mem:
         continue
     for sid, e in st.items():
-        mx, mn = e.get("max_c"), e.get("min_c")
+        mx, mn = e.get("max_c"), trust_min(e)
         for p in mem:
             cur = agg[p].get(sid)
             if cur is None:
@@ -368,7 +376,7 @@ for idx, (base, st) in enumerate(daily_data):
         s = series.get(sid)
         if s is None:
             s = {"max": [None] * n, "min": [None] * n}; series[sid] = s
-        s["max"][idx] = e.get("max_c"); s["min"][idx] = e.get("min_c")
+        s["max"][idx] = e.get("max_c"); s["min"][idx] = trust_min(e)
 json.dump({"dates": date_list, "stations": series},
           io.open(os.path.join(data_dir, "series.json"), "w", encoding="utf-8"),
           ensure_ascii=False, separators=(",", ":"))
