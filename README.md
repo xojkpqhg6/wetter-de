@@ -1,93 +1,83 @@
 # 🌡 Temperatur-Leaderboard Deutschland
 
 Live-Rangliste der Lufttemperatur aller DWD-Messstationen in Deutschland —
-plus Tages-, Wochen-, Monats- und Jahres-Höchstwerte. Daten vom
-[Deutschen Wetterdienst](https://opendata.dwd.de), Website als statische
-Vanilla-TypeScript-Seite, automatisch aktualisiert per GitHub Actions und
-ausgeliefert über GitHub Pages.
+plus Tages-, Wochen-, Monats- und Jahreswerte, Karte und Stationsverlauf.
+Daten vom [Deutschen Wetterdienst](https://opendata.dwd.de), Website als
+statische Vanilla-TypeScript-Seite (kein Framework), stündlich automatisch
+aktualisiert per GitHub Actions und über GitHub Pages ausgeliefert.
+
+## Features
+
+- **Rangliste** aller ~200 Stationen — „Jetzt" (Live) sowie Höchst-/Tiefstwerte
+  für **Tag / Woche / Monat / Jahr**.
+- **Tabelle & Deutschlandkarte** (Stationen als Punkte, nach Temperatur eingefärbt).
+- **Stationsdetail** per Klick: Sparkline des 2026-Verlaufs (Tagesmax/-min),
+  Jahres-Höchst/-Tiefst, Badge bei neuem Jahresrekord.
+- **Überblicks-Strip**: heißeste/kälteste Station, Spanne, größter Steiger/Faller,
+  Jahresrekorde des Tages.
+- **Funfacts-Banderole** (Laufband mit Temperatur-Fakten).
+- **Frische-Anzeige + Auto-Refresh** (alle 5 min) mit Stale-Warnung.
+- Farb-Legende, **Dark Mode**, teilbare URLs (`#year/min/map`), Berlin-Zeit
+  in der Anzeige (gespeichert wird immer UTC).
 
 ## Aufbau
 
 ```
 .
-├─ temp-leaderboard.sh        # holt DWD-Daten, schreibt latest.json / tops.json / history / daily
-├─ backfill-2026.sh           # EINMALIG: Tageshistorie 2026 aus dem DWD-Klimaarchiv
+├─ temp-leaderboard.sh        # holt DWD-Daten, erzeugt latest/tops/series/stations/stats + daily + history
+├─ backfill-2026.sh           # einmaliger Backfill der 2026-Tageshistorie aus dem DWD-Klimaarchiv
 ├─ web/                       # Vite + TypeScript (kein Framework)
-│  ├─ src/main.ts, src/style.css
 │  ├─ index.html
-│  └─ public/data/            # die ausgelieferten Daten (siehe unten)
+│  ├─ src/main.ts             # Rendering: Tabelle, Karte, Detail, Banderole, Theme, URL-State
+│  ├─ src/style.css           # Oldschool-Almanach-Design + Dark Mode
+│  ├─ src/funfacts.ts         # die Temperatur-Fakten der Banderole
+│  └─ public/
+│     ├─ germany.json         # Karten-Outline (statisches Asset)
+│     └─ data/                # die ausgelieferten Daten (siehe unten)
 └─ .github/workflows/update-and-deploy.yml
 ```
 
-### Daten unter `web/public/data/`
+## Daten (`web/public/data/`)
 
-| Datei | Inhalt | versioniert? |
+| Datei | Inhalt | versioniert |
 |---|---|---|
 | `latest.json` | aktueller Snapshot (Rangliste „Jetzt") | ✅ |
-| `tops.json` | Höchstwerte je Station: Tag / Woche / Monat / Jahr | ✅ |
+| `tops.json` | Höchst-/Tiefstwerte je Station für Tag/Woche/Monat/Jahr | ✅ |
 | `daily/<datum>.json` | Tages-Min/Max je Station | ✅ |
 | `history.csv` | Roh-Log aller Messungen (dedupliziert) | ✅ |
-| `poi/`, `stations.cfg`, `de_stations.tsv` | Roh-Cache / Hilfsdateien | ❌ (werden neu erzeugt) |
+| `series.json`, `stations.json`, `stats.json` | abgeleitet (Verlauf, Koordinaten, Überblick) | ❌ neu erzeugt |
+| `poi/`, `stations.cfg`, `de_stations.tsv` | Roh-Cache / Hilfsdateien | ❌ neu erzeugt |
 
-Gespeichert wird immer **UTC**; die Website zeigt **Berlin-Zeit** (Umrechnung im Browser).
+Gespeichert wird durchgängig **UTC**; die Website rechnet für die Anzeige in
+**Berlin-Zeit** um.
 
-## So bringst du es online
+## Wie es funktioniert
 
-1. **Repo anlegen** (leer, auf GitHub) und lokal pushen:
-   ```bash
-   git init -b main
-   git add .
-   git commit -m "init: temperatur-leaderboard"
-   git remote add origin git@github.com:<user>/<repo>.git
-   git push -u origin main
-   ```
-2. **GitHub Pages aktivieren**: Repo → *Settings* → *Pages* →
-   *Build and deployment* → **Source: GitHub Actions**.
-   (Einmaliger Klick — danach übernimmt der Workflow alles.)
-3. Fertig. Der Workflow läuft beim Push, danach **stündlich**, und nach
-   wenigen Minuten ist die Seite unter
-   `https://<user>.github.io/<repo>/` erreichbar.
+- **`temp-leaderboard.sh`** lädt die aktuellen POI-Messwerte des DWD (eine CSV je
+  Station), ermittelt die deutschen Stationen über den MOSMIX-Katalog und schreibt
+  daraus `latest.json` + `tops.json` + `series.json` + `stations.json` + `stats.json`,
+  führt die Tages-Min/Max in `daily/` fort und hängt neue Messungen dedupliziert an
+  `history.csv` an. Gibt zusätzlich ein Leaderboard im Terminal aus
+  (`--help` zeigt alle Optionen).
+- **`backfill-2026.sh`** füllt einmalig die Tageshistorie 2026 (Höchst-/Tiefstwerte)
+  aus dem DWD-Klimaarchiv nach. Zuordnung der internen DWD-IDs zu den WMO-IDs über
+  Koordinaten + Namens-Fallback. `--gaps` zieht nur fehlende Stationen nach.
+- **GitHub Actions** (`update-and-deploy.yml`) führt stündlich `temp-leaderboard.sh`
+  aus, committet die aktualisierten Daten zurück, baut die Seite und deployt sie auf
+  GitHub Pages.
 
-> Tokens musst du nichts einrichten — der Workflow nutzt den automatischen
-> `GITHUB_TOKEN`. Commits des Bots lösen **keinen** erneuten Lauf aus
-> (kein Endlos-Loop).
-
-### Optional: Historie vor dem ersten Push seeden
-
-Damit Woche/Monat/Jahr von Anfang an gefüllt sind, einmal lokal:
-```bash
-./temp-leaderboard.sh   # Live-Snapshot + erstes daily/
-./backfill-2026.sh      # Tageshistorie 2026 aus dem Klimaarchiv
-```
-Die so erzeugten `daily/*.json` werden mitcommittet. (Ist in diesem
-Repo bereits geschehen.)
-
-## Lokal entwickeln
+## Lokal
 
 ```bash
-./temp-leaderboard.sh              # Daten aktualisieren
+./temp-leaderboard.sh             # Daten aktualisieren (-> web/public/data/)
 npm --prefix web install          # einmalig
-npm --prefix web run dev          # Dev-Server (http://localhost:5173)
+npm --prefix web run dev          # Dev-Server, http://localhost:5173
 npm --prefix web run build        # Production-Build -> web/dist/
 ```
-
-`temp-leaderboard.sh --help` zeigt alle Optionen (`--cold`, `--top N`, …).
-
-## Automatisierung (GitHub Actions)
-
-[`.github/workflows/update-and-deploy.yml`](.github/workflows/update-and-deploy.yml)
-macht pro Lauf:
-
-1. `temp-leaderboard.sh` ausführen → `latest.json` + `tops.json` + `daily/` + `history.csv` aktualisieren
-2. geänderte Daten zurück-committen (`web/public/data`)
-3. Site bauen (`npm ci && npm run build`)
-4. auf GitHub Pages deployen
-
-Auslöser: stündlich (`cron`), bei Push auf `main`, oder manuell
-(*Actions* → *Update & Deploy* → *Run workflow*).
 
 ## Quellen
 
 - Live-Messwerte: `opendata.dwd.de/weather/weather_reports/poi/`
 - Stationskatalog: DWD MOSMIX
 - Tageshistorie: `opendata.dwd.de/climate_environment/CDC/.../daily/kl/recent/`
+- Karten-Outline: [deutschlandGeoJSON](https://github.com/isellsoap/deutschlandGeoJSON)
