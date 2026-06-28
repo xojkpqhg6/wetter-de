@@ -6,6 +6,14 @@
     <title>Methodik & Transparenz · Temperatur-Leaderboard</title>
     <meta name="description" content="Wie das Temperatur-Leaderboard seine Zahlen ermittelt — Datenquelle, Farbskala und Darstellungsgrenzen, transparent erklärt." />
     <meta name="theme-color" content="#f4efe3" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Methodik & Transparenz · Temperatur-Leaderboard" />
+    <meta property="og:description" content="Datenquelle, Farbskala und Darstellungsgrenzen — transparent erklärt." />
+    <meta property="og:image" content="https://xojkpqhg6.github.io/wetter-de/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://xojkpqhg6.github.io/wetter-de/og.png" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23f4efe3'/%3E%3Cpath d='M16 5a3 3 0 0 0-3 3v9.6a5 5 0 1 0 6 0V8a3 3 0 0 0-3-3z' fill='none' stroke='%237c1d10' stroke-width='2'/%3E%3Ccircle cx='16' cy='22' r='3.4' fill='%237c1d10'/%3E%3Crect x='15' y='12' width='2' height='9' fill='%237c1d10'/%3E%3C/svg%3E" />
   </head>
   <body>
@@ -23,8 +31,10 @@
         <h2>Datenquelle</h2>
         <p>Alle Werte stammen vom <a href="https://opendata.dwd.de" target="_blank" rel="noopener">Deutschen Wetterdienst (DWD), OpenData</a>:
         die aktuellen Messwerte aus den stündlichen Stationsberichten (POI), die Stationsnamen aus dem
-        MOSMIX-Katalog, die Tageshistorie aus dem Klimaarchiv (KL-Tageswerte). Es handelt sich um eine
-        nicht-amtliche Aufbereitung — für verbindliche Auskünfte gilt die Originalquelle des DWD.</p>
+        MOSMIX-Katalog, die Tageshistorie aus dem Klimaarchiv (KL-Tageswerte).</p>
+        <p><strong>Datenbasis: Deutscher Wetterdienst (DWD)</strong> — eigene Aufbereitung; Daten teilweise
+        verändert/aggregiert. Es handelt sich um eine <strong>nicht-amtliche</strong> Darstellung; für
+        verbindliche Auskünfte gilt ausschließlich die Originalquelle des DWD.</p>
 
         <h2>Farbskala</h2>
         <p>Temperaturen sind nach festen Stufen eingefärbt (gilt für Tabelle, Karte, Kalender und Rekorde):</p>
@@ -81,6 +91,17 @@
         Stationsdateien nach — solange mindestens einmal pro Tag aktualisiert wird, geht also keine Stunde
         verloren, selbst wenn ein Lauf ausfällt.</p>
 
+        <h2 id="datenschutz">Datenschutz</h2>
+        <p>Diese Seite verzichtet bewusst auf Tracking: <strong>keine Cookies, keine Analyse, keine Werbung,
+        keine Drittanbieter-Skripte</strong>. Lediglich deine Theme-Wahl (hell/dunkel) wird lokal in deinem
+        Browser (localStorage) gespeichert und nicht übertragen.</p>
+        <p>Gehostet wird die Seite auf <strong>GitHub Pages</strong> (GitHub, Inc.). Beim Abruf verarbeitet
+        GitHub als Hoster technisch notwendige Zugriffsdaten (u.&nbsp;a. die IP-Adresse) — darauf besteht
+        kein Einfluss; Details in der
+        <a href="https://docs.github.com/de/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub-Datenschutzerklärung</a>.</p>
+        <p>Externe Verbindungen entstehen nur, wenn du selbst einen externen Link anklickst (z.&nbsp;B. zu
+        opendata.dwd.de). Die Wetterdaten werden als statische Dateien von dieser Seite geladen.</p>
+
         <h2>Ohne Gewähr</h2>
         <p>Diese Seite ist ein privates Hobby-Projekt zur Veranschaulichung offener Wetterdaten. Keine Gewähr
         für Richtigkeit, Vollständigkeit oder Aktualität — im Zweifel gilt der DWD.</p>
@@ -89,8 +110,8 @@
       </div>
 
       <footer class="colophon">
-        Daten: <a href="https://opendata.dwd.de" target="_blank" rel="noopener">opendata.dwd.de</a>
-        · Zeiten in Berlin-Zeit · gespeichert wird UTC
+        <div>Datenbasis: <a href="https://opendata.dwd.de" target="_blank" rel="noopener">Deutscher Wetterdienst (DWD)</a>, eigene Aufbereitung · Zeiten in Berlin-Zeit</div>
+        <div class="footer-links"><a href="./">Leaderboard</a> · <a href="#datenschutz">Datenschutz</a></div>
       </footer>
     </main>
 
