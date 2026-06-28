@@ -354,6 +354,20 @@ body {
 .rec-info b { font-weight: 700; }
 .rec-info .dim { color: var(--ink-soft); font-size: 11px; }
 
+/* ---- Methodik-/Info-Seite ---- */
+.page { margin-top: 16px; }
+.page .back { color: var(--accent); text-decoration: none; font-size: 13px; }
+.page .back:hover { text-decoration: underline; }
+.page h2 { font-family: var(--serif); font-weight: 700; font-size: 19px; margin: 24px 0 6px; }
+.page p, .page li { font-size: 13.5px; line-height: 1.6; color: var(--ink); }
+.page p { margin: 6px 0; }
+.page ul { margin: 6px 0; padding-left: 20px; }
+.page li { margin: 2px 0; }
+.page a { color: var(--accent); }
+.page .scale { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 10px 0; }
+.page .scale .item { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--ink); }
+.page .scale .sw { width: 20px; height: 12px; display: inline-block; border: 1px solid rgba(0, 0, 0, .15); }
+
 /* ---- Fuß ---- */
 .colophon {
   margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--line);

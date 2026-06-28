@@ -9,7 +9,7 @@ interface TopStation {
   max_c: number; max_obs_utc: string
   min_c: number; min_obs_utc: string
 }
-interface PeriodTop { key: string; station_count: number; stations: TopStation[] }
+interface PeriodTop { key: string; station_count: number; hidden?: number; stations: TopStation[] }
 interface Tops { generated_utc: string; periods: Record<PeriodKey, PeriodTop> }
 interface Stats {
   generated_utc: string
@@ -173,13 +173,14 @@ function currentList(): { items: Item[]; metaHtml: string } | null {
       metaHtml: freshnessHtml(latest.generated_utc) + ` · ${latest.station_count} Stationen`,
     }
   }
+  const hideNote = (n: number) => (n ? ` · ${n} mit zu wenig Daten ausgeblendet` : '')
   // Jahr-Sub-Auswahl (2025 / Allzeit) -> client-seitig aus series.json
   if (view === 'year' && yearSel !== 'current') {
     if (!series) return null
-    const items = computeYearItems(yearSel === 'all' ? null : +yearSel)
+    const { items, hidden } = computeYearItems(yearSel === 'all' ? null : +yearSel)
     const label = yearSel === 'all' ? 'Allzeit' : yearSel
     const what = metric === 'max' ? 'Höchstwerte' : 'Tiefstwerte'
-    return { items, metaHtml: `${what} <strong>${label}</strong> · ${items.length} Stationen` }
+    return { items, metaHtml: `${what} <strong>${label}</strong> · ${items.length} Stationen${hideNote(hidden)}` }
   }
   if (!tops) return null
   const p = tops.periods[view]
@@ -192,28 +193,39 @@ function currentList(): { items: Item[]; metaHtml: string } | null {
     }))
     .filter((it) => typeof it.value === 'number')
   const what = metric === 'max' ? 'Höchstwerte' : 'Tiefstwerte'
-  return { items, metaHtml: `${what} <strong>${PERIOD_LABEL[view]}</strong> · ${p.key} · ${items.length} Stationen` }
+  return { items, metaHtml: `${what} <strong>${PERIOD_LABEL[view]}</strong> · ${p.key} · ${items.length} Stationen${hideNote(p.hidden ?? 0)}` }
 }
 
-// Rangliste eines Jahres (oder Allzeit, year=null) aus series.json berechnen
-function computeYearItems(year: number | null): Item[] {
-  if (!series) return []
+// Rangliste eines Jahres (oder Allzeit, year=null) aus series.json.
+// Stationen mit <60 % Tagesabdeckung (im Jahr bzw. im besten Jahr) werden ausgeblendet.
+function computeYearItems(year: number | null): { items: Item[]; hidden: number } {
+  if (!series) return { items: [], hidden: 0 }
   const { dates, stations } = series
+  const yIdx = dates.map((d) => +d.slice(0, 4))
+  const yearTotal: Record<number, number> = {}
+  for (const y of yIdx) yearTotal[y] = (yearTotal[y] || 0) + 1
   const items: Item[] = []
+  let hidden = 0
   for (const id in stations) {
     const s = stations[id]
     let bMax: number | null = null, bMaxD = '', bMin: number | null = null, bMinD = ''
+    const dpy: Record<number, number> = {}
     for (let i = 0; i < dates.length; i++) {
-      if (year !== null && +dates[i].slice(0, 4) !== year) continue
+      const Y = yIdx[i]
+      if (year !== null && Y !== year) continue
       const mx = s.max[i], mn = s.min[i]
-      if (mx != null && (bMax === null || mx > bMax)) { bMax = mx; bMaxD = dates[i] }
+      if (mx != null) { dpy[Y] = (dpy[Y] || 0) + 1; if (bMax === null || mx > bMax) { bMax = mx; bMaxD = dates[i] } }
       if (mn != null && (bMin === null || mn < bMin)) { bMin = mn; bMinD = dates[i] }
     }
     const val = metric === 'max' ? bMax : bMin
     if (val == null) continue
+    let cov = 0
+    if (year !== null) cov = (dpy[year] || 0) / (yearTotal[year] || 1)
+    else for (const Y in dpy) cov = Math.max(cov, dpy[Y] / (yearTotal[+Y] || 1))
+    if (cov < 0.6) { hidden++; continue }
     items.push({ id, name: coords[id]?.name ?? id, value: val, obs: metric === 'max' ? bMaxD : bMinD })
   }
-  return items
+  return { items, hidden }
 }
 
 // Jahr-Umschalter füllen (aktuelles Jahr · Vorjahr · Allzeit)
@@ -227,11 +239,25 @@ function buildYearSel(): void {
 /* ---------- Rekorde-Tafel (aus series.json) ---------- */
 type RecResult = { id: string; name: string; valueText: string; sub: string; cls: string }
 
+// Schutz gegen Einzel-Ausreißer: Rekordhalter braucht eine Mindest-Datenmenge.
+const REC_MIN_DAYS = 10
+const _daysCache = new Map<string, number>()
+function stationDataDays(id: string): number {
+  let c = _daysCache.get(id)
+  if (c === undefined) {
+    c = 0
+    for (const v of series?.stations[id]?.max ?? []) if (v != null) c++
+    _daysCache.set(id, c)
+  }
+  return c
+}
+
 function recExtreme(yr: number | null, key: 'max' | 'min', wantMax: boolean): RecResult | null {
   if (!series) return null
   const { dates, stations } = series
   let best: { id: string; v: number; date: string; name: string } | null = null
   for (const id in stations) {
+    if (stationDataDays(id) < REC_MIN_DAYS) continue
     const arr = key === 'max' ? stations[id].max : stations[id].min
     for (let i = 0; i < dates.length; i++) {
       if (yr !== null && +dates[i].slice(0, 4) !== yr) continue
@@ -251,6 +277,7 @@ function recWarmestNight(yr: number | null): RecResult | null {
   const today = dates[dates.length - 1]            // laufenden Tag auslassen: Min noch unvollständig
   let best: { id: string; v: number; date: string; name: string } | null = null
   for (const id in stations) {
+    if (stationDataDays(id) < REC_MIN_DAYS) continue
     const mn = stations[id].min
     for (let i = 0; i < dates.length; i++) {
       if (dates[i] === today) continue
@@ -269,6 +296,7 @@ function recLargestSpan(yr: number | null): RecResult | null {
   const { dates, stations } = series
   let best: { id: string; sp: number; mx: number; mn: number; date: string; name: string } | null = null
   for (const id in stations) {
+    if (stationDataDays(id) < REC_MIN_DAYS) continue
     const s = stations[id]
     for (let i = 0; i < dates.length; i++) {
       if (yr !== null && +dates[i].slice(0, 4) !== yr) continue

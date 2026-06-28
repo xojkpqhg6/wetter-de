@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Methodik & Transparenz · Temperatur-Leaderboard</title>
+    <meta name="description" content="Wie das Temperatur-Leaderboard seine Zahlen ermittelt — Datenquelle, Farbskala und Darstellungsgrenzen, transparent erklärt." />
+    <meta name="theme-color" content="#f4efe3" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23f4efe3'/%3E%3Cpath d='M16 5a3 3 0 0 0-3 3v9.6a5 5 0 1 0 6 0V8a3 3 0 0 0-3-3z' fill='none' stroke='%237c1d10' stroke-width='2'/%3E%3Ccircle cx='16' cy='22' r='3.4' fill='%237c1d10'/%3E%3Crect x='15' y='12' width='2' height='9' fill='%237c1d10'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <main class="sheet">
+      <header class="masthead">
+        <button class="theme-toggle" id="theme" type="button" title="Hell/Dunkel" aria-label="Hell/Dunkel umschalten">☾</button>
+        <h1>Methodik &amp; Transparenz</h1>
+        <div class="subtitle">Wie diese Seite ihre Zahlen ermittelt — und wo die Grenzen liegen.</div>
+        <div class="rule"></div>
+      </header>
+
+      <div class="page">
+        <p><a class="back" href="./">← zurück zum Leaderboard</a></p>
+
+        <h2>Datenquelle</h2>
+        <p>Alle Werte stammen vom <a href="https://opendata.dwd.de" target="_blank" rel="noopener">Deutschen Wetterdienst (DWD), OpenData</a>:
+        die aktuellen Messwerte aus den stündlichen Stationsberichten (POI), die Stationsnamen aus dem
+        MOSMIX-Katalog, die Tageshistorie aus dem Klimaarchiv (KL-Tageswerte). Es handelt sich um eine
+        nicht-amtliche Aufbereitung — für verbindliche Auskünfte gilt die Originalquelle des DWD.</p>
+
+        <h2>Farbskala</h2>
+        <p>Temperaturen sind nach festen Stufen eingefärbt (gilt für Tabelle, Karte, Kalender und Rekorde):</p>
+        <div class="scale">
+          <span class="item"><span class="sw" style="background:var(--t-cold)"></span> unter 5&nbsp;°C</span>
+          <span class="item"><span class="sw" style="background:var(--t-cool)"></span> 5–15&nbsp;°C</span>
+          <span class="item"><span class="sw" style="background:var(--t-mild)"></span> 15–25&nbsp;°C</span>
+          <span class="item"><span class="sw" style="background:var(--t-warm)"></span> 25–30&nbsp;°C</span>
+          <span class="item"><span class="sw" style="background:var(--t-hot)"></span> 30–35&nbsp;°C</span>
+          <span class="item"><span class="sw" style="background:var(--t-scorch)"></span> ab 35&nbsp;°C</span>
+        </div>
+
+        <h2>Zeit</h2>
+        <p>Gespeichert werden alle Zeitpunkte in <strong>UTC</strong>; angezeigt wird durchgängig
+        <strong>Berlin-Zeit</strong> (mit korrekter Sommer-/Winterzeit). Backfill-Werte aus dem
+        Tagesarchiv haben kein Uhrzeit-Detail und erscheinen daher nur als Datum.</p>
+
+        <h2>„Jetzt" zeigt nur die jüngste Stunde</h2>
+        <p>Die Live-Ansicht zeigt ausschließlich Stationen der <strong>aktuellsten vorhandenen Stunde</strong>.
+        Stationen, die diese Stunde noch nicht übermittelt haben, fehlen dort vorübergehend — so gibt es
+        keine gemischten Zeitstempel.</p>
+
+        <h2>Tages-Minimum &amp; „Tiefst"</h2>
+        <p>Ein verlässliches Tagesminimum braucht die Nachtstunden. Für Woche/Monat/Jahr und für Rekorde
+        zählt ein Minimum daher nur, wenn der Tag <strong>nahezu voll abgedeckt</strong> ist
+        (≥&nbsp;20 Stundenwerte) oder aus dem Klimaarchiv stammt. In der <strong>Tag</strong>-Ansicht wird
+        bewusst das <strong>laufende, vorläufige</strong> Tagesminimum gezeigt. „Wärmste Nacht" lässt den
+        laufenden Tag aus (dessen Minimum ist noch unvollständig).</p>
+
+        <h2>Ranglisten: ausgeblendete Stationen</h2>
+        <p>Stationen mit zu dünner Datenbasis werden je Zeitraum <strong>ausgeblendet</strong> (nicht gelöscht) —
+        sie erscheinen weiterhin überall, wo sie genug Daten haben. Schwellen:</p>
+        <ul>
+          <li><strong>Tag:</strong> mindestens 3 Stundenwerte heute</li>
+          <li><strong>Woche:</strong> Daten an mindestens 4 von 7 Tagen</li>
+          <li><strong>Monat / Jahr:</strong> Daten an mindestens 60&nbsp;% der Tage (Allzeit: ≥&nbsp;60&nbsp;% im besten Jahr)</li>
+        </ul>
+        <p>Unter jeder Rangliste steht, wie viele Stationen deshalb ausgeblendet wurden.</p>
+
+        <h2>Rekorde</h2>
+        <p>Die Rekorde gelten <strong>seit Aufzeichnungsbeginn 2025</strong> — der Datensatz beginnt 2025 und
+        wächst mit jedem weiteren Backfill. Ein Rekordhalter braucht <strong>mindestens 10 Messtage</strong>,
+        damit ein einzelner Ausreißer einer selten meldenden Station keinen Rekord verfälscht. Serien-Rekorde
+        (Hitze-/Eisserie) brauchen lückenlose Tage; Stationen mit Lücken können sie nicht gewinnen.</p>
+
+        <h2>Historie &amp; fehlende Stationen</h2>
+        <p>Die Tageshistorie ab 2025 wurde aus dem DWD-Klimaarchiv nachgeladen. Rund zwei Dutzend Stationen —
+        überwiegend Bundeswehr-/NATO-Flugplätze — sind dort <strong>ohne Tagestemperatur</strong> hinterlegt;
+        sie melden zwar live, haben aber keine vorgelagerte Historie und tauchen in Jahres-Ranglisten erst auf,
+        wenn sie genug eigene Tage gesammelt haben.</p>
+
+        <h2>Aktualisierung</h2>
+        <p>Die Daten werden stündlich automatisch aktualisiert. Jeder Lauf liest bis zu 24&nbsp;Stunden aus den
+        Stationsdateien nach — solange mindestens einmal pro Tag aktualisiert wird, geht also keine Stunde
+        verloren, selbst wenn ein Lauf ausfällt.</p>
+
+        <h2>Ohne Gewähr</h2>
+        <p>Diese Seite ist ein privates Hobby-Projekt zur Veranschaulichung offener Wetterdaten. Keine Gewähr
+        für Richtigkeit, Vollständigkeit oder Aktualität — im Zweifel gilt der DWD.</p>
+
+        <p><a class="back" href="./">← zurück zum Leaderboard</a></p>
+      </div>
+
+      <footer class="colophon">
+        Daten: <a href="https://opendata.dwd.de" target="_blank" rel="noopener">opendata.dwd.de</a>
+        · Zeiten in Berlin-Zeit · gespeichert wird UTC
+      </footer>
+    </main>
+
+    <script type="module" src="/src/info.ts"></script>
+  </body>
+</html>

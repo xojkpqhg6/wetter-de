@@ -340,6 +340,7 @@ def in_periods(dd):
     return out
 
 agg = {p: {} for p in ("day", "week", "month", "year")}
+period_days = {p: 0 for p in ("day", "week", "month", "year")}  # verfügbare Tage je Zeitraum
 for base, st in daily_data:
     try:
         dd = datetime.strptime(base, "%Y-%m-%d").date()
@@ -348,31 +349,47 @@ for base, st in daily_data:
     mem = in_periods(dd)
     if not mem:
         continue
+    for p in mem:
+        period_days[p] += 1
     for sid, e in st.items():
         mx = e.get("max_c")
         mn_raw, mn_trust = e.get("min_c"), trust_min(e)
+        samp = e.get("samples", 0)
         for p in mem:
             # "Tag" zeigt das laufende (provisorische) Tagesmin -> rohes min;
             # Woche/Monat/Jahr nur vertrauenswürdiges Min (volle Tagesabdeckung).
             mn = mn_raw if p == "day" else mn_trust
             cur = agg[p].get(sid)
             if cur is None:
-                agg[p][sid] = {"name": e.get("name", sid),
-                               "max_c": mx, "max_obs_utc": e.get("max_obs_utc", ""),
-                               "min_c": mn, "min_obs_utc": e.get("min_obs_utc", "")}
-            else:
-                cur["name"] = e.get("name", sid)
-                if mx is not None and (cur["max_c"] is None or mx > cur["max_c"]):
-                    cur["max_c"], cur["max_obs_utc"] = mx, e.get("max_obs_utc", "")
-                if mn is not None and (cur["min_c"] is None or mn < cur["min_c"]):
-                    cur["min_c"], cur["min_obs_utc"] = mn, e.get("min_obs_utc", "")
+                cur = {"name": e.get("name", sid), "max_c": None, "max_obs_utc": "",
+                       "min_c": None, "min_obs_utc": "", "days": 0, "samples": 0}
+                agg[p][sid] = cur
+            cur["name"] = e.get("name", sid)
+            cur["days"] += 1
+            if samp > cur["samples"]:
+                cur["samples"] = samp
+            if mx is not None and (cur["max_c"] is None or mx > cur["max_c"]):
+                cur["max_c"], cur["max_obs_utc"] = mx, e.get("max_obs_utc", "")
+            if mn is not None and (cur["min_c"] is None or mn < cur["min_c"]):
+                cur["min_c"], cur["min_obs_utc"] = mn, e.get("min_obs_utc", "")
+
+# Stationen mit zu dünner Abdeckung im jeweiligen Zeitraum ausblenden (nicht löschen)
+def has_coverage(p, v):
+    if p == "day":
+        return v["samples"] >= 3            # heute >= 3 Stundenwerte
+    if p == "week":
+        return v["days"] >= 4               # >= 4 von 7 Tagen
+    return v["days"] >= 0.6 * period_days[p]  # Monat/Jahr: >= 60 % der Tage
+
 tops = {"generated_utc": run_utc, "periods": {}}
 for p in ("day", "week", "month", "year"):
+    valid = [(sid, v) for sid, v in agg[p].items() if v["max_c"] is not None]
+    elig = [(sid, v) for sid, v in valid if has_coverage(p, v)]
     sts = [{"id": sid, "name": v["name"], "max_c": v["max_c"], "max_obs_utc": v["max_obs_utc"],
-            "min_c": v["min_c"], "min_obs_utc": v["min_obs_utc"]}
-           for sid, v in agg[p].items() if v["max_c"] is not None]
+            "min_c": v["min_c"], "min_obs_utc": v["min_obs_utc"]} for sid, v in elig]
     sts.sort(key=lambda x: x["max_c"], reverse=True)
-    tops["periods"][p] = {"key": pkey[p], "station_count": len(sts), "stations": sts}
+    tops["periods"][p] = {"key": pkey[p], "station_count": len(sts),
+                          "hidden": len(valid) - len(elig), "stations": sts}
 json.dump(tops, io.open(os.path.join(data_dir, "tops.json"), "w", encoding="utf-8"),
           ensure_ascii=False, indent=2)
 
