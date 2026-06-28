@@ -610,6 +610,31 @@ function renderTicker(): void {
 
 /* ---------- Detail: Verlauf-Overlay + Kalender ---------- */
 type SeriesEntry = { max: (number | null)[]; min: (number | null)[] }
+type SparkCtx = {
+  byYear: Map<number, SeriesEntry>; years: number[]
+  lo: number; hi: number; W: number; H: number
+  padL: number; padR: number; padT: number; padB: number
+}
+let sparkCtx: SparkCtx | null = null
+
+// gemeinsamer Hover-Tooltip (Graph + Kalender)
+let tipEl: HTMLElement | null = null
+function showTip(html: string, x: number, y: number): void {
+  if (!tipEl) { tipEl = document.createElement('div'); tipEl.className = 'chart-tip'; document.body.appendChild(tipEl) }
+  tipEl.innerHTML = html
+  tipEl.style.display = 'block'
+  const r = tipEl.getBoundingClientRect()
+  let left = x + 14, top = y + 14
+  if (left + r.width > window.innerWidth - 6) left = x - r.width - 14
+  if (top + r.height > window.innerHeight - 6) top = y - r.height - 14
+  tipEl.style.left = Math.max(6, left) + 'px'
+  tipEl.style.top = Math.max(6, top) + 'px'
+}
+function hideTip(): void { if (tipEl) tipEl.style.display = 'none' }
+function clearGuide(): void {
+  const g = detailBody.querySelector('.spark-guide')
+  if (g) g.innerHTML = ''
+}
 
 async function openDetail(id: string): Promise<void> {
   detailId = id
@@ -693,9 +718,16 @@ function renderDetail(): void {
     `<button data-tab="kalender" class="${detailTab === 'kalender' ? 'active' : ''}">Kalender</button></div>`
 
   let panel = '<p class="empty">Kein Verlauf verfügbar.</p>'
-  if (ser) panel = detailTab === 'verlauf'
-    ? overlaySparkSvg(ser, dates) + overlayLegend(dates)
-    : calendarPanel(ser, dates)
+  sparkCtx = null
+  if (ser) {
+    if (detailTab === 'verlauf') {
+      const o = overlayBuild(ser, dates)
+      sparkCtx = o.ctx
+      panel = o.html + overlayLegend(dates)
+    } else {
+      panel = calendarPanel(ser, dates)
+    }
+  }
 
   detailBody.innerHTML =
     `<h2>${esc(name)}${isRecordToday ? '<span class="detail-badge">★ Jahresrekord heute</span>' : ''}</h2>` +
@@ -711,7 +743,7 @@ function fact(k: string, v: string, cls: string, sub?: string): string {
     `<div class="v ${cls}">${v}</div>${sub ? `<div class="k">${sub}</div>` : ''}</div>`
 }
 
-function overlaySparkSvg(ser: SeriesEntry, dates: string[]): string {
+function overlayBuild(ser: SeriesEntry, dates: string[]): { html: string; ctx: SparkCtx | null } {
   const byYear = new Map<number, SeriesEntry>()
   dates.forEach((ds, i) => {
     const Y = +ds.slice(0, 4), dd = doy(ds)
@@ -722,7 +754,7 @@ function overlaySparkSvg(ser: SeriesEntry, dates: string[]): string {
   const years = [...byYear.keys()].sort((a, b) => a - b)
   const vals: number[] = []
   byYear.forEach((o) => { for (const v of o.max) if (v != null) vals.push(v); for (const v of o.min) if (v != null) vals.push(v) })
-  if (!vals.length) return '<p class="empty">Kein Verlauf verfügbar.</p>'
+  if (!vals.length) return { html: '<p class="empty">Kein Verlauf verfügbar.</p>', ctx: null }
   let lo = Math.min(...vals), hi = Math.max(...vals)
   if (hi - lo < 1) { hi += 1; lo -= 1 }
   const W = 540, H = 170, padL = 26, padR = 8, padT = 10, padB = 22
@@ -752,9 +784,43 @@ function overlaySparkSvg(ser: SeriesEntry, dates: string[]): string {
   mDoy.forEach((d, i) => { months += `<text class="spark-lbl" x="${xs(d).toFixed(1)}" y="${H - 4}">${mLbl[i]}</text>` })
   const yl = `<text class="spark-lbl" x="2" y="${(ys(hi) + 3).toFixed(1)}">${hi.toFixed(0)}°</text>` +
     `<text class="spark-lbl" x="2" y="${(ys(lo) + 3).toFixed(1)}">${lo.toFixed(0)}°</text>`
-  return `<svg class="spark" viewBox="0 0 ${W} ${H}">` +
+  const html = `<svg class="spark" viewBox="0 0 ${W} ${H}">` +
     `<line class="spark-axis" x1="${padL}" y1="${padT}" x2="${padL}" y2="${H - padB}"/>` +
-    zero + paths + months + yl + `</svg>`
+    zero + paths + months + yl + `<g class="spark-guide"></g></svg>`
+  return { html, ctx: { byYear, years, lo, hi, W, H, padL, padR, padT, padB } }
+}
+
+// Hover über dem Graph: nächsten Tag bestimmen, Führungslinie + Werte je Jahr
+function onSparkMove(svg: SVGSVGElement, clientX: number, clientY: number): void {
+  const c = sparkCtx
+  if (!c) return
+  const rect = svg.getBoundingClientRect()
+  if (rect.width === 0) return
+  const sx = (clientX - rect.left) / rect.width * c.W
+  let d = Math.round(1 + ((sx - c.padL) / (c.W - c.padL - c.padR)) * 365)
+  d = Math.max(1, Math.min(366, d))
+  const gx = c.padL + ((d - 1) / 365) * (c.W - c.padL - c.padR)
+  const ys = (v: number) => c.padT + (1 - (v - c.lo) / (c.hi - c.lo)) * (c.H - c.padT - c.padB)
+  const curY = c.years[c.years.length - 1]
+  let g = `<line class="guide-line" x1="${gx.toFixed(1)}" y1="${c.padT}" x2="${gx.toFixed(1)}" y2="${(c.H - c.padB).toFixed(1)}"/>`
+  const rows: string[] = []
+  for (const Y of c.years) {
+    const o = c.byYear.get(Y)!
+    const mx = o.max[d], mn = o.min[d]
+    if (mx != null) g += `<circle class="guide-dot mx" cx="${gx.toFixed(1)}" cy="${ys(mx).toFixed(1)}" r="2.5"/>`
+    if (mn != null) g += `<circle class="guide-dot mn" cx="${gx.toFixed(1)}" cy="${ys(mn).toFixed(1)}" r="2.5"/>`
+    if (mx != null || mn != null)
+      rows.push(`<span class="ty${Y === curY ? '' : ' faintlbl'}">${Y}</span> ` +
+        `<span class="mx">${mx != null ? mx.toFixed(1) + '°' : '–'}</span> / ` +
+        `<span class="mn">${mn != null ? mn.toFixed(1) + '°' : '–'}</span>`)
+  }
+  const gg = svg.querySelector('.spark-guide')
+  if (gg) gg.innerHTML = g
+  if (rows.length) {
+    const dt = new Date(Date.UTC(curY, 0, d))
+    const lbl = `${String(dt.getUTCDate()).padStart(2, '0')}.${String(dt.getUTCMonth() + 1).padStart(2, '0')}.`
+    showTip(`<b>${lbl}</b><br>${rows.join('<br>')}`, clientX, clientY)
+  } else hideTip()
 }
 
 function overlayLegend(dates: string[]): string {
@@ -786,14 +852,14 @@ function calendarSvg(ser: SeriesEntry, dates: string[], year: number): string {
     const cls = v == null ? 'cal-empty' : tempClass(v)
     const dt = new Date(Date.UTC(year, 0, d))
     const ds = `${year}-${String(dt.getUTCMonth() + 1).padStart(2, '0')}-${String(dt.getUTCDate()).padStart(2, '0')}`
-    cells += `<rect class="cal ${cls}" x="${(col * (cell + gap)).toFixed(1)}" y="${(row * (cell + gap)).toFixed(1)}" width="${cell}" height="${cell}"><title>${fmtDate(ds)}: ${v == null ? '—' : v.toFixed(1) + '°'}</title></rect>`
+    cells += `<rect class="cal ${cls}" x="${(col * (cell + gap)).toFixed(1)}" y="${(row * (cell + gap)).toFixed(1)}" width="${cell}" height="${cell}" data-d="${fmtDate(ds)}" data-v="${v == null ? '—' : v.toFixed(1) + '°'}"></rect>`
   }
   const W = (maxCol + 1) * (cell + gap), H = 7 * (cell + gap)
   return `<div class="cal-year"><div class="cal-label">${year}</div>` +
     `<svg class="cal-svg" viewBox="0 0 ${W.toFixed(1)} ${H.toFixed(1)}" preserveAspectRatio="xMinYMin meet">${cells}</svg></div>`
 }
 
-function closeDetail(): void { detailEl.hidden = true; detailBody.innerHTML = '' }
+function closeDetail(): void { detailEl.hidden = true; detailBody.innerHTML = ''; sparkCtx = null; hideTip() }
 
 /* ---------- URL-State ---------- */
 function readHash(): void {
@@ -872,6 +938,15 @@ detailBody.addEventListener('click', (e) => {
   detailTab = b.dataset.tab as 'verlauf' | 'kalender'
   renderDetail()
 })
+detailBody.addEventListener('mousemove', (e) => {
+  if (!(e.target instanceof Element)) return
+  const cal = e.target.closest('.cal')
+  if (cal) { showTip(`<b>${cal.getAttribute('data-d')}</b> · ${cal.getAttribute('data-v')}`, e.clientX, e.clientY); return }
+  const svg = e.target.closest('.spark') as SVGSVGElement | null
+  if (svg) { onSparkMove(svg, e.clientX, e.clientY); return }
+  hideTip(); clearGuide()
+})
+detailBody.addEventListener('mouseleave', () => { hideTip(); clearGuide() })
 filterEl.addEventListener('input', () => { filter = filterEl.value; render() })
 sortEl.addEventListener('click', () => {
   sortDir = sortDir === 'hot' ? 'cold' : 'hot'

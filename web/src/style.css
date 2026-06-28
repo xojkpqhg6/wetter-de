@@ -316,8 +316,28 @@ body {
 .cal-wrap { display: flex; flex-direction: column; gap: 10px; margin: 2px 0 6px; }
 .cal-label { font-size: 11px; color: var(--ink-soft); letter-spacing: .12em; margin-bottom: 3px; }
 .cal-svg { width: 100%; height: auto; }
-.cal { fill: currentColor; }
+.cal { fill: currentColor; cursor: crosshair; }
 .cal-empty { fill: var(--line); }
+.cal:hover { stroke: var(--ink); stroke-width: 1; }
+
+/* Hover-Tooltip + Graph-Führungslinie */
+.chart-tip {
+  position: fixed; z-index: 60; display: none; pointer-events: none;
+  background: var(--paper); color: var(--ink);
+  border: 1px solid var(--line-2); padding: 5px 8px;
+  font: 12px/1.45 var(--mono); white-space: nowrap;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .28);
+}
+.chart-tip b { font-weight: 700; }
+.chart-tip .ty { color: var(--ink-soft); }
+.chart-tip .faintlbl { color: var(--ink-soft); }
+.chart-tip .mx { color: var(--t-hot); font-weight: 700; }
+.chart-tip .mn { color: var(--t-cool); font-weight: 700; }
+.spark { cursor: crosshair; }
+.spark-guide { pointer-events: none; }
+.guide-line { stroke: var(--ink-soft); stroke-width: 1; stroke-dasharray: 3 2; }
+.guide-dot.mx { fill: var(--t-hot); }
+.guide-dot.mn { fill: var(--t-cool); }
 
 /* ---- Rekorde-Tafel ---- */
 .rec-filter { display: flex; justify-content: center; margin: 0 0 16px; }
