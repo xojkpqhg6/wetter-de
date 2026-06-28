@@ -232,13 +232,17 @@ with io.open(res_path, encoding="utf-8") as f:
 
 names = {sid: name for _, sid, name, _, _ in rows}
 
-# --- latest.json: neueste gültige Messung je Station (rows enthält jetzt alle Stunden) ---
+# --- latest.json: neueste gültige Messung je Station (rows enthält alle Stunden) ---
 latest_by = {}
 for t, sid, name, obs_iso, _ in rows:
     cur = latest_by.get(sid)
     if cur is None or obs_iso > cur["obs_utc"]:
         latest_by[sid] = {"id": sid, "name": name, "temp_c": t, "obs_utc": obs_iso}
-snap = sorted(latest_by.values(), key=lambda x: x["temp_c"], reverse=True)
+# "Jetzt" = nur die jüngste vorhandene Stunde (sonst gemischte Zeitstempel).
+# Stationen, die noch hinterherhängen (ältere Stunde), bleiben außen vor.
+max_obs = max((s["obs_utc"] for s in latest_by.values()), default="")
+snap = sorted((s for s in latest_by.values() if s["obs_utc"] == max_obs),
+              key=lambda x: x["temp_c"], reverse=True)
 json.dump({"generated_utc": run_utc, "station_count": len(snap), "stations": snap},
           io.open(os.path.join(data_dir, "latest.json"), "w", encoding="utf-8"),
           ensure_ascii=False, indent=2)
@@ -345,8 +349,12 @@ for base, st in daily_data:
     if not mem:
         continue
     for sid, e in st.items():
-        mx, mn = e.get("max_c"), trust_min(e)
+        mx = e.get("max_c")
+        mn_raw, mn_trust = e.get("min_c"), trust_min(e)
         for p in mem:
+            # "Tag" zeigt das laufende (provisorische) Tagesmin -> rohes min;
+            # Woche/Monat/Jahr nur vertrauenswürdiges Min (volle Tagesabdeckung).
+            mn = mn_raw if p == "day" else mn_trust
             cur = agg[p].get(sid)
             if cur is None:
                 agg[p][sid] = {"name": e.get("name", sid),
