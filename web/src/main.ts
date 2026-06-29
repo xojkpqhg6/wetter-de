@@ -620,6 +620,7 @@ let sparkCtx: SparkCtx | null = null
 
 type DistCtx = {
   counts: Map<number, Map<number, number>>; totals: Map<number, number>; years: number[]
+  allCounts: Map<number, number>; allTotal: number
   lo: number; hi: number; maxPct: number; metric: 'max' | 'min'
   W: number; H: number; padL: number; padR: number; padT: number; padB: number
 }
@@ -866,9 +867,16 @@ function distBuild(ser: SeriesEntry, dates: string[], metric: 'max' | 'min'): { 
   const totals = new Map<number, number>()
   counts.forEach((m, Y) => { let s = 0; m.forEach((c) => { s += c }); totals.set(Y, s) })
   const pct = (Y: number, t: number) => ((counts.get(Y)?.get(t) ?? 0) / (totals.get(Y) || 1)) * 100
+  // Allzeit = alle Jahre gepoolt; wird mit wachsender Datenmenge glatter
+  const allCounts = new Map<number, number>()
+  let allTotal = 0
+  counts.forEach((m) => m.forEach((c, t) => { allCounts.set(t, (allCounts.get(t) ?? 0) + c); allTotal += c }))
+  const pctAll = (t: number) => ((allCounts.get(t) ?? 0) / (allTotal || 1)) * 100
+  const years = [...counts.keys()].sort((a, b) => a - b)
+  const showAll = years.length >= 2
   let maxPct = 1
   counts.forEach((m, Y) => m.forEach((_, t) => { const p = pct(Y, t); if (p > maxPct) maxPct = p }))
-  const years = [...counts.keys()].sort((a, b) => a - b)
+  if (showAll) for (let t = lo; t <= hi; t++) { const p = pctAll(t); if (p > maxPct) maxPct = p }
   const curY = years[years.length - 1]
   const W = 540, H = 170, padL = 30, padR = 8, padT = 10, padB = 22
   const xs = (t: number) => padL + ((t - lo) / (hi - lo)) * (W - padL - padR)
@@ -880,6 +888,11 @@ function distBuild(ser: SeriesEntry, dates: string[], metric: 'max' | 'min'): { 
     for (let t = lo; t <= hi; t++) d += `${t === lo ? 'M' : 'L'}${xs(t).toFixed(1)},${ys(pct(Y, t)).toFixed(1)} `
     paths += `<path class="dist-line ${tone}${Y !== curY ? ' faint' : ''}" d="${d.trim()}"/>`
   }
+  if (showAll) {
+    let dAll = ''
+    for (let t = lo; t <= hi; t++) dAll += `${t === lo ? 'M' : 'L'}${xs(t).toFixed(1)},${ys(pctAll(t)).toFixed(1)} `
+    paths += `<path class="dist-line all" d="${dAll.trim()}"/>`
+  }
   let xlbl = ''
   for (let t = Math.ceil(lo / 5) * 5; t <= hi; t += 5)
     xlbl += `<text class="spark-lbl" x="${xs(t).toFixed(1)}" y="${H - 4}" text-anchor="middle">${t}°</text>`
@@ -889,7 +902,7 @@ function distBuild(ser: SeriesEntry, dates: string[], metric: 'max' | 'min'): { 
     `<line class="spark-axis" x1="${padL}" y1="${padT}" x2="${padL}" y2="${H - padB}"/>` +
     `<line class="spark-axis" x1="${padL}" y1="${(H - padB).toFixed(1)}" x2="${W - padR}" y2="${(H - padB).toFixed(1)}"/>` +
     paths + xlbl + ylbl + `<g class="dist-guide"></g></svg>`
-  return { html, ctx: { counts, totals, years, lo, hi, maxPct, metric, W, H, padL, padR, padT, padB } }
+  return { html, ctx: { counts, totals, years, allCounts, allTotal, lo, hi, maxPct, metric, W, H, padL, padR, padT, padB } }
 }
 
 // Hover über der Verteilung: Temperatur-Bin bestimmen, Führungslinie + "N Tage" je Jahr.
@@ -914,6 +927,12 @@ function onDistMove(svg: SVGSVGElement, clientX: number, clientY: number): void 
     rows.push(`<span class="ty${Y === curY ? '' : ' faintlbl'}">${Y}</span> ` +
       `<span class="${tone}">${p.toFixed(1)} %</span> <span class="dim">${n} ${n === 1 ? 'Tag' : 'Tage'}</span>`)
   }
+  if (c.years.length >= 2) {
+    const n = c.allCounts.get(t) ?? 0
+    const p = (n / (c.allTotal || 1)) * 100
+    g += `<circle class="guide-dot all" cx="${gx.toFixed(1)}" cy="${ys(p).toFixed(1)}" r="2.5"/>`
+    rows.push(`<span class="ty">Allzeit</span> <span class="av">${p.toFixed(1)} %</span> <span class="dim">${n} ${n === 1 ? 'Tag' : 'Tage'}</span>`)
+  }
   const gg = svg.querySelector('.dist-guide')
   if (gg) gg.innerHTML = g
   showTip(`<b>${t}°</b><br>${rows.join('<br>')}`, clientX, clientY)
@@ -923,9 +942,10 @@ function distLegend(dates: string[], metric: 'max' | 'min'): string {
   const years = [...new Set(dates.map((d) => +d.slice(0, 4)))].sort((a, b) => a - b)
   const curY = years[years.length - 1]
   const yl = years.map((y) => `<span class="${y === curY ? '' : 'faintlbl'}">${y}</span>`).join(' · ')
-  const what = metric === 'max'
-    ? '<span class="mx">— Tagesmaxima</span>' : '<span class="mn">— Tagesminima</span>'
-  return `<div class="spark-legend">${yl} &nbsp; ${what} &nbsp; · Anteil der Tage (%) je 1°C</div>`
+  const tone = metric === 'max' ? 'mx' : 'mn'
+  const metricWord = metric === 'max' ? 'Tagesmaxima' : 'Tagesminima'
+  const all = years.length >= 2 ? ` <span class="dist-all-lbl">— Allzeit</span>` : ''
+  return `<div class="spark-legend">${yl} &nbsp; <span class="${tone}">— Jahre</span>${all} &nbsp; · ${metricWord}, Anteil (%) je 1°C</div>`
 }
 
 function calendarPanel(ser: SeriesEntry, dates: string[]): string {

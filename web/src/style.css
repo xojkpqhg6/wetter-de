@@ -334,6 +334,7 @@ body {
 .chart-tip .mx { color: var(--t-hot); font-weight: 700; }
 .chart-tip .mn { color: var(--t-cool); font-weight: 700; }
 .chart-tip .dim { color: var(--ink-soft); }
+.chart-tip .av { color: var(--ink); font-weight: 700; }
 .spark { cursor: crosshair; }
 .spark-guide { pointer-events: none; }
 .guide-line { stroke: var(--ink-soft); stroke-width: 1; stroke-dasharray: 3 2; }
@@ -347,6 +348,9 @@ body {
 .dist-line.hot { stroke: var(--t-hot); }
 .dist-line.cool { stroke: var(--t-cool); }
 .dist-line.faint { opacity: .3; stroke-width: 1; }
+.dist-line.all { stroke: var(--ink); stroke-width: 1.6; }
+.spark-legend .dist-all-lbl { color: var(--ink); font-weight: 700; }
+.guide-dot.all { fill: var(--ink); }
 
 /* ---- Rekorde-Tafel ---- */
 .rec-filter { display: flex; justify-content: center; margin: 0 0 16px; }
