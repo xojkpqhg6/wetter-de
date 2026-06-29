@@ -326,6 +326,12 @@ ty, tw, _ = today.isocalendar()
 pkey = {"day": today.strftime("%Y-%m-%d"), "week": "%04d-W%02d" % (ty, tw),
         "month": today.strftime("%Y-%m"), "year": today.strftime("%Y")}
 
+# Max. Messpunktzahl heute (Nenner fuer die relative Tagesgrenze, analog period_days
+# bei Woche/Monat/Jahr): eine Station erscheint erst, wenn sie >= 60 % davon hat.
+max_samples_day = max(
+    [e.get("samples", 0) for b, st in daily_data if b == pkey["day"] for e in st.values()]
+    or [0])
+
 def in_periods(dd):
     out = []
     if dd == today:
@@ -355,10 +361,15 @@ for base, st in daily_data:
         mx = e.get("max_c")
         mn_raw, mn_trust = e.get("min_c"), trust_min(e)
         samp = e.get("samples", 0)
+        # Laufendes Tagesmin gilt, sobald die Station heute >= 60 % der Messpunkte der
+        # bestabgedeckten Station hat (gleiche Schwelle wie die Tag-Anzeige) -> dann sind
+        # die Nachtstunden erfasst und das Min ist belastbar (kein zu hohes Teiltag-Min).
+        day_min = mn_raw if (dd == today and samp >= max(1, int(0.6 * max_samples_day))) else None
         for p in mem:
-            # "Tag" zeigt das laufende (provisorische) Tagesmin -> rohes min;
-            # Woche/Monat/Jahr nur vertrauenswürdiges Min (volle Tagesabdeckung).
-            mn = mn_raw if p == "day" else mn_trust
+            # Tag UND der laufende Tag in Woche/Monat/Jahr: gegate-tes rohes Tagesmin
+            # (sonst bliebe z. B. am Montag das Woche-Tief leer). Frühere Tage: nur
+            # vertrauenswürdiges Min (volle Tagesabdeckung >= 20 Werte / Klimaarchiv).
+            mn = day_min if (p == "day" or dd == today) else mn_trust
             cur = agg[p].get(sid)
             if cur is None:
                 cur = {"name": e.get("name", sid), "max_c": None, "max_obs_utc": "",
@@ -376,10 +387,12 @@ for base, st in daily_data:
 # Stationen mit zu dünner Abdeckung im jeweiligen Zeitraum ausblenden (nicht löschen)
 def has_coverage(p, v):
     if p == "day":
-        return v["samples"] >= 3            # heute >= 3 Stundenwerte
-    if p == "week":
-        return v["days"] >= 4               # >= 4 von 7 Tagen
-    return v["days"] >= 0.6 * period_days[p]  # Monat/Jahr: >= 60 % der Tage
+        # wie Woche, nur auf Messpunkte statt Tage: >= 60 % der Messpunkte der
+        # bestabgedeckten Station -> am Tagesanfang reicht 1 Messpunkt, statt fix 3.
+        return v["samples"] >= max(1, int(0.6 * max_samples_day))
+    # Woche/Monat/Jahr: >= 60 % der bisher *vorhandenen* Tage (period_days), nicht der
+    # nominellen Periodenlaenge -> am Wochenstart (Mo) reicht 1 Tag, statt fix 4 zu fordern.
+    return v["days"] >= max(1, 0.6 * period_days[p])
 
 tops = {"generated_utc": run_utc, "periods": {}}
 for p in ("day", "week", "month", "year"):

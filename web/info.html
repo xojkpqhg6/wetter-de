@@ -58,19 +58,23 @@
         keine gemischten Zeitstempel.</p>
 
         <h2>Tages-Minimum &amp; „Tiefst"</h2>
-        <p>Ein verlässliches Tagesminimum braucht die Nachtstunden. Für Woche/Monat/Jahr und für Rekorde
-        zählt ein Minimum daher nur, wenn der Tag <strong>nahezu voll abgedeckt</strong> ist
-        (≥&nbsp;20 Stundenwerte) oder aus dem Klimaarchiv stammt. In der <strong>Tag</strong>-Ansicht wird
-        bewusst das <strong>laufende, vorläufige</strong> Tagesminimum gezeigt. „Wärmste Nacht" lässt den
-        laufenden Tag aus (dessen Minimum ist noch unvollständig).</p>
+        <p>Ein verlässliches Tagesminimum braucht die Nachtstunden. Für <strong>abgeschlossene</strong> Tage
+        (Woche/Monat/Jahr und Rekorde) zählt ein Minimum daher nur, wenn der Tag <strong>nahezu voll
+        abgedeckt</strong> ist (≥&nbsp;20 Stundenwerte) oder aus dem Klimaarchiv stammt. Der <strong>laufende
+        Tag</strong> steuert sein vorläufiges Minimum überall dort bei, wo die Station <strong>mindestens
+        60&nbsp;% der Messpunkte der bestabgedeckten Station</strong> gesammelt hat (dieselbe Grenze wie in der
+        Tag-Ansicht). Maßgeblich ist dabei allein die <em>Anzahl</em> der Messpunkte, nicht die Tageszeit — die
+        Annahme dahinter: Wer so viele Werte hat, hat die kühlen Nachtstunden meist mit erfasst; zwingend ist
+        das nicht. „Wärmste Nacht" lässt den laufenden Tag ganz aus (dessen Minimum ist als Rekord noch
+        unvollständig).</p>
 
         <h2>Ranglisten: ausgeblendete Stationen</h2>
         <p>Stationen mit zu dünner Datenbasis werden je Zeitraum <strong>ausgeblendet</strong> (nicht gelöscht) —
         sie erscheinen weiterhin überall, wo sie genug Daten haben. Schwellen:</p>
         <ul>
-          <li><strong>Tag:</strong> mindestens 3 Stundenwerte heute</li>
-          <li><strong>Woche:</strong> Daten an mindestens 4 von 7 Tagen</li>
-          <li><strong>Monat / Jahr:</strong> Daten an mindestens 60&nbsp;% der Tage (Allzeit: ≥&nbsp;60&nbsp;% im besten Jahr)</li>
+          <li><strong>Tag:</strong> mindestens 60&nbsp;% der Messpunkte der bestabgedeckten Station — am Tagesanfang reicht also bereits ein Messpunkt</li>
+          <li><strong>Woche:</strong> Daten an mindestens 60&nbsp;% der bisher vorhandenen Tage — am Wochenstart (Montag) reicht also bereits der erste Tag</li>
+          <li><strong>Monat / Jahr:</strong> Daten an mindestens 60&nbsp;% der bisher vorhandenen Tage (Allzeit: ≥&nbsp;60&nbsp;% im besten Jahr)</li>
         </ul>
         <p>Unter jeder Rangliste steht, wie viele Stationen deshalb ausgeblendet wurden.</p>
 
