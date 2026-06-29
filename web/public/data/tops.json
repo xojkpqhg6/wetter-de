@@ -1,10 +1,10 @@
 {
-  "generated_utc": "2026-06-29T18:07:33Z",
+  "generated_utc": "2026-06-29T19:07:42Z",
   "periods": {
     "day": {
       "key": "2026-06-29",
-      "station_count": 202,
-      "hidden": 1,
+      "station_count": 201,
+      "hidden": 2,
       "stations": [
         {
           "id": "10776",
@@ -67,8 +67,8 @@
           "name": "CHIEMING",
           "max_c": 30.3,
           "max_obs_utc": "2026-06-29T15:00:00Z",
-          "min_c": 18.2,
-          "min_obs_utc": "2026-06-29T04:00:00Z"
+          "min_c": 16.8,
+          "min_obs_utc": "2026-06-29T18:00:00Z"
         },
         {
           "id": "10796",
@@ -483,8 +483,8 @@
           "name": "LEIPZIG",
           "max_c": 27.5,
           "max_obs_utc": "2026-06-29T13:00:00Z",
-          "min_c": 22.0,
-          "min_obs_utc": "2026-06-29T04:00:00Z"
+          "min_c": 21.9,
+          "min_obs_utc": "2026-06-29T18:00:00Z"
         },
         {
           "id": "10513",
@@ -555,8 +555,8 @@
           "name": "WITTENBERG",
           "max_c": 27.2,
           "max_obs_utc": "2026-06-29T13:00:00Z",
-          "min_c": 23.2,
-          "min_obs_utc": "2026-06-29T17:00:00Z"
+          "min_c": 22.4,
+          "min_obs_utc": "2026-06-29T18:00:00Z"
         },
         {
           "id": "10490",
@@ -835,8 +835,8 @@
           "name": "ERFURT",
           "max_c": 25.9,
           "max_obs_utc": "2026-06-29T13:00:00Z",
-          "min_c": 21.8,
-          "min_obs_utc": "2026-06-29T17:00:00Z"
+          "min_c": 21.4,
+          "min_obs_utc": "2026-06-29T18:00:00Z"
         },
         {
           "id": "10565",
@@ -1451,8 +1451,8 @@
           "name": "NEUHAUS A.R.",
           "max_c": 22.5,
           "max_obs_utc": "2026-06-29T09:00:00Z",
-          "min_c": 18.2,
-          "min_obs_utc": "2026-06-29T01:00:00Z"
+          "min_c": 18.1,
+          "min_obs_utc": "2026-06-29T18:00:00Z"
         },
         {
           "id": "10022",
@@ -1531,8 +1531,8 @@
           "name": "SCHMUECKE",
           "max_c": 21.7,
           "max_obs_utc": "2026-06-29T00:00:00Z",
-          "min_c": 18.9,
-          "min_obs_utc": "2026-06-29T17:00:00Z"
+          "min_c": 17.9,
+          "min_obs_utc": "2026-06-29T18:00:00Z"
         },
         {
           "id": "10574",
@@ -1541,14 +1541,6 @@
           "max_obs_utc": "2026-06-29T14:00:00Z",
           "min_c": 17.3,
           "min_obs_utc": "2026-06-29T10:00:00Z"
-        },
-        {
-          "id": "10139",
-          "name": "BREMERVOERDE",
-          "max_c": 21.6,
-          "max_obs_utc": "2026-06-29T09:00:00Z",
-          "min_c": 18.1,
-          "min_obs_utc": "2026-06-29T01:00:00Z"
         },
         {
           "id": "10015",
@@ -1579,8 +1571,8 @@
           "name": "FICHTELBERG",
           "max_c": 20.9,
           "max_obs_utc": "2026-06-29T12:00:00Z",
-          "min_c": 17.2,
-          "min_obs_utc": "2026-06-29T04:00:00Z"
+          "min_c": 17.1,
+          "min_obs_utc": "2026-06-29T18:00:00Z"
         },
         {
           "id": "10908",
@@ -1690,8 +1682,8 @@
           "name": "CHIEMING",
           "max_c": 30.3,
           "max_obs_utc": "2026-06-29T15:00:00Z",
-          "min_c": 18.2,
-          "min_obs_utc": "2026-06-29T04:00:00Z"
+          "min_c": 16.8,
+          "min_obs_utc": "2026-06-29T18:00:00Z"
         },
         {
           "id": "10796",
@@ -2106,8 +2098,8 @@
           "name": "LEIPZIG",
           "max_c": 27.5,
           "max_obs_utc": "2026-06-29T13:00:00Z",
-          "min_c": 22.0,
-          "min_obs_utc": "2026-06-29T04:00:00Z"
+          "min_c": 21.9,
+          "min_obs_utc": "2026-06-29T18:00:00Z"
         },
         {
           "id": "10513",
@@ -2178,8 +2170,8 @@
           "name": "WITTENBERG",
           "max_c": 27.2,
           "max_obs_utc": "2026-06-29T13:00:00Z",
-          "min_c": 23.2,
-          "min_obs_utc": "2026-06-29T17:00:00Z"
+          "min_c": 22.4,
+          "min_obs_utc": "2026-06-29T18:00:00Z"
         },
         {
           "id": "10490",
@@ -2458,8 +2450,8 @@
           "name": "ERFURT",
           "max_c": 25.9,
           "max_obs_utc": "2026-06-29T13:00:00Z",
-          "min_c": 21.8,
-          "min_obs_utc": "2026-06-29T17:00:00Z"
+          "min_c": 21.4,
+          "min_obs_utc": "2026-06-29T18:00:00Z"
         },
         {
           "id": "10565",
@@ -3082,8 +3074,8 @@
           "name": "NEUHAUS A.R.",
           "max_c": 22.5,
           "max_obs_utc": "2026-06-29T09:00:00Z",
-          "min_c": 18.2,
-          "min_obs_utc": "2026-06-29T01:00:00Z"
+          "min_c": 18.1,
+          "min_obs_utc": "2026-06-29T18:00:00Z"
         },
         {
           "id": "10022",
@@ -3162,8 +3154,8 @@
           "name": "SCHMUECKE",
           "max_c": 21.7,
           "max_obs_utc": "2026-06-29T00:00:00Z",
-          "min_c": 18.9,
-          "min_obs_utc": "2026-06-29T17:00:00Z"
+          "min_c": 17.9,
+          "min_obs_utc": "2026-06-29T18:00:00Z"
         },
         {
           "id": "10574",
@@ -3178,8 +3170,8 @@
           "name": "BREMERVOERDE",
           "max_c": 21.6,
           "max_obs_utc": "2026-06-29T09:00:00Z",
-          "min_c": 18.1,
-          "min_obs_utc": "2026-06-29T01:00:00Z"
+          "min_c": null,
+          "min_obs_utc": ""
         },
         {
           "id": "10015",
@@ -3210,8 +3202,8 @@
           "name": "FICHTELBERG",
           "max_c": 20.9,
           "max_obs_utc": "2026-06-29T12:00:00Z",
-          "min_c": 17.2,
-          "min_obs_utc": "2026-06-29T04:00:00Z"
+          "min_c": 17.1,
+          "min_obs_utc": "2026-06-29T18:00:00Z"
         },
         {
           "id": "10908",
