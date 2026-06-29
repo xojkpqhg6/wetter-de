@@ -333,11 +333,20 @@ body {
 .chart-tip .faintlbl { color: var(--ink-soft); }
 .chart-tip .mx { color: var(--t-hot); font-weight: 700; }
 .chart-tip .mn { color: var(--t-cool); font-weight: 700; }
+.chart-tip .dim { color: var(--ink-soft); }
 .spark { cursor: crosshair; }
 .spark-guide { pointer-events: none; }
 .guide-line { stroke: var(--ink-soft); stroke-width: 1; stroke-dasharray: 3 2; }
 .guide-dot.mx { fill: var(--t-hot); }
 .guide-dot.mn { fill: var(--t-cool); }
+
+/* Verteilungskurve (Tabs "Verteilung Max/Min") */
+.dist { width: 100%; height: auto; cursor: crosshair; }
+.dist-guide { pointer-events: none; }
+.dist-line { fill: none; stroke-width: 1.4; }
+.dist-line.hot { stroke: var(--t-hot); }
+.dist-line.cool { stroke: var(--t-cool); }
+.dist-line.faint { opacity: .3; stroke-width: 1; }
 
 /* ---- Rekorde-Tafel ---- */
 .rec-filter { display: flex; justify-content: center; margin: 0 0 16px; }
@@ -410,4 +419,7 @@ body {
   .controls input { flex: 1 1 100%; }
   .controls button { flex: 1 1 auto; }
   .periods button { padding: 7px 9px; font-size: 11px; letter-spacing: .04em; }
+  /* 4 Detail-Tabs passen schmal nicht in eine Reihe -> umbrechen, je Button voller Rand */
+  .detail-tabs { flex-wrap: wrap; gap: 4px; }
+  .detail-tabs button { border-left-width: 1px; }
 }

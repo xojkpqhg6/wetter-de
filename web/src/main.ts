@@ -113,7 +113,8 @@ let filter = ''
 let yearSel = 'current'              // bei view==='year': 'current' | '<jahr>' | 'all'
 let recYear = 'all'                  // Rekorde-Filter: 'all' | '<jahr>'
 let detailId: string | null = null
-let detailTab: 'verlauf' | 'kalender' = 'verlauf'
+type DetailTab = 'verlauf' | 'vmax' | 'vmin' | 'kalender'
+let detailTab: DetailTab = 'verlauf'
 
 // series.json (Verlauf je Station) einmalig nachladen
 function ensureSeries(): Promise<void> {
@@ -617,6 +618,13 @@ type SparkCtx = {
 }
 let sparkCtx: SparkCtx | null = null
 
+type DistCtx = {
+  counts: Map<number, Map<number, number>>; totals: Map<number, number>; years: number[]
+  lo: number; hi: number; maxPct: number; metric: 'max' | 'min'
+  W: number; H: number; padL: number; padR: number; padT: number; padB: number
+}
+let distCtx: DistCtx | null = null
+
 // gemeinsamer Hover-Tooltip (Graph + Kalender)
 let tipEl: HTMLElement | null = null
 function showTip(html: string, x: number, y: number): void {
@@ -632,8 +640,7 @@ function showTip(html: string, x: number, y: number): void {
 }
 function hideTip(): void { if (tipEl) tipEl.style.display = 'none' }
 function clearGuide(): void {
-  const g = detailBody.querySelector('.spark-guide')
-  if (g) g.innerHTML = ''
+  detailBody.querySelectorAll('.spark-guide, .dist-guide').forEach((g) => { g.innerHTML = '' })
 }
 
 async function openDetail(id: string): Promise<void> {
@@ -713,17 +720,25 @@ function renderDetail(): void {
       `${ly.delta >= 0 ? '+' : ''}${ly.delta.toFixed(1)}° ggü. heute`))
   }
 
+  const tabBtn = (t: DetailTab, lbl: string) =>
+    `<button data-tab="${t}" class="${detailTab === t ? 'active' : ''}">${lbl}</button>`
   const tabs = `<div class="seg detail-tabs">` +
-    `<button data-tab="verlauf" class="${detailTab === 'verlauf' ? 'active' : ''}">Verlauf</button>` +
-    `<button data-tab="kalender" class="${detailTab === 'kalender' ? 'active' : ''}">Kalender</button></div>`
+    tabBtn('verlauf', 'Verlauf') + tabBtn('vmax', 'Verteilung Max') +
+    tabBtn('vmin', 'Verteilung Min') + tabBtn('kalender', 'Kalender') + `</div>`
 
   let panel = '<p class="empty">Kein Verlauf verfügbar.</p>'
   sparkCtx = null
+  distCtx = null
   if (ser) {
     if (detailTab === 'verlauf') {
       const o = overlayBuild(ser, dates)
       sparkCtx = o.ctx
       panel = o.html + overlayLegend(dates)
+    } else if (detailTab === 'vmax' || detailTab === 'vmin') {
+      const metric = detailTab === 'vmax' ? 'max' : 'min'
+      const o = distBuild(ser, dates, metric)
+      distCtx = o.ctx
+      panel = o.html + distLegend(dates, metric)
     } else {
       panel = calendarPanel(ser, dates)
     }
@@ -830,6 +845,89 @@ function overlayLegend(dates: string[]): string {
   return `<div class="spark-legend">${yl} &nbsp; <span class="mx">— Max</span> <span class="mn">— Min</span></div>`
 }
 
+// Verteilung: je Jahr ein Häufigkeits-Polygon "Anzahl Tage (y) über Temperatur (x, 1°C-Bins)".
+// Bewusst ohne Gates -- gezeigt wird die Rohlage aus series.json (wie der Verlauf).
+function distBuild(ser: SeriesEntry, dates: string[], metric: 'max' | 'min'): { html: string; ctx: DistCtx | null } {
+  const counts = new Map<number, Map<number, number>>()
+  let lo = Infinity, hi = -Infinity
+  dates.forEach((ds, i) => {
+    const v = ser[metric][i]
+    if (v == null) return
+    const Y = +ds.slice(0, 4), t = Math.round(v)
+    let m = counts.get(Y)
+    if (!m) { m = new Map(); counts.set(Y, m) }
+    m.set(t, (m.get(t) ?? 0) + 1)
+    if (t < lo) lo = t
+    if (t > hi) hi = t
+  })
+  if (!counts.size) return { html: '<p class="empty">Kein Verlauf verfügbar.</p>', ctx: null }
+  if (hi - lo < 1) { hi += 1; lo -= 1 }
+  // je Jahr auf Anteil der Tage normieren -> Jahre vergleichbar (Teiljahr verzerrt nicht)
+  const totals = new Map<number, number>()
+  counts.forEach((m, Y) => { let s = 0; m.forEach((c) => { s += c }); totals.set(Y, s) })
+  const pct = (Y: number, t: number) => ((counts.get(Y)?.get(t) ?? 0) / (totals.get(Y) || 1)) * 100
+  let maxPct = 1
+  counts.forEach((m, Y) => m.forEach((_, t) => { const p = pct(Y, t); if (p > maxPct) maxPct = p }))
+  const years = [...counts.keys()].sort((a, b) => a - b)
+  const curY = years[years.length - 1]
+  const W = 540, H = 170, padL = 30, padR = 8, padT = 10, padB = 22
+  const xs = (t: number) => padL + ((t - lo) / (hi - lo)) * (W - padL - padR)
+  const ys = (p: number) => padT + (1 - p / maxPct) * (H - padT - padB)
+  const tone = metric === 'max' ? 'hot' : 'cool'
+  let paths = ''
+  for (const Y of years) {
+    let d = ''
+    for (let t = lo; t <= hi; t++) d += `${t === lo ? 'M' : 'L'}${xs(t).toFixed(1)},${ys(pct(Y, t)).toFixed(1)} `
+    paths += `<path class="dist-line ${tone}${Y !== curY ? ' faint' : ''}" d="${d.trim()}"/>`
+  }
+  let xlbl = ''
+  for (let t = Math.ceil(lo / 5) * 5; t <= hi; t += 5)
+    xlbl += `<text class="spark-lbl" x="${xs(t).toFixed(1)}" y="${H - 4}" text-anchor="middle">${t}°</text>`
+  const ylbl = `<text class="spark-lbl" x="2" y="${(ys(maxPct) + 3).toFixed(1)}">${maxPct.toFixed(0)}%</text>` +
+    `<text class="spark-lbl" x="2" y="${(ys(0) + 3).toFixed(1)}">0%</text>`
+  const html = `<svg class="dist" viewBox="0 0 ${W} ${H}">` +
+    `<line class="spark-axis" x1="${padL}" y1="${padT}" x2="${padL}" y2="${H - padB}"/>` +
+    `<line class="spark-axis" x1="${padL}" y1="${(H - padB).toFixed(1)}" x2="${W - padR}" y2="${(H - padB).toFixed(1)}"/>` +
+    paths + xlbl + ylbl + `<g class="dist-guide"></g></svg>`
+  return { html, ctx: { counts, totals, years, lo, hi, maxPct, metric, W, H, padL, padR, padT, padB } }
+}
+
+// Hover über der Verteilung: Temperatur-Bin bestimmen, Führungslinie + "N Tage" je Jahr.
+function onDistMove(svg: SVGSVGElement, clientX: number, clientY: number): void {
+  const c = distCtx
+  if (!c) return
+  const rect = svg.getBoundingClientRect()
+  if (rect.width === 0) return
+  const sx = (clientX - rect.left) / rect.width * c.W
+  let t = Math.round(c.lo + ((sx - c.padL) / (c.W - c.padL - c.padR)) * (c.hi - c.lo))
+  t = Math.max(c.lo, Math.min(c.hi, t))
+  const gx = c.padL + ((t - c.lo) / (c.hi - c.lo)) * (c.W - c.padL - c.padR)
+  const ys = (p: number) => c.padT + (1 - p / c.maxPct) * (c.H - c.padT - c.padB)
+  const curY = c.years[c.years.length - 1]
+  const tone = c.metric === 'max' ? 'mx' : 'mn'
+  let g = `<line class="guide-line" x1="${gx.toFixed(1)}" y1="${c.padT}" x2="${gx.toFixed(1)}" y2="${(c.H - c.padB).toFixed(1)}"/>`
+  const rows: string[] = []
+  for (const Y of c.years) {
+    const n = c.counts.get(Y)?.get(t) ?? 0
+    const p = (n / (c.totals.get(Y) || 1)) * 100
+    g += `<circle class="guide-dot ${tone}" cx="${gx.toFixed(1)}" cy="${ys(p).toFixed(1)}" r="2.5"/>`
+    rows.push(`<span class="ty${Y === curY ? '' : ' faintlbl'}">${Y}</span> ` +
+      `<span class="${tone}">${p.toFixed(1)} %</span> <span class="dim">${n} ${n === 1 ? 'Tag' : 'Tage'}</span>`)
+  }
+  const gg = svg.querySelector('.dist-guide')
+  if (gg) gg.innerHTML = g
+  showTip(`<b>${t}°</b><br>${rows.join('<br>')}`, clientX, clientY)
+}
+
+function distLegend(dates: string[], metric: 'max' | 'min'): string {
+  const years = [...new Set(dates.map((d) => +d.slice(0, 4)))].sort((a, b) => a - b)
+  const curY = years[years.length - 1]
+  const yl = years.map((y) => `<span class="${y === curY ? '' : 'faintlbl'}">${y}</span>`).join(' · ')
+  const what = metric === 'max'
+    ? '<span class="mx">— Tagesmaxima</span>' : '<span class="mn">— Tagesminima</span>'
+  return `<div class="spark-legend">${yl} &nbsp; ${what} &nbsp; · Anteil der Tage (%) je 1°C</div>`
+}
+
 function calendarPanel(ser: SeriesEntry, dates: string[]): string {
   const years = [...new Set(dates.map((d) => +d.slice(0, 4)))].sort((a, b) => a - b)
   return `<div class="cal-wrap">${years.map((y) => calendarSvg(ser, dates, y)).join('')}</div>` +
@@ -859,7 +957,7 @@ function calendarSvg(ser: SeriesEntry, dates: string[], year: number): string {
     `<svg class="cal-svg" viewBox="0 0 ${W.toFixed(1)} ${H.toFixed(1)}" preserveAspectRatio="xMinYMin meet">${cells}</svg></div>`
 }
 
-function closeDetail(): void { detailEl.hidden = true; detailBody.innerHTML = ''; sparkCtx = null; hideTip() }
+function closeDetail(): void { detailEl.hidden = true; detailBody.innerHTML = ''; sparkCtx = null; distCtx = null; hideTip() }
 
 /* ---------- URL-State ---------- */
 function readHash(): void {
@@ -935,7 +1033,7 @@ yearSelEl.addEventListener('click', (e) => {
 detailBody.addEventListener('click', (e) => {
   const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-tab]')
   if (!b) return
-  detailTab = b.dataset.tab as 'verlauf' | 'kalender'
+  detailTab = b.dataset.tab as DetailTab
   renderDetail()
 })
 detailBody.addEventListener('mousemove', (e) => {
@@ -944,6 +1042,8 @@ detailBody.addEventListener('mousemove', (e) => {
   if (cal) { showTip(`<b>${cal.getAttribute('data-d')}</b> · ${cal.getAttribute('data-v')}`, e.clientX, e.clientY); return }
   const svg = e.target.closest('.spark') as SVGSVGElement | null
   if (svg) { onSparkMove(svg, e.clientX, e.clientY); return }
+  const dist = e.target.closest('.dist') as SVGSVGElement | null
+  if (dist) { onDistMove(dist, e.clientX, e.clientY); return }
   hideTip(); clearGuide()
 })
 detailBody.addEventListener('mouseleave', () => { hideTip(); clearGuide() })
