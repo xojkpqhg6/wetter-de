@@ -42,6 +42,7 @@ HISTORY=0                          # zusätzlich history/<wmo>.json (volle Tages
 WINDOW="${REF_WINDOW:-7}"          # Glättungsfenster ±N Kalendertage
 MIN_SAMPLES="${REF_MIN_SAMPLES:-50}"  # min. Messwerte je Fenster, sonst null
 MIN_STATION="${REF_MIN_STATION:-1500}" # min. Messwerte je Station, sonst keine Referenz
+MIN_YEARS="${REF_MIN_YEARS:-20}"   # min. abgedeckte Jahre in der Periode, sonst keine Normal-Linie
 
 YEARS=()
 while [ $# -gt 0 ]; do
@@ -255,12 +256,13 @@ echo "  im Cache: $GOT / $N"
 # 5) TXK/TNK parsen, je Kalendertag mitteln + glätten, Verteilung poolen -> JSON
 # ---------------------------------------------------------------------------
 echo "» Parse TXK/TNK, mittel je Kalendertag (geglättet) & poole Verteilung …"
-python3 - "$XWALK" "$DLLIST" "$CACHE" "$OUT" "$FROM" "$TO" "$WINDOW" "$MIN_SAMPLES" "$MIN_STATION" "$OUT_RECORDS" <<'PY'
+python3 - "$XWALK" "$DLLIST" "$CACHE" "$OUT" "$FROM" "$TO" "$WINDOW" "$MIN_SAMPLES" "$MIN_STATION" "$OUT_RECORDS" "$MIN_YEARS" <<'PY'
 import sys, os, io, json, zipfile, datetime
 
-xwalk, dllist, cache, out_path, frm, to, window, min_samples, min_station, out_records = (
+xwalk, dllist, cache, out_path, frm, to, window, min_samples, min_station, out_records, min_years = (
     sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],
-    int(sys.argv[5]), int(sys.argv[6]), int(sys.argv[7]), int(sys.argv[8]), int(sys.argv[9]), sys.argv[10])
+    int(sys.argv[5]), int(sys.argv[6]), int(sys.argv[7]), int(sys.argv[8]), int(sys.argv[9]),
+    sys.argv[10], int(sys.argv[11]))
 
 # interne ID -> WMO
 internal2wmo = {}
@@ -365,7 +367,8 @@ def smooth(sums, counts):
 stations = {}
 kept = dropped = 0
 for wmo, a in acc.items():
-    if a["n"] < min_station:
+    # Normal-Linie nur bei ausreichend langer Reihe (min_years abgedeckte Jahre) + Messwerten
+    if a["n"] < min_station or len(a["years"]) < min_years:
         dropped += 1; continue
     ys = a["years"]
     stations[wmo] = {

@@ -81,8 +81,9 @@ Gespeichert wird durchgängig **UTC**; die Website rechnet für die Anzeige in
   enthält zusätzlich den Allzeit-Höchst/-Tiefstwert je Station (über das gesamte Archiv).
   Rate-limit-schonend: Verzeichnis-Listing nur 1×, kleine Parallelität (`--jobs`),
   Backoff-Retries, **resumebarer ZIP-Cache** (zweiter Lauf nach Abbruch lädt nur
-  Fehlendes; `--refresh` erzwingt Neuladen). Stationen ohne ausreichende Historie
-  bleiben ohne Referenzlinie. Nur nötig, wenn sich die Normalperiode ändert.
+  Fehlendes; `--refresh` erzwingt Neuladen). Eine Normal-Linie entsteht nur bei
+  **≥ 20 abgedeckten Jahren** in der Periode (`REF_MIN_YEARS`); bei Teilabdeckung
+  trägt das Label die tatsächliche Spanne. Nur nötig, wenn sich die Normalperiode ändert.
   Mit **`--history`** schreibt dasselbe Skript zusätzlich `history/<wmo>.json` (die
   volle Tageshistorie je Station, aus demselben ZIP-Cache) — vom Frontend on-demand
   beim Öffnen einer Station geladen, sodass Kalender/Verlauf/Verteilung die gesamte
