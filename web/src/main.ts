@@ -26,11 +26,14 @@ interface Series { dates: string[]; stations: Record<string, { max: (number | nu
 // reference.json: Tages-Klimatologie der Normalperiode (per ./reference.sh erzeugt).
 //   max/min: geglättete Normalwerte je Kalendertag (Index 1…366; [0] ungenutzt).
 //   histMax/histMin: gepoolte Verteilung der Tageswerte (1-°C-Bins, °C -> Tage).
-interface RefEntry { max: (number | null)[]; min: (number | null)[]; histMax: Record<string, number>; histMin: Record<string, number> }
+interface RefEntry { max: (number | null)[]; min: (number | null)[]; histMax: Record<string, number>; histMin: Record<string, number>; y0?: number; y1?: number; ny?: number }
 interface Reference { period: string; stations: Record<string, RefEntry> }
 // history/<wmo>.json: volle Tageshistorie einer Station (per ./reference.sh --history),
 // on-demand geladen. Dichte Tagesreihe ab `start` (Index = Tagesoffset).
 interface Hist { start: string; max: (number | null)[]; min: (number | null)[] }
+// records.json: Allzeit-Rekord je Station (volles DWD-Archiv), per ./reference.sh
+interface RecEntry { maxC?: number; maxDate?: string; minC?: number; minDate?: string }
+interface Records { records: Record<string, RecEntry> }
 
 type PeriodKey = 'day' | 'week' | 'month' | 'year'
 type View = 'now' | PeriodKey
@@ -114,6 +117,8 @@ let series: Series | null = null
 let seriesPromise: Promise<void> | null = null
 let reference: Reference | null = null
 let referencePromise: Promise<void> | null = null
+let records: Records | null = null
+let recordsPromise: Promise<void> | null = null
 const historyRaw = new Map<string, Hist | null>()                 // geladene history/<id>.json (null = keine)
 const combinedCache = new Map<string, { dates: string[]; ser: SeriesEntry }>()  // Historie + Live je Station
 
@@ -139,6 +144,12 @@ function ensureSeries(): Promise<void> {
 function ensureReference(): Promise<void> {
   if (!referencePromise) referencePromise = fetchJson<Reference>('data/reference.json').then((r) => { reference = r })
   return referencePromise
+}
+
+// records.json (Allzeit-Rekorde je Station) einmalig nachladen
+function ensureRecords(): Promise<void> {
+  if (!recordsPromise) recordsPromise = fetchJson<Records>('data/records.json').then((r) => { records = r })
+  return recordsPromise
 }
 
 // history/<id>.json on-demand laden (je Station genau einmal) und mit Live-Reihe mergen
@@ -229,13 +240,18 @@ function currentList(): { items: Item[]; metaHtml: string } | null {
     }
   }
   const hideNote = (n: number) => (n ? ` · ${n} mit zu wenig Daten ausgeblendet` : '')
-  // Jahr-Sub-Auswahl (2025 / Allzeit) -> client-seitig aus series.json
+  // Jahr-Sub-Auswahl -> client-seitig: einzelne Jahre aus series.json,
+  // „Allzeit" = Rekord je Station aus records.json (volles Archiv) + Live-Reihe.
   if (view === 'year' && yearSel !== 'current') {
-    if (!series) return null
-    const { items, hidden } = computeYearItems(yearSel === 'all' ? null : +yearSel)
-    const label = yearSel === 'all' ? 'Allzeit' : yearSel
     const what = metric === 'max' ? 'Höchstwerte' : 'Tiefstwerte'
-    return { items, metaHtml: `${what} <strong>${label}</strong> · ${items.length} Stationen${hideNote(hidden)}` }
+    if (yearSel === 'all') {
+      if (!series || !records) return null
+      const items = computeAllTimeItems()
+      return { items, metaHtml: `${what} <strong>Allzeit</strong> · Rekord je Station seit Aufzeichnungsbeginn · ${items.length} Stationen` }
+    }
+    if (!series) return null
+    const { items, hidden } = computeYearItems(+yearSel)
+    return { items, metaHtml: `${what} <strong>${yearSel}</strong> · ${items.length} Stationen${hideNote(hidden)}` }
   }
   if (!tops) return null
   const p = tops.periods[view]
@@ -281,6 +297,51 @@ function computeYearItems(year: number | null): { items: Item[]; hidden: number 
     items.push({ id, name: coords[id]?.name ?? id, value: val, obs: metric === 'max' ? bMaxD : bMinD })
   }
   return { items, hidden }
+}
+
+// Bestwerte je Station aus der Live-Reihe (series.json, 2025+); einmal berechnet.
+let liveExtCache: Map<string, { mx: number | null; mxd: string; mn: number | null; mnd: string }> | null = null
+function liveExtremes(): Map<string, { mx: number | null; mxd: string; mn: number | null; mnd: string }> {
+  if (liveExtCache) return liveExtCache
+  const m = new Map<string, { mx: number | null; mxd: string; mn: number | null; mnd: string }>()
+  if (series) {
+    const { dates, stations } = series
+    for (const id in stations) {
+      const s = stations[id]
+      let mx: number | null = null, mxd = '', mn: number | null = null, mnd = ''
+      for (let i = 0; i < dates.length; i++) {
+        const a = s.max[i], b = s.min[i]
+        if (a != null && (mx === null || a > mx)) { mx = a; mxd = dates[i] }
+        if (b != null && (mn === null || b < mn)) { mn = b; mnd = dates[i] }
+      }
+      m.set(id, { mx, mxd, mn, mnd })
+    }
+  }
+  liveExtCache = m
+  return m
+}
+
+// Allzeit-Rangliste: Rekord je Station aus records.json (volles Archiv), mit der
+// Live-Reihe gemerged (damit auch 2026er-Rekorde zählen). Kein Abdeckungs-Gate.
+function computeAllTimeItems(): Item[] {
+  if (!records) return []
+  const live = liveExtremes()
+  const items: Item[] = []
+  const ids = new Set<string>([...Object.keys(records.records), ...live.keys()])
+  for (const id of ids) {
+    const rec = records.records[id], lv = live.get(id)
+    let v: number | null = null, obs = ''
+    if (metric === 'max') {
+      if (rec?.maxC != null) { v = rec.maxC; obs = rec.maxDate ?? '' }
+      if (lv?.mx != null && (v === null || lv.mx > v)) { v = lv.mx; obs = lv.mxd }
+    } else {
+      if (rec?.minC != null) { v = rec.minC; obs = rec.minDate ?? '' }
+      if (lv?.mn != null && (v === null || lv.mn < v)) { v = lv.mn; obs = lv.mnd }
+    }
+    if (v == null) continue
+    items.push({ id, name: coords[id]?.name ?? latest?.stations.find((s) => s.id === id)?.name ?? id, value: v, obs })
+  }
+  return items
 }
 
 // Jahr-Umschalter füllen (aktuelles Jahr · Vorjahr · Allzeit)
@@ -524,11 +585,11 @@ function render(): void {
   }
   recordsEl.hidden = true
 
-  // Jahr-Sub-Ansicht braucht series.json -> ggf. nachladen, dann erneut rendern
-  if (view === 'year' && yearSel !== 'current' && !series) {
+  // Jahr-Sub-Ansicht braucht series.json (+ records.json für Allzeit) -> ggf. nachladen
+  if (view === 'year' && yearSel !== 'current' && (!seriesPromise || (yearSel === 'all' && !recordsPromise))) {
     metaEl.textContent = 'lädt Verlaufsdaten …'
     rowsEl.innerHTML = ''; mapWrap.innerHTML = ''
-    void ensureSeries().then(render)
+    void Promise.all([ensureSeries(), yearSel === 'all' ? ensureRecords() : Promise.resolve()]).then(render)
     return
   }
 
@@ -576,6 +637,8 @@ function renderTable(list: Item[], all: Item[]): void {
   const vals = all.map((s) => s.value)
   const min = Math.min(...vals)
   const span = Math.max(1, Math.max(...vals) - min)
+  // Allzeit-Rekorde stammen aus verschiedenen Jahren -> volles Datum (mit Jahr) zeigen
+  const obsFmt = view === 'year' && yearSel === 'all' ? fmtDate : fmtTime
   rowsEl.innerHTML = list.map((s, i) => {
     const rank = i + 1
     const cls = tempClass(s.value)
@@ -586,7 +649,7 @@ function renderTable(list: Item[], all: Item[]): void {
       `<td class="name">${esc(s.name)}</td>` +
       `<td class="bar"><span class="fill" style="width:${pct}%"></span></td>` +
       `<td class="temp">${s.value.toFixed(1)}°</td>` +
-      `<td class="time">${fmtTime(s.obs)}</td></tr>`
+      `<td class="time">${obsFmt(s.obs)}</td></tr>`
   }).join('')
 }
 
@@ -761,7 +824,9 @@ function renderDetail(): void {
   const ser = series?.stations[id]
   const dates = series?.dates ?? []
   const ref = reference?.stations[id] ?? null
-  const refPeriod = reference?.period ?? ''
+  // Label = tatsächlich genutzte Jahresspanne der Station (nicht die Zielperiode),
+  // da manche Stationen nur einen Teil von 1991–2020 abdecken (z. B. Zugspitze ab 2011).
+  const refPeriod = ref?.y0 && ref?.y1 ? `${ref.y0}–${ref.y1}` : (reference?.period ?? '')
   // Charts nutzen die kombinierte Reihe (Historie + Live), sobald die Historie geladen ist;
   // Fakten/Zähler bleiben auf der Live-Reihe (kanonisch für den Rest der Seite).
   const combined = combinedCache.get(id)

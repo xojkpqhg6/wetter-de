@@ -67,6 +67,7 @@ DATA="$ROOT/web/public/data"
 KL_BASE="https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/daily/kl/historical"
 CACHE="${TMPDIR:-/tmp}/dwd_kl_hist_cache"   # stabiler, resumebarer ZIP-Cache
 OUT="$DATA/reference.json"
+OUT_RECORDS="$DATA/records.json"
 
 if [ ! -s "$DATA/stations.cfg" ] || [ ! -s "$DATA/de_stations.tsv" ]; then
   echo "Fehlt: stations.cfg / de_stations.tsv — bitte zuerst ./temp-leaderboard.sh ausführen." >&2
@@ -254,12 +255,12 @@ echo "  im Cache: $GOT / $N"
 # 5) TXK/TNK parsen, je Kalendertag mitteln + glätten, Verteilung poolen -> JSON
 # ---------------------------------------------------------------------------
 echo "» Parse TXK/TNK, mittel je Kalendertag (geglättet) & poole Verteilung …"
-python3 - "$XWALK" "$DLLIST" "$CACHE" "$OUT" "$FROM" "$TO" "$WINDOW" "$MIN_SAMPLES" "$MIN_STATION" <<'PY'
+python3 - "$XWALK" "$DLLIST" "$CACHE" "$OUT" "$FROM" "$TO" "$WINDOW" "$MIN_SAMPLES" "$MIN_STATION" "$OUT_RECORDS" <<'PY'
 import sys, os, io, json, zipfile, datetime
 
-xwalk, dllist, cache, out_path, frm, to, window, min_samples, min_station = (
+xwalk, dllist, cache, out_path, frm, to, window, min_samples, min_station, out_records = (
     sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],
-    int(sys.argv[5]), int(sys.argv[6]), int(sys.argv[7]), int(sys.argv[8]), int(sys.argv[9]))
+    int(sys.argv[5]), int(sys.argv[6]), int(sys.argv[7]), int(sys.argv[8]), int(sys.argv[9]), sys.argv[10])
 
 # interne ID -> WMO
 internal2wmo = {}
@@ -292,7 +293,8 @@ def rnd(v):                       # wie JS Math.round (halbe Werte Richtung +∞
 N = 367
 def new_acc():
     return {"smax": [0.0]*N, "cmax": [0]*N, "smin": [0.0]*N, "cmin": [0]*N,
-            "hmax": {}, "hmin": {}, "n": 0}
+            "hmax": {}, "hmin": {}, "n": 0, "years": set(),
+            "rmx": None, "rmxd": "", "rmn": None, "rmnd": ""}   # Allzeit-Rekorde
 acc = {}
 
 lo_i, hi_i = frm * 10000 + 101, to * 10000 + 1231
@@ -322,17 +324,25 @@ for internal in internals:
             dt = int(fields[1])
         except ValueError:
             continue
-        if dt < lo_i or dt > hi_i:
-            continue
         txk, tnk = num(fields[15]), num(fields[16])
         if txk is None and tnk is None:
             continue
         y, m, d = dt // 10000, (dt // 100) % 100, dt % 100
+        ds = "%04d-%02d-%02d" % (y, m, d)
+        # Allzeit-Rekorde je Station (gesamte Historie, ungefiltert) -> records.json
+        if txk is not None and (a["rmx"] is None or txk > a["rmx"]):
+            a["rmx"] = txk; a["rmxd"] = ds
+        if tnk is not None and (a["rmn"] is None or tnk < a["rmn"]):
+            a["rmn"] = tnk; a["rmnd"] = ds
+        # ab hier nur die Normalperiode (für reference.json)
+        if dt < lo_i or dt > hi_i:
+            continue
         try:
             doy = (datetime.date(y, m, d) - datetime.date(y, 1, 1)).days + 1
         except ValueError:
             continue
         a["n"] += 1
+        a["years"].add(y)
         if txk is not None:
             a["smax"][doy] += txk; a["cmax"][doy] += 1
             k = str(rnd(txk)); a["hmax"][k] = a["hmax"].get(k, 0) + 1
@@ -357,11 +367,13 @@ kept = dropped = 0
 for wmo, a in acc.items():
     if a["n"] < min_station:
         dropped += 1; continue
+    ys = a["years"]
     stations[wmo] = {
         "max": smooth(a["smax"], a["cmax"]),
         "min": smooth(a["smin"], a["cmin"]),
         "histMax": a["hmax"],
         "histMin": a["hmin"],
+        "y0": min(ys), "y1": max(ys), "ny": len(ys),   # tatsächlich genutzte Jahresspanne
     }
     kept += 1
 
@@ -369,9 +381,23 @@ doc = {"period": "%d-%d" % (frm, to), "stations": stations}
 with io.open(out_path, "w", encoding="utf-8") as f:
     json.dump(doc, f, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
 
+# Allzeit-Rekorde je Station (unabhängig vom Normalperioden-Gate) -> records.json
+records = {}
+for wmo, a in acc.items():
+    rec = {}
+    if a["rmx"] is not None:
+        rec["maxC"] = a["rmx"]; rec["maxDate"] = a["rmxd"]
+    if a["rmn"] is not None:
+        rec["minC"] = a["rmn"]; rec["minDate"] = a["rmnd"]
+    if rec:
+        records[wmo] = rec
+with io.open(out_records, "w", encoding="utf-8") as f:
+    json.dump({"records": records}, f, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+
 print("   Stationen mit Referenz: %d  (zu wenig Daten verworfen: %d)" % (kept, dropped),
       file=sys.stderr)
 print("   geschrieben: %s" % out_path, file=sys.stderr)
+print("   records.json: %d Stationen (Allzeit-Rekorde)" % len(records), file=sys.stderr)
 PY
 
 # ---------------------------------------------------------------------------

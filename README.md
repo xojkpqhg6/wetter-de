@@ -9,7 +9,8 @@ aktualisiert per GitHub Actions und über GitHub Pages ausgeliefert.
 ## Features
 
 - **Rangliste** aller ~200 Stationen — „Jetzt" (Live) sowie Höchst-/Tiefstwerte
-  für **Tag / Woche / Monat / Jahr**.
+  für **Tag / Woche / Monat / Jahr**; im Jahr-Umschalter zeigt **„Allzeit"** den
+  Allzeit-Rekord je Station aus dem vollen DWD-Archiv (gemerged mit den Live-Jahren).
 - **Tabelle & Deutschlandkarte** (Stationen als Punkte, nach Temperatur eingefärbt).
 - **Stationsdetail** per Klick (lädt die volle Stationshistorie on-demand nach,
   je nach Station bis ins 19. Jahrhundert zurück):
@@ -32,7 +33,7 @@ aktualisiert per GitHub Actions und über GitHub Pages ausgeliefert.
 .
 ├─ temp-leaderboard.sh        # holt DWD-Daten, erzeugt latest/tops/series/stations/stats + daily + history
 ├─ backfill.sh                # Backfill der Tageshistorie eines Jahres aus dem DWD-Klimaarchiv
-├─ reference.sh               # Tages-Klimatologie -> reference.json (+ --history -> history/<wmo>.json)
+├─ reference.sh               # Tages-Klimatologie -> reference.json + records.json (+ --history -> history/<wmo>.json)
 ├─ web/                       # Vite + TypeScript (kein Framework)
 │  ├─ index.html
 │  ├─ src/main.ts             # Rendering: Tabelle, Karte, Detail, Banderole, Theme, URL-State
@@ -54,6 +55,7 @@ aktualisiert per GitHub Actions und über GitHub Pages ausgeliefert.
 | `history.csv` | Roh-Log aller Messungen (dedupliziert) | ✅ |
 | `reference.json` | Tages-Klimatologie 1991–2020 je Station (Normal-Verlauf + Referenzverteilung) | ✅ statisch |
 | `history/<wmo>.json` | volle Tageshistorie je Station (oft Jahrzehnte zurück), on-demand geladen | ✅ statisch |
+| `records.json` | Allzeit-Höchst/-Tiefst je Station + Datum (volles Archiv) — speist die „Allzeit"-Rangliste | ✅ statisch |
 | `series.json`, `stations.json`, `stats.json` | abgeleitet (Verlauf, Koordinaten, Überblick) | ❌ neu erzeugt |
 | `poi/`, `stations.cfg`, `de_stations.tsv`, `kl_hist_stations.txt` | Roh-Cache / Hilfsdateien | ❌ neu erzeugt |
 
@@ -72,10 +74,11 @@ Gespeichert wird durchgängig **UTC**; die Website rechnet für die Anzeige in
   Tiefstwerte) aus dem DWD-Klimaarchiv nach (Standard: aktuelles Jahr; `recent`
   deckt aktuelles + Vorjahr ab). Zuordnung der internen DWD-IDs zu den WMO-IDs über
   Koordinaten + Namens-Fallback. `--gaps` zieht nur für das Jahr fehlende Stationen nach.
-- **`reference.sh [VON BIS]`** erzeugt **einmalig** `reference.json`: pro Station die
-  Tages-Klimatologie der Normalperiode (Standard 1991–2020) aus dem `historical`-
-  KL-Archiv (TXK/TNK) — geglättete Normalwerte je Kalendertag (Referenzkurve im
-  Verlauf) plus die gepoolte Verteilung (Referenzkurve in „Verteilung Max/Min").
+- **`reference.sh [VON BIS]`** erzeugt **einmalig** `reference.json` **und `records.json`**:
+  pro Station die Tages-Klimatologie der Normalperiode (Standard 1991–2020) aus dem
+  `historical`-KL-Archiv (TXK/TNK) — geglättete Normalwerte je Kalendertag (Referenzkurve im
+  Verlauf) plus die gepoolte Verteilung (Referenzkurve in „Verteilung Max/Min"); `records.json`
+  enthält zusätzlich den Allzeit-Höchst/-Tiefstwert je Station (über das gesamte Archiv).
   Rate-limit-schonend: Verzeichnis-Listing nur 1×, kleine Parallelität (`--jobs`),
   Backoff-Retries, **resumebarer ZIP-Cache** (zweiter Lauf nach Abbruch lädt nur
   Fehlendes; `--refresh` erzwingt Neuladen). Stationen ohne ausreichende Historie
