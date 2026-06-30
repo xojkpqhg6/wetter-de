@@ -23,6 +23,14 @@ interface Stats {
 type Coords = Record<string, { name: string; lat: number; lon: number }>
 interface Germany { rings: [number, number][][] }
 interface Series { dates: string[]; stations: Record<string, { max: (number | null)[]; min: (number | null)[] }> }
+// reference.json: Tages-Klimatologie der Normalperiode (per ./reference.sh erzeugt).
+//   max/min: geglättete Normalwerte je Kalendertag (Index 1…366; [0] ungenutzt).
+//   histMax/histMin: gepoolte Verteilung der Tageswerte (1-°C-Bins, °C -> Tage).
+interface RefEntry { max: (number | null)[]; min: (number | null)[]; histMax: Record<string, number>; histMin: Record<string, number> }
+interface Reference { period: string; stations: Record<string, RefEntry> }
+// history/<wmo>.json: volle Tageshistorie einer Station (per ./reference.sh --history),
+// on-demand geladen. Dichte Tagesreihe ab `start` (Index = Tagesoffset).
+interface Hist { start: string; max: (number | null)[]; min: (number | null)[] }
 
 type PeriodKey = 'day' | 'week' | 'month' | 'year'
 type View = 'now' | PeriodKey
@@ -104,6 +112,10 @@ let coords: Coords = {}
 let germany: Germany | null = null
 let series: Series | null = null
 let seriesPromise: Promise<void> | null = null
+let reference: Reference | null = null
+let referencePromise: Promise<void> | null = null
+const historyRaw = new Map<string, Hist | null>()                 // geladene history/<id>.json (null = keine)
+const combinedCache = new Map<string, { dates: string[]; ser: SeriesEntry }>()  // Historie + Live je Station
 
 let view: View = 'now'
 let metric: Metric = 'max'
@@ -115,11 +127,53 @@ let recYear = 'all'                  // Rekorde-Filter: 'all' | '<jahr>'
 let detailId: string | null = null
 type DetailTab = 'verlauf' | 'vmax' | 'vmin' | 'kalender'
 let detailTab: DetailTab = 'verlauf'
+let calYears: number | 'all' = 2     // Kalender: wie viele (neueste) Jahre zeigen
 
 // series.json (Verlauf je Station) einmalig nachladen
 function ensureSeries(): Promise<void> {
   if (!seriesPromise) seriesPromise = fetchJson<Series>('data/series.json').then((s) => { series = s })
   return seriesPromise
+}
+
+// reference.json (Normalwerte je Station) einmalig nachladen; optional -> Fehler ok
+function ensureReference(): Promise<void> {
+  if (!referencePromise) referencePromise = fetchJson<Reference>('data/reference.json').then((r) => { reference = r })
+  return referencePromise
+}
+
+// history/<id>.json on-demand laden (je Station genau einmal) und mit Live-Reihe mergen
+function ensureHistory(id: string): Promise<void> {
+  if (historyRaw.has(id)) return Promise.resolve()
+  return fetchJson<Hist>(`data/history/${id}.json`).then((h) => {
+    historyRaw.set(id, h)
+    if (h) buildCombined(id)
+  })
+}
+
+const DAY_MS = 86400000
+function isoUTC(ms: number): string {
+  const d = new Date(ms)
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`
+}
+
+// Historie (DWD-Klimaarchiv) + Live-Reihe (series.json) zu einer Tagesreihe verschmelzen.
+// Live gewinnt bei Datums-Überschneidung (das ist die kanonische Reihe der restlichen Seite).
+function buildCombined(id: string): void {
+  const hist = historyRaw.get(id)
+  const live = series?.stations[id]
+  const liveDates = series?.dates ?? []
+  if (!hist) return
+  const map = new Map<string, [number | null, number | null]>()
+  const t0 = Date.parse(hist.start + 'T00:00:00Z')
+  for (let i = 0; i < hist.max.length; i++) {
+    const mx = hist.max[i], mn = hist.min[i]
+    if (mx == null && mn == null) continue
+    map.set(isoUTC(t0 + i * DAY_MS), [mx, mn])
+  }
+  liveDates.forEach((ds, i) => { map.set(ds, [live?.max[i] ?? null, live?.min[i] ?? null]) })
+  const dates = [...map.keys()].sort()
+  const ser: SeriesEntry = { max: dates.map((d) => map.get(d)![0]), min: dates.map((d) => map.get(d)![1]) }
+  combinedCache.set(id, { dates, ser })
 }
 
 /* ---------- Daten ---------- */
@@ -612,7 +666,8 @@ function renderTicker(): void {
 /* ---------- Detail: Verlauf-Overlay + Kalender ---------- */
 type SeriesEntry = { max: (number | null)[]; min: (number | null)[] }
 type SparkCtx = {
-  byYear: Map<number, SeriesEntry>; years: number[]
+  byYear: Map<number, SeriesEntry>; years: number[]; liveYears: Set<number>; ref: RefEntry | null
+  recHi: (number | null)[]; recHiY: number[]; recLo: (number | null)[]; recLoY: number[]
   lo: number; hi: number; W: number; H: number
   padL: number; padR: number; padT: number; padB: number
 }
@@ -620,7 +675,7 @@ let sparkCtx: SparkCtx | null = null
 
 type DistCtx = {
   counts: Map<number, Map<number, number>>; totals: Map<number, number>; years: number[]
-  allCounts: Map<number, number>; allTotal: number
+  refHist: Map<number, number>; refTotal: number
   lo: number; hi: number; maxPct: number; metric: 'max' | 'min'
   W: number; H: number; padL: number; padR: number; padT: number; padB: number
 }
@@ -647,10 +702,12 @@ function clearGuide(): void {
 async function openDetail(id: string): Promise<void> {
   detailId = id
   detailTab = 'verlauf'
+  calYears = 2
   detailEl.hidden = false
   detailBody.innerHTML = '<p class="empty">lädt …</p>'
-  await ensureSeries()
-  renderDetail()
+  await Promise.all([ensureSeries(), ensureReference()])
+  renderDetail()                                   // Live-Jahre + Referenz sofort
+  void ensureHistory(id).then(() => { if (detailId === id) renderDetail() })  // Historie nachladen
 }
 
 function doy(ds: string): number {
@@ -703,6 +760,14 @@ function renderDetail(): void {
   const y = tops?.periods.year.stations.find((s) => s.id === id)
   const ser = series?.stations[id]
   const dates = series?.dates ?? []
+  const ref = reference?.stations[id] ?? null
+  const refPeriod = reference?.period ?? ''
+  // Charts nutzen die kombinierte Reihe (Historie + Live), sobald die Historie geladen ist;
+  // Fakten/Zähler bleiben auf der Live-Reihe (kanonisch für den Rest der Seite).
+  const combined = combinedCache.get(id)
+  const chartSer = combined?.ser ?? ser
+  const chartDates = combined?.dates ?? dates
+  const liveYears = new Set(dates.map((d) => +d.slice(0, 4)))
 
   let isRecordToday = false
   if (ser && dates.length) {
@@ -730,18 +795,18 @@ function renderDetail(): void {
   let panel = '<p class="empty">Kein Verlauf verfügbar.</p>'
   sparkCtx = null
   distCtx = null
-  if (ser) {
+  if (chartSer) {
     if (detailTab === 'verlauf') {
-      const o = overlayBuild(ser, dates)
+      const o = overlayBuild(chartSer, chartDates, ref, liveYears)
       sparkCtx = o.ctx
-      panel = o.html + overlayLegend(dates)
+      panel = o.html + overlayLegend(liveYears, ref, refPeriod)
     } else if (detailTab === 'vmax' || detailTab === 'vmin') {
       const metric = detailTab === 'vmax' ? 'max' : 'min'
-      const o = distBuild(ser, dates, metric)
+      const o = distBuild(chartSer, chartDates, metric, ref, liveYears)
       distCtx = o.ctx
-      panel = o.html + distLegend(dates, metric)
+      panel = o.html + distLegend(metric, liveYears, ref, refPeriod)
     } else {
-      panel = calendarPanel(ser, dates)
+      panel = calendarPanel(chartSer, chartDates, calYears)
     }
   }
 
@@ -759,7 +824,7 @@ function fact(k: string, v: string, cls: string, sub?: string): string {
     `<div class="v ${cls}">${v}</div>${sub ? `<div class="k">${sub}</div>` : ''}</div>`
 }
 
-function overlayBuild(ser: SeriesEntry, dates: string[]): { html: string; ctx: SparkCtx | null } {
+function overlayBuild(ser: SeriesEntry, dates: string[], ref: RefEntry | null, liveYears: Set<number>): { html: string; ctx: SparkCtx | null } {
   const byYear = new Map<number, SeriesEntry>()
   dates.forEach((ds, i) => {
     const Y = +ds.slice(0, 4), dd = doy(ds)
@@ -768,8 +833,21 @@ function overlayBuild(ser: SeriesEntry, dates: string[]): { html: string; ctx: S
     o.max[dd] = ser.max[i]; o.min[dd] = ser.min[i]
   })
   const years = [...byYear.keys()].sort((a, b) => a - b)
+  // Allzeit-Rekorde je Kalendertag (für den Hover, sinnvoll bei tiefer Historie)
+  const recHi: (number | null)[] = Array(367).fill(null), recHiY: number[] = Array(367).fill(0)
+  const recLo: (number | null)[] = Array(367).fill(null), recLoY: number[] = Array(367).fill(0)
+  // gezeichnet werden nur die Live-Jahre (sonst erschlägt die Historie das aktuelle Jahr);
+  // die Skala (lo/hi) richtet sich nur nach Gezeichnetem, die Rekorde nutzen die volle Historie.
   const vals: number[] = []
-  byYear.forEach((o) => { for (const v of o.max) if (v != null) vals.push(v); for (const v of o.min) if (v != null) vals.push(v) })
+  byYear.forEach((o, Y) => {
+    const live = liveYears.has(Y)
+    for (let d = 1; d <= 366; d++) {
+      const mx = o.max[d], mn = o.min[d]
+      if (mx != null) { if (live) vals.push(mx); if (recHi[d] == null || mx > recHi[d]!) { recHi[d] = mx; recHiY[d] = Y } }
+      if (mn != null) { if (live) vals.push(mn); if (recLo[d] == null || mn < recLo[d]!) { recLo[d] = mn; recLoY[d] = Y } }
+    }
+  })
+  if (ref) { for (const v of ref.max) if (v != null) vals.push(v); for (const v of ref.min) if (v != null) vals.push(v) }
   if (!vals.length) return { html: '<p class="empty">Kein Verlauf verfügbar.</p>', ctx: null }
   let lo = Math.min(...vals), hi = Math.max(...vals)
   if (hi - lo < 1) { hi += 1; lo -= 1 }
@@ -785,15 +863,26 @@ function overlayBuild(ser: SeriesEntry, dates: string[]): { html: string; ctx: S
     }
     return d.trim()
   }
-  const curY = years[years.length - 1]
+  // nur die Live-Jahre zeichnen (aktuelles kräftig, Vorjahr blass); ältere nur im Hover als Rekord
+  const curY = liveYears.size ? Math.max(...liveYears) : (years[years.length - 1] ?? 0)
   let paths = ''
   for (const Y of years) {
+    if (!liveYears.has(Y)) continue
     const o = byYear.get(Y)!
-    const f = Y !== curY ? ' faint' : ''
+    const f = Y === curY ? '' : ' faint'
     paths += `<path class="spark-min${f}" d="${line(o.min)}"/><path class="spark-max${f}" d="${line(o.max)}"/>`
   }
+  // Normal-Kurven (Referenzperiode) als ruhiger Hintergrund unter den Jahreslinien
+  const refPaths = ref
+    ? `<path class="spark-ref-min" d="${line(ref.min)}"/><path class="spark-ref-max" d="${line(ref.max)}"/>` : ''
   const zero = (lo < 0 && hi > 0)
     ? `<line class="spark-zero" x1="${padL}" y1="${ys(0).toFixed(1)}" x2="${W - padR}" y2="${ys(0).toFixed(1)}"/>` : ''
+  // Hitze-Schwellen 20/30/35/40° – nur wenn im sichtbaren Bereich (mit Gradzahl rechts)
+  const heat = [20, 30, 35, 40].filter((t) => t >= lo && t <= hi).map((t) => {
+    const yy = ys(t).toFixed(1)
+    return `<line class="spark-heat" x1="${padL}" y1="${yy}" x2="${W - padR}" y2="${yy}"/>` +
+      `<text class="spark-heat-lbl" x="${(W - padR).toFixed(1)}" y="${(ys(t) - 1.5).toFixed(1)}" text-anchor="end">${t}°</text>`
+  }).join('')
   const mDoy = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
   const mLbl = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D']
   let months = ''
@@ -802,8 +891,8 @@ function overlayBuild(ser: SeriesEntry, dates: string[]): { html: string; ctx: S
     `<text class="spark-lbl" x="2" y="${(ys(lo) + 3).toFixed(1)}">${lo.toFixed(0)}°</text>`
   const html = `<svg class="spark" viewBox="0 0 ${W} ${H}">` +
     `<line class="spark-axis" x1="${padL}" y1="${padT}" x2="${padL}" y2="${H - padB}"/>` +
-    zero + paths + months + yl + `<g class="spark-guide"></g></svg>`
-  return { html, ctx: { byYear, years, lo, hi, W, H, padL, padR, padT, padB } }
+    zero + heat + refPaths + paths + months + yl + `<g class="spark-guide"></g></svg>`
+  return { html, ctx: { byYear, years, liveYears, ref, recHi, recHiY, recLo, recLoY, lo, hi, W, H, padL, padR, padT, padB } }
 }
 
 // Hover über dem Graph: nächsten Tag bestimmen, Führungslinie + Werte je Jahr
@@ -820,7 +909,9 @@ function onSparkMove(svg: SVGSVGElement, clientX: number, clientY: number): void
   const curY = c.years[c.years.length - 1]
   let g = `<line class="guide-line" x1="${gx.toFixed(1)}" y1="${c.padT}" x2="${gx.toFixed(1)}" y2="${(c.H - c.padB).toFixed(1)}"/>`
   const rows: string[] = []
-  for (const Y of c.years) {
+  // nur die Live-Jahre einzeln (sonst wären es bei tiefer Historie Dutzende Zeilen)
+  const shown = c.years.filter((Y) => c.liveYears.has(Y)).sort((a, b) => b - a)
+  for (const Y of shown) {
     const o = c.byYear.get(Y)!
     const mx = o.max[d], mn = o.min[d]
     if (mx != null) g += `<circle class="guide-dot mx" cx="${gx.toFixed(1)}" cy="${ys(mx).toFixed(1)}" r="2.5"/>`
@@ -830,6 +921,19 @@ function onSparkMove(svg: SVGSVGElement, clientX: number, clientY: number): void
         `<span class="mx">${mx != null ? mx.toFixed(1) + '°' : '–'}</span> / ` +
         `<span class="mn">${mn != null ? mn.toFixed(1) + '°' : '–'}</span>`)
   }
+  const rmx = c.ref?.max[d], rmn = c.ref?.min[d]
+  if (rmx != null) g += `<circle class="guide-dot ref" cx="${gx.toFixed(1)}" cy="${ys(rmx).toFixed(1)}" r="2.5"/>`
+  if (rmn != null) g += `<circle class="guide-dot ref" cx="${gx.toFixed(1)}" cy="${ys(rmn).toFixed(1)}" r="2.5"/>`
+  if (rmx != null || rmn != null)
+    rows.push(`<span class="ty reflbl">Normal</span> ` +
+      `<span class="mx">${rmx != null ? rmx.toFixed(1) + '°' : '–'}</span> / ` +
+      `<span class="mn">${rmn != null ? rmn.toFixed(1) + '°' : '–'}</span>`)
+  // Allzeit-Rekord dieses Kalendertags (über die gesamte Historie)
+  const rhi = c.recHi[d], rlo = c.recLo[d]
+  if (rhi != null || rlo != null)
+    rows.push(`<span class="ty">Rekord</span> ` +
+      `<span class="mx">${rhi != null ? rhi.toFixed(1) + '°' : '–'}${rhi != null ? ` <span class="dim">${c.recHiY[d]}</span>` : ''}</span> / ` +
+      `<span class="mn">${rlo != null ? rlo.toFixed(1) + '°' : '–'}${rlo != null ? ` <span class="dim">${c.recLoY[d]}</span>` : ''}</span>`)
   const gg = svg.querySelector('.spark-guide')
   if (gg) gg.innerHTML = g
   if (rows.length) {
@@ -839,22 +943,24 @@ function onSparkMove(svg: SVGSVGElement, clientX: number, clientY: number): void
   } else hideTip()
 }
 
-function overlayLegend(dates: string[]): string {
-  const years = [...new Set(dates.map((d) => +d.slice(0, 4)))].sort((a, b) => a - b)
-  const curY = years[years.length - 1]
-  const yl = years.map((y) => `<span class="${y === curY ? '' : 'faintlbl'}">${y}</span>`).join(' · ')
-  return `<div class="spark-legend">${yl} &nbsp; <span class="mx">— Max</span> <span class="mn">— Min</span></div>`
+function overlayLegend(liveYears: Set<number>, ref: RefEntry | null, period: string): string {
+  const yl = [...liveYears].sort((a, b) => a - b).join(' · ')
+  const refl = ref ? ` &nbsp; <span class="reflbl">— Normal ${period}</span>` : ''
+  return `<div class="spark-legend">${yl} &nbsp; <span class="mx">— Max</span> <span class="mn">— Min</span>${refl}</div>`
 }
 
 // Verteilung: je Jahr ein Häufigkeits-Polygon "Anzahl Tage (y) über Temperatur (x, 1°C-Bins)".
 // Bewusst ohne Gates -- gezeigt wird die Rohlage aus series.json (wie der Verlauf).
-function distBuild(ser: SeriesEntry, dates: string[], metric: 'max' | 'min'): { html: string; ctx: DistCtx | null } {
+function distBuild(ser: SeriesEntry, dates: string[], metric: 'max' | 'min', ref: RefEntry | null, liveYears: Set<number>): { html: string; ctx: DistCtx | null } {
+  // nur aktuelles Jahr + Vorjahr (die Live-Jahre); die Skala richtet sich danach + nach Normal
   const counts = new Map<number, Map<number, number>>()
   let lo = Infinity, hi = -Infinity
   dates.forEach((ds, i) => {
+    const Y = +ds.slice(0, 4)
+    if (!liveYears.has(Y)) return
     const v = ser[metric][i]
     if (v == null) return
-    const Y = +ds.slice(0, 4), t = Math.round(v)
+    const t = Math.round(v)
     let m = counts.get(Y)
     if (!m) { m = new Map(); counts.set(Y, m) }
     m.set(t, (m.get(t) ?? 0) + 1)
@@ -862,36 +968,45 @@ function distBuild(ser: SeriesEntry, dates: string[], metric: 'max' | 'min'): { 
     if (t > hi) hi = t
   })
   if (!counts.size) return { html: '<p class="empty">Kein Verlauf verfügbar.</p>', ctx: null }
+  // Referenzverteilung (gepoolt über die Normalperiode) -> Bins + Spanne mit aufnehmen
+  const refHist = new Map<number, number>()
+  let refTotal = 0
+  if (ref) {
+    const h = metric === 'max' ? ref.histMax : ref.histMin
+    for (const k in h) {
+      const t = +k, n = h[k]
+      refHist.set(t, n); refTotal += n
+      if (t < lo) lo = t
+      if (t > hi) hi = t
+    }
+  }
   if (hi - lo < 1) { hi += 1; lo -= 1 }
   // je Jahr auf Anteil der Tage normieren -> Jahre vergleichbar (Teiljahr verzerrt nicht)
   const totals = new Map<number, number>()
   counts.forEach((m, Y) => { let s = 0; m.forEach((c) => { s += c }); totals.set(Y, s) })
   const pct = (Y: number, t: number) => ((counts.get(Y)?.get(t) ?? 0) / (totals.get(Y) || 1)) * 100
-  // Allzeit = alle Jahre gepoolt; wird mit wachsender Datenmenge glatter
-  const allCounts = new Map<number, number>()
-  let allTotal = 0
-  counts.forEach((m) => m.forEach((c, t) => { allCounts.set(t, (allCounts.get(t) ?? 0) + c); allTotal += c }))
-  const pctAll = (t: number) => ((allCounts.get(t) ?? 0) / (allTotal || 1)) * 100
-  const years = [...counts.keys()].sort((a, b) => a - b)
-  const showAll = years.length >= 2
+  const pctRef = (t: number) => ((refHist.get(t) ?? 0) / (refTotal || 1)) * 100
+  const showRef = refTotal > 0
+  const years = [...counts.keys()].sort((a, b) => a - b)   // nur die Live-Jahre
   let maxPct = 1
-  counts.forEach((m, Y) => m.forEach((_, t) => { const p = pct(Y, t); if (p > maxPct) maxPct = p }))
-  if (showAll) for (let t = lo; t <= hi; t++) { const p = pctAll(t); if (p > maxPct) maxPct = p }
+  for (const Y of years) (counts.get(Y) as Map<number, number>).forEach((_, t) => { const p = pct(Y, t); if (p > maxPct) maxPct = p })
+  if (showRef) for (let t = lo; t <= hi; t++) { const p = pctRef(t); if (p > maxPct) maxPct = p }
   const curY = years[years.length - 1]
   const W = 540, H = 170, padL = 30, padR = 8, padT = 10, padB = 22
   const xs = (t: number) => padL + ((t - lo) / (hi - lo)) * (W - padL - padR)
   const ys = (p: number) => padT + (1 - p / maxPct) * (H - padT - padB)
   const tone = metric === 'max' ? 'hot' : 'cool'
   let paths = ''
+  // Referenzverteilung zuerst (ruhiger Hintergrund unter den Jahreslinien)
+  if (showRef) {
+    let dRef = ''
+    for (let t = lo; t <= hi; t++) dRef += `${t === lo ? 'M' : 'L'}${xs(t).toFixed(1)},${ys(pctRef(t)).toFixed(1)} `
+    paths += `<path class="dist-line ref" d="${dRef.trim()}"/>`
+  }
   for (const Y of years) {
     let d = ''
     for (let t = lo; t <= hi; t++) d += `${t === lo ? 'M' : 'L'}${xs(t).toFixed(1)},${ys(pct(Y, t)).toFixed(1)} `
     paths += `<path class="dist-line ${tone}${Y !== curY ? ' faint' : ''}" d="${d.trim()}"/>`
-  }
-  if (showAll) {
-    let dAll = ''
-    for (let t = lo; t <= hi; t++) dAll += `${t === lo ? 'M' : 'L'}${xs(t).toFixed(1)},${ys(pctAll(t)).toFixed(1)} `
-    paths += `<path class="dist-line all" d="${dAll.trim()}"/>`
   }
   let xlbl = ''
   for (let t = Math.ceil(lo / 5) * 5; t <= hi; t += 5)
@@ -902,7 +1017,7 @@ function distBuild(ser: SeriesEntry, dates: string[], metric: 'max' | 'min'): { 
     `<line class="spark-axis" x1="${padL}" y1="${padT}" x2="${padL}" y2="${H - padB}"/>` +
     `<line class="spark-axis" x1="${padL}" y1="${(H - padB).toFixed(1)}" x2="${W - padR}" y2="${(H - padB).toFixed(1)}"/>` +
     paths + xlbl + ylbl + `<g class="dist-guide"></g></svg>`
-  return { html, ctx: { counts, totals, years, allCounts, allTotal, lo, hi, maxPct, metric, W, H, padL, padR, padT, padB } }
+  return { html, ctx: { counts, totals, years, refHist, refTotal, lo, hi, maxPct, metric, W, H, padL, padR, padT, padB } }
 }
 
 // Hover über der Verteilung: Temperatur-Bin bestimmen, Führungslinie + "N Tage" je Jahr.
@@ -918,49 +1033,84 @@ function onDistMove(svg: SVGSVGElement, clientX: number, clientY: number): void 
   const ys = (p: number) => c.padT + (1 - p / c.maxPct) * (c.H - c.padT - c.padB)
   const curY = c.years[c.years.length - 1]
   const tone = c.metric === 'max' ? 'mx' : 'mn'
+  // Perzentil = Anteil der Tage ≤ aktueller Temperatur (kumulativ von unten)
+  const pctl = (m: Map<number, number> | undefined, total: number): number => {
+    if (!m || !total) return 0
+    let s = 0
+    for (let b = c.lo; b <= t; b++) s += m.get(b) ?? 0
+    return Math.round((s / total) * 100)
+  }
   let g = `<line class="guide-line" x1="${gx.toFixed(1)}" y1="${c.padT}" x2="${gx.toFixed(1)}" y2="${(c.H - c.padB).toFixed(1)}"/>`
   const rows: string[] = []
-  for (const Y of c.years) {
-    const n = c.counts.get(Y)?.get(t) ?? 0
-    const p = (n / (c.totals.get(Y) || 1)) * 100
+  for (const Y of [...c.years].sort((a, b) => b - a)) {
+    const m = c.counts.get(Y)
+    const total = c.totals.get(Y) || 1
+    const n = m?.get(t) ?? 0
+    const p = (n / total) * 100
     g += `<circle class="guide-dot ${tone}" cx="${gx.toFixed(1)}" cy="${ys(p).toFixed(1)}" r="2.5"/>`
     rows.push(`<span class="ty${Y === curY ? '' : ' faintlbl'}">${Y}</span> ` +
-      `<span class="${tone}">${p.toFixed(1)} %</span> <span class="dim">${n} ${n === 1 ? 'Tag' : 'Tage'}</span>`)
+      `<span class="${tone}">${p.toFixed(1)} %</span> <span class="dim">${n} ${n === 1 ? 'Tag' : 'Tage'} · P${pctl(m, total)}</span>`)
   }
-  if (c.years.length >= 2) {
-    const n = c.allCounts.get(t) ?? 0
-    const p = (n / (c.allTotal || 1)) * 100
-    g += `<circle class="guide-dot all" cx="${gx.toFixed(1)}" cy="${ys(p).toFixed(1)}" r="2.5"/>`
-    rows.push(`<span class="ty">Allzeit</span> <span class="av">${p.toFixed(1)} %</span> <span class="dim">${n} ${n === 1 ? 'Tag' : 'Tage'}</span>`)
+  if (c.refTotal > 0) {
+    const n = c.refHist.get(t) ?? 0
+    const p = (n / c.refTotal) * 100
+    const perYear = n * 365.25 / c.refTotal       // über die Normalperiode auf 1 Jahr gerechnet
+    g += `<circle class="guide-dot ref" cx="${gx.toFixed(1)}" cy="${ys(p).toFixed(1)}" r="2.5"/>`
+    rows.push(`<span class="ty reflbl">Normal</span> <span class="reflbl">${p.toFixed(1)} %</span> <span class="dim">${perYear.toFixed(1)} Tage/Jahr · P${pctl(c.refHist, c.refTotal)}</span>`)
   }
   const gg = svg.querySelector('.dist-guide')
   if (gg) gg.innerHTML = g
   showTip(`<b>${t}°</b><br>${rows.join('<br>')}`, clientX, clientY)
 }
 
-function distLegend(dates: string[], metric: 'max' | 'min'): string {
-  const years = [...new Set(dates.map((d) => +d.slice(0, 4)))].sort((a, b) => a - b)
-  const curY = years[years.length - 1]
-  const yl = years.map((y) => `<span class="${y === curY ? '' : 'faintlbl'}">${y}</span>`).join(' · ')
+function distLegend(metric: 'max' | 'min', liveYears: Set<number>, ref: RefEntry | null, period: string): string {
+  const yl = [...liveYears].sort((a, b) => a - b).join(' · ')
   const tone = metric === 'max' ? 'mx' : 'mn'
   const metricWord = metric === 'max' ? 'Tagesmaxima' : 'Tagesminima'
-  const all = years.length >= 2 ? ` <span class="dist-all-lbl">— Allzeit</span>` : ''
-  return `<div class="spark-legend">${yl} &nbsp; <span class="${tone}">— Jahre</span>${all} &nbsp; · ${metricWord}, Anteil (%) je 1°C</div>`
+  const refl = ref ? ` <span class="reflbl">— Normal ${period}</span>` : ''
+  return `<div class="spark-legend">${yl} &nbsp; <span class="${tone}">— Jahre</span>${refl} &nbsp; · ${metricWord}, Anteil (%) je 1°C</div>`
 }
 
-function calendarPanel(ser: SeriesEntry, dates: string[]): string {
-  const years = [...new Set(dates.map((d) => +d.slice(0, 4)))].sort((a, b) => a - b)
-  return `<div class="cal-wrap">${years.map((y) => calendarSvg(ser, dates, y)).join('')}</div>` +
-    `<div class="spark-legend">eine Zelle = ein Tag · Farbe = Tagesmaximum</div>`
+function calendarPanel(ser: SeriesEntry, dates: string[], limit: number | 'all'): string {
+  // Tagesmaxima einmal je Jahr/Kalendertag bucketen (nicht je Jahr neu scannen)
+  const byYear = new Map<number, (number | null)[]>()
+  dates.forEach((ds, i) => {
+    const Y = +ds.slice(0, 4)
+    let a = byYear.get(Y)
+    if (!a) { a = Array(367).fill(null); byYear.set(Y, a) }
+    a[doy(ds)] = ser.max[i]
+  })
+  const allYears = [...byYear.keys()].sort((a, b) => b - a)   // neueste Jahre zuerst
+  const total = allYears.length
+  const shown = limit === 'all' ? allYears : allYears.slice(0, limit)
+  // Umschalter nur wenn es mehr als die Standard-2 Jahre gibt
+  let seg = ''
+  if (total > 2) {
+    const opts: (number | 'all')[] = ([2, 10, 30] as const).filter((n) => n < total)
+    opts.push('all')
+    seg = `<div class="seg cal-seg">` + opts.map((o) => {
+      const lbl = o === 'all' ? `Alle (${total})` : String(o)
+      return `<button data-calyears="${o}" class="${limit === o ? 'active' : ''}">${lbl}</button>`
+    }).join('') + `</div>`
+  }
+  return seg + `<div class="cal-wrap">${shown.map((y) => calendarSvg(byYear.get(y)!, y)).join('')}</div>` +
+    `<div class="spark-legend">eine Zelle = ein Tag · Farbe = Tagesmaximum${total > 2 ? ` · ${shown.length} von ${total} Jahren` : ''}</div>`
 }
 
-function calendarSvg(ser: SeriesEntry, dates: string[], year: number): string {
+function calendarSvg(maxByDoy: (number | null)[], year: number): string {
   const cell = 9, gap = 1.6
-  const maxByDoy: (number | null)[] = Array(367).fill(null)
-  dates.forEach((ds, i) => { if (+ds.slice(0, 4) === year) maxByDoy[doy(ds)] = ser.max[i] })
+  const leap = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
   const jan1 = new Date(Date.UTC(year, 0, 1)).getUTCDay()
   const off = (jan1 + 6) % 7
-  const days = ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) ? 366 : 365
+  const days = leap ? 366 : 365
+  // Datumslabel je Kalendertag einmal direkt bauen (kein Date/Intl je Zelle -> ~42k Zellen schnell)
+  const ml = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+  const dLbl: string[] = Array(367)
+  let dn = 1
+  for (let m = 0; m < 12; m++)
+    for (let day = 1; day <= ml[m]; day++) {
+      dLbl[dn++] = `${String(day).padStart(2, '0')}.${String(m + 1).padStart(2, '0')}.${year}`
+    }
   let cells = '', maxCol = 0
   for (let d = 1; d <= days; d++) {
     const idx = d - 1 + off
@@ -968,9 +1118,7 @@ function calendarSvg(ser: SeriesEntry, dates: string[], year: number): string {
     if (col > maxCol) maxCol = col
     const v = maxByDoy[d]
     const cls = v == null ? 'cal-empty' : tempClass(v)
-    const dt = new Date(Date.UTC(year, 0, d))
-    const ds = `${year}-${String(dt.getUTCMonth() + 1).padStart(2, '0')}-${String(dt.getUTCDate()).padStart(2, '0')}`
-    cells += `<rect class="cal ${cls}" x="${(col * (cell + gap)).toFixed(1)}" y="${(row * (cell + gap)).toFixed(1)}" width="${cell}" height="${cell}" data-d="${fmtDate(ds)}" data-v="${v == null ? '—' : v.toFixed(1) + '°'}"></rect>`
+    cells += `<rect class="cal ${cls}" x="${(col * (cell + gap)).toFixed(1)}" y="${(row * (cell + gap)).toFixed(1)}" width="${cell}" height="${cell}" data-d="${dLbl[d]}" data-v="${v == null ? '—' : v.toFixed(1) + '°'}"></rect>`
   }
   const W = (maxCol + 1) * (cell + gap), H = 7 * (cell + gap)
   return `<div class="cal-year"><div class="cal-label">${year}</div>` +
@@ -1051,10 +1199,14 @@ yearSelEl.addEventListener('click', (e) => {
   syncControls(); writeHash(); render()
 })
 detailBody.addEventListener('click', (e) => {
-  const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-tab]')
-  if (!b) return
-  detailTab = b.dataset.tab as DetailTab
-  renderDetail()
+  const t = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-tab]')
+  if (t) { detailTab = t.dataset.tab as DetailTab; renderDetail(); return }
+  const cy = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-calyears]')
+  if (cy) {
+    const v = cy.dataset.calyears!
+    calYears = v === 'all' ? 'all' : +v
+    renderDetail()
+  }
 })
 detailBody.addEventListener('mousemove', (e) => {
   if (!(e.target instanceof Element)) return

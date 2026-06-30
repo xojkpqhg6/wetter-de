@@ -18,6 +18,7 @@
   --t-mild:  #4d5238;
   --t-cool:  #3a5d6b;
   --t-cold:  #2f4a6b;
+  --t-ref:   #7c6f86;   /* Normalwert-Referenz (neutrales Plum, distinkt zu hot/cool) */
 
   --mono: "Courier New", Courier, ui-monospace, monospace;
   --serif: Georgia, "Times New Roman", Times, serif;
@@ -38,6 +39,7 @@
   --t-mild:  #b3ab8f;
   --t-cool:  #6fb0c6;
   --t-cold:  #6f9bd6;
+  --t-ref:   #b3a6bd;
 }
 
 * { box-sizing: border-box; }
@@ -275,7 +277,10 @@ body {
   background: var(--paper); border: 1px solid var(--line-2);
   box-shadow: 0 10px 40px rgba(0,0,0,.35);
   padding: 24px 26px 22px;
+  max-height: calc(100vh - 36px);
+  display: flex; flex-direction: column;
 }
+#detail-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
 .detail-close {
   position: absolute; top: 6px; right: 10px;
   font-size: 22px; line-height: 1; color: var(--ink-soft);
@@ -301,11 +306,16 @@ body {
 .spark-axis { stroke: var(--line-2); stroke-width: 1; }
 .spark-lbl { fill: var(--ink-soft); font-family: var(--mono); font-size: 9px; }
 .spark-zero { stroke: var(--line-2); stroke-dasharray: 2 2; stroke-width: 1; }
+.spark-heat { stroke: var(--t-hot); opacity: .28; stroke-width: 1; stroke-dasharray: 5 4; }
+.spark-heat-lbl { fill: var(--t-hot); opacity: .6; font-family: var(--mono); font-size: 8px; }
 .spark-legend { font-size: 11px; color: var(--ink-soft); margin-top: 6px; text-align: center; }
 .spark-legend .mx { color: var(--t-hot); font-weight: 700; }
 .spark-legend .mn { color: var(--t-cool); font-weight: 700; }
 .spark-legend .faintlbl { color: var(--ink-soft); }
 .spark-max.faint, .spark-min.faint { opacity: .3; stroke-width: 1; }
+/* Normalwert-Referenz (Tages-Klimatologie der Normalperiode) */
+.spark-ref-max, .spark-ref-min { fill: none; stroke: var(--t-ref); stroke-width: 1.1; stroke-dasharray: 4 3; opacity: .8; }
+.spark-legend .reflbl { color: var(--t-ref); font-weight: 700; }
 
 /* Detail: Zähler + Tabs + Kalender-Heatmap */
 .counters { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: -4px 0 14px; font-size: 12.5px; }
@@ -313,6 +323,8 @@ body {
 .counters .dim { color: var(--ink-soft); font-size: 11px; }
 .detail-tabs { margin: 2px 0 12px; }
 .detail-tabs button { font-size: 12px; padding: 5px 14px; }
+.cal-seg { margin: 0 0 10px; }
+.cal-seg button { font-size: 12px; padding: 4px 12px; }
 .cal-wrap { display: flex; flex-direction: column; gap: 10px; margin: 2px 0 6px; }
 .cal-label { font-size: 11px; color: var(--ink-soft); letter-spacing: .12em; margin-bottom: 3px; }
 .cal-svg { width: 100%; height: auto; }
@@ -334,12 +346,13 @@ body {
 .chart-tip .mx { color: var(--t-hot); font-weight: 700; }
 .chart-tip .mn { color: var(--t-cool); font-weight: 700; }
 .chart-tip .dim { color: var(--ink-soft); }
-.chart-tip .av { color: var(--ink); font-weight: 700; }
+.chart-tip .reflbl { color: var(--t-ref); font-weight: 700; }
 .spark { cursor: crosshair; }
 .spark-guide { pointer-events: none; }
 .guide-line { stroke: var(--ink-soft); stroke-width: 1; stroke-dasharray: 3 2; }
 .guide-dot.mx { fill: var(--t-hot); }
 .guide-dot.mn { fill: var(--t-cool); }
+.guide-dot.ref { fill: var(--t-ref); }
 
 /* Verteilungskurve (Tabs "Verteilung Max/Min") */
 .dist { width: 100%; height: auto; cursor: crosshair; }
@@ -348,9 +361,7 @@ body {
 .dist-line.hot { stroke: var(--t-hot); }
 .dist-line.cool { stroke: var(--t-cool); }
 .dist-line.faint { opacity: .3; stroke-width: 1; }
-.dist-line.all { stroke: var(--ink); stroke-width: 1.6; }
-.spark-legend .dist-all-lbl { color: var(--ink); font-weight: 700; }
-.guide-dot.all { fill: var(--ink); }
+.dist-line.ref { stroke: var(--t-ref); stroke-width: 1.2; stroke-dasharray: 4 3; opacity: .85; }
 
 /* ---- Rekorde-Tafel ---- */
 .rec-filter { display: flex; justify-content: center; margin: 0 0 16px; }

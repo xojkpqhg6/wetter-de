@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Methodik & Transparenz · Temperatur-Leaderboard</title>
-    <meta name="description" content="Wie das Temperatur-Leaderboard seine Zahlen ermittelt — Datenquelle, Farbskala und Darstellungsgrenzen, transparent erklärt." />
+    <meta name="description" content="Wie das Temperatur-Leaderboard seine Zahlen ermittelt — Datenquelle, Normalwerte 1991–2020, Stationshistorie, Farbskala und Darstellungsgrenzen, transparent erklärt." />
     <meta name="theme-color" content="#f4efe3" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Methodik & Transparenz · Temperatur-Leaderboard" />
@@ -32,6 +32,9 @@
         <p>Alle Werte stammen vom <a href="https://opendata.dwd.de" target="_blank" rel="noopener">Deutschen Wetterdienst (DWD), OpenData</a>:
         die aktuellen Messwerte aus den stündlichen Stationsberichten (POI), die Stationsnamen aus dem
         MOSMIX-Katalog, die Tageshistorie aus dem Klimaarchiv (KL-Tageswerte).</p>
+        <p>Für den <strong>Stationsverlauf</strong> wird zusätzlich die <strong>vollständige Tageshistorie</strong>
+        jeder Station aus dem Klimaarchiv geladen (Tagesmaximum/-minimum, je nach Station bis ins 19.&nbsp;Jahrhundert
+        zurück); daraus berechnet die Seite die <strong>vieljährigen Normalwerte der Periode 1991–2020</strong>.</p>
         <p><strong>Datenbasis: Deutscher Wetterdienst (DWD)</strong> — eigene Aufbereitung; Daten teilweise
         verändert/aggregiert. Es handelt sich um eine <strong>nicht-amtliche</strong> Darstellung; für
         verbindliche Auskünfte gilt ausschließlich die Originalquelle des DWD.</p>
@@ -84,11 +87,30 @@
         damit ein einzelner Ausreißer einer selten meldenden Station keinen Rekord verfälscht. Serien-Rekorde
         (Hitze-/Eisserie) brauchen lückenlose Tage; Stationen mit Lücken können sie nicht gewinnen.</p>
 
+        <h2>Normalwerte (Klimamittel 1991–2020)</h2>
+        <p>Die gestrichelte <strong>„Normal"-Kurve</strong> in Verlauf und Verteilung ist das vieljährige Mittel der
+        WMO-Referenzperiode <strong>1991–2020</strong> — für jede Station und jeden Kalendertag der Durchschnitt des
+        Tagesmaximums bzw. -minimums über die 30&nbsp;Jahre, mit einem ±7-Tage-Fenster geglättet. Kalendertage mit zu
+        dünner Datenbasis bleiben offen; Stationen ohne durchgehende Reihe 1991–2020 bekommen gar keine Normal-Linie.</p>
+        <p>In den Verteilungs-Tabs zeigt die Normal-Kurve die über die ganze Periode gepoolte Häufigkeit je 1&nbsp;°C.
+        Der Hover nennt dort für jedes Jahr und das Normal das <strong>Perzentil</strong> (Anteil der Tage, die kühler
+        oder gleich warm waren) und beim Normal die auf <strong>ein Jahr gerechnete</strong> Tageszahl.</p>
+
+        <h2>Stationsverlauf: volle Historie</h2>
+        <p>Ein Klick auf eine Station öffnet ihren Verlauf und lädt dabei die <strong>vollständige Tageshistorie</strong>
+        nach (oft Jahrzehnte, einzelne Reihen bis ins 19.&nbsp;Jahrhundert). Der <strong>Verlauf</strong> zeigt das
+        aktuelle und das Vorjahr (kräftig bzw. blass) plus die Normal-Kurve, dazu dezente Schwellenlinien bei
+        <strong>20/30/35/40&nbsp;°C</strong> (sofern im sichtbaren Bereich). Der Hover nennt zusätzlich den
+        <strong>Allzeit-Rekord</strong> des jeweiligen Kalendertags — dieser stammt aus der vollen Historie und reicht
+        damit weiter zurück als die Rekorde-Tafel (die erst 2025 beginnt). Der <strong>Kalender</strong> lässt sich von
+        2 über 10/30 bis auf alle verfügbaren Jahre umschalten.</p>
+
         <h2>Historie &amp; fehlende Stationen</h2>
-        <p>Die Tageshistorie ab 2025 wurde aus dem DWD-Klimaarchiv nachgeladen. Rund zwei Dutzend Stationen —
-        überwiegend Bundeswehr-/NATO-Flugplätze — sind dort <strong>ohne Tagestemperatur</strong> hinterlegt;
-        sie melden zwar live, haben aber keine vorgelagerte Historie und tauchen in Jahres-Ranglisten erst auf,
-        wenn sie genug eigene Tage gesammelt haben.</p>
+        <p>Ranglisten, Karte und Rekorde-Tafel arbeiten mit dem laufenden Datensatz <strong>ab 2025</strong>
+        (POI-Messwerte plus Backfill aus dem Klimaarchiv); der Stationsverlauf greift darüber hinaus auf die volle
+        Historie zu (siehe oben). Rund zwei Dutzend Stationen — überwiegend Bundeswehr-/NATO-Flugplätze — sind im
+        Klimaarchiv <strong>ohne Tagestemperatur</strong> hinterlegt; sie melden zwar live, haben aber keine
+        vorgelagerte Historie und tauchen in Jahres-Ranglisten erst auf, wenn sie genug eigene Tage gesammelt haben.</p>
 
         <h2>Aktualisierung</h2>
         <p>Die Daten werden stündlich automatisch aktualisiert. Jeder Lauf liest bis zu 24&nbsp;Stunden aus den

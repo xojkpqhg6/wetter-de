@@ -8,6 +8,7 @@ dist/
 public/data/poi/
 public/data/stations.cfg
 public/data/de_stations.tsv
+public/data/kl_hist_stations.txt
 public/data/_*
 # weitere abgeleitete Dateien (werden je Lauf neu erzeugt & deployed)
 public/data/series.json
