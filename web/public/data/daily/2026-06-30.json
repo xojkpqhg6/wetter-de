@@ -759,7 +759,7 @@
       "min_c": 14.5,
       "min_obs_utc": "2026-06-30T03:00:00Z",
       "name": "ARTERN",
-      "samples": 21
+      "samples": 24
     },
     "10469": {
       "max_c": 24.6,
@@ -1634,5 +1634,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-06-30T23:46:06Z"
+  "updated_utc": "2026-07-01T03:07:56Z"
 }
