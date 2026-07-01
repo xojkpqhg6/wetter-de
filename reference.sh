@@ -296,8 +296,16 @@ N = 367
 def new_acc():
     return {"smax": [0.0]*N, "cmax": [0]*N, "smin": [0.0]*N, "cmin": [0]*N,
             "hmax": {}, "hmin": {}, "n": 0, "years": set(),
-            "rmx": None, "rmxd": "", "rmn": None, "rmnd": ""}   # Allzeit-Rekorde
+            # Allzeit-Rekorde je Station (ungefiltert, ganze Historie) -> records.json
+            "rmx": None, "rmxd": "", "rmn": None, "rmnd": "",       # heißester Tag / kältester Tag
+            "rnight": None, "rnightd": "",                          # wärmste Nacht (max TNK)
+            "rspan": None, "rspand": "", "rspanmx": None, "rspanmn": None,  # größte Tagesspanne
+            "hotdays": {}, "tropn": {},                             # Hitzetage / Tropennächte je Jahr
+            "prevo": None, "hrun": 0, "hstart": None, "hbest": 0, "hbeg": None, "hend": None,  # Hitzeserie
+            "irun": 0, "istart": None, "ibest": 0, "ibeg": None, "iend": None}                 # Eisserie
 acc = {}
+nat_hot = {}   # Jahr -> Menge der Tage (national) mit mind. einer Station >= 30 °C
+nat_trop = {}  # Jahr -> Menge der Tage (national) mit mind. einer Station Tnk >= 20 °C
 
 lo_i, hi_i = frm * 10000 + 101, to * 10000 + 1231
 for internal in internals:
@@ -331,11 +339,44 @@ for internal in internals:
             continue
         y, m, d = dt // 10000, (dt // 100) % 100, dt % 100
         ds = "%04d-%02d-%02d" % (y, m, d)
-        # Allzeit-Rekorde je Station (gesamte Historie, ungefiltert) -> records.json
+        try:
+            o = datetime.date(y, m, d).toordinal()
+        except ValueError:
+            o = None
+        # ---- Allzeit-Rekorde je Station (ganze Historie, ungefiltert) -> records.json ----
         if txk is not None and (a["rmx"] is None or txk > a["rmx"]):
             a["rmx"] = txk; a["rmxd"] = ds
         if tnk is not None and (a["rmn"] is None or tnk < a["rmn"]):
             a["rmn"] = tnk; a["rmnd"] = ds
+        if tnk is not None and (a["rnight"] is None or tnk > a["rnight"]):
+            a["rnight"] = tnk; a["rnightd"] = ds
+        if txk is not None and tnk is not None:
+            sp = txk - tnk
+            if a["rspan"] is None or sp > a["rspan"]:
+                a["rspan"] = sp; a["rspand"] = ds; a["rspanmx"] = txk; a["rspanmn"] = tnk
+        if txk is not None and txk >= 30:
+            a["hotdays"][y] = a["hotdays"].get(y, 0) + 1
+            if o is not None: nat_hot.setdefault(y, set()).add(o)
+        if tnk is not None and tnk >= 20:
+            a["tropn"][y] = a["tropn"].get(y, 0) + 1
+            if o is not None: nat_trop.setdefault(y, set()).add(o)
+        if o is not None:
+            cons = a["prevo"] is not None and o == a["prevo"] + 1
+            if txk is not None and txk >= 30:                     # Hitzeserie
+                if cons and a["hrun"] >= 1: a["hrun"] += 1
+                else: a["hrun"] = 1; a["hstart"] = o
+                if a["hrun"] > a["hbest"]:
+                    a["hbest"] = a["hrun"]; a["hbeg"] = a["hstart"]; a["hend"] = o
+            else:
+                a["hrun"] = 0
+            if txk is not None and txk < 0:                       # Eisserie (Eistag: TXK < 0)
+                if cons and a["irun"] >= 1: a["irun"] += 1
+                else: a["irun"] = 1; a["istart"] = o
+                if a["irun"] > a["ibest"]:
+                    a["ibest"] = a["irun"]; a["ibeg"] = a["istart"]; a["iend"] = o
+            else:
+                a["irun"] = 0
+            a["prevo"] = o
         # ab hier nur die Normalperiode (für reference.json)
         if dt < lo_i or dt > hi_i:
             continue
@@ -385,6 +426,8 @@ with io.open(out_path, "w", encoding="utf-8") as f:
     json.dump(doc, f, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
 
 # Allzeit-Rekorde je Station (unabhängig vom Normalperioden-Gate) -> records.json
+def od(o):
+    return datetime.date.fromordinal(o).isoformat() if o else None
 records = {}
 for wmo, a in acc.items():
     rec = {}
@@ -392,10 +435,30 @@ for wmo, a in acc.items():
         rec["maxC"] = a["rmx"]; rec["maxDate"] = a["rmxd"]
     if a["rmn"] is not None:
         rec["minC"] = a["rmn"]; rec["minDate"] = a["rmnd"]
+    if a["rnight"] is not None:
+        rec["nightC"] = a["rnight"]; rec["nightDate"] = a["rnightd"]
+    if a["rspan"] is not None:
+        rec["spanC"] = round(a["rspan"], 1); rec["spanDate"] = a["rspand"]
+        rec["spanMx"] = a["rspanmx"]; rec["spanMn"] = a["rspanmn"]
+    if a["hbest"] >= 2:
+        rec["heatLen"] = a["hbest"]; rec["heatStart"] = od(a["hbeg"]); rec["heatEnd"] = od(a["hend"])
+    if a["ibest"] >= 2:
+        rec["iceLen"] = a["ibest"]; rec["iceStart"] = od(a["ibeg"]); rec["iceEnd"] = od(a["iend"])
+    if a["hotdays"]:
+        yy, cc = max(a["hotdays"].items(), key=lambda kv: kv[1]); rec["hotDays"] = cc; rec["hotYear"] = yy
+    if a["tropn"]:
+        yy, cc = max(a["tropn"].items(), key=lambda kv: kv[1]); rec["tropN"] = cc; rec["tropYear"] = yy
     if rec:
         records[wmo] = rec
+
+national = {}
+if nat_hot:
+    yy, dd = max(nat_hot.items(), key=lambda kv: len(kv[1])); national["hotDaysBest"] = {"count": len(dd), "year": yy}
+if nat_trop:
+    yy, dd = max(nat_trop.items(), key=lambda kv: len(kv[1])); national["tropBest"] = {"count": len(dd), "year": yy}
+
 with io.open(out_records, "w", encoding="utf-8") as f:
-    json.dump({"records": records}, f, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+    json.dump({"records": records, "national": national}, f, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
 
 print("   Stationen mit Referenz: %d  (zu wenig Daten verworfen: %d)" % (kept, dropped),
       file=sys.stderr)

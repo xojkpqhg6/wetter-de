@@ -32,8 +32,17 @@ interface Reference { period: string; stations: Record<string, RefEntry> }
 // on-demand geladen. Dichte Tagesreihe ab `start` (Index = Tagesoffset).
 interface Hist { start: string; max: (number | null)[]; min: (number | null)[] }
 // records.json: Allzeit-Rekord je Station (volles DWD-Archiv), per ./reference.sh
-interface RecEntry { maxC?: number; maxDate?: string; minC?: number; minDate?: string }
-interface Records { records: Record<string, RecEntry> }
+interface RecEntry {
+  maxC?: number; maxDate?: string; minC?: number; minDate?: string   // heißester / kältester Tag
+  nightC?: number; nightDate?: string                                // wärmste Nacht (max TNK)
+  spanC?: number; spanDate?: string; spanMx?: number; spanMn?: number // größte Tagesspanne
+  heatLen?: number; heatStart?: string; heatEnd?: string             // längste Hitzeserie
+  iceLen?: number; iceStart?: string; iceEnd?: string                // längste Eisserie
+  hotDays?: number; hotYear?: number                                 // meiste Hitzetage/Jahr
+  tropN?: number; tropYear?: number                                  // meiste Tropennächte/Jahr
+}
+interface NatBest { count: number; year: number }
+interface Records { records: Record<string, RecEntry>; national?: { hotDaysBest?: NatBest; tropBest?: NatBest } }
 
 type PeriodKey = 'day' | 'week' | 'month' | 'year'
 type View = 'now' | PeriodKey
@@ -353,7 +362,7 @@ function buildYearSel(): void {
 }
 
 /* ---------- Rekorde-Tafel (aus series.json) ---------- */
-type RecResult = { id: string; name: string; valueText: string; sub: string; cls: string }
+type RecResult = { id: string; name: string; valueText: string; sub: string; cls: string; v?: number }
 
 // Schutz gegen Einzel-Ausreißer: Rekordhalter braucht eine Mindest-Datenmenge.
 const REC_MIN_DAYS = 10
@@ -384,7 +393,7 @@ function recExtreme(yr: number | null, key: 'max' | 'min', wantMax: boolean): Re
     }
   }
   if (!best) return null
-  return { id: best.id, name: best.name, valueText: `${best.v.toFixed(1)}°`, sub: `${best.name} · ${fmtDate(best.date)}`, cls: tempClass(best.v) }
+  return { id: best.id, name: best.name, v: best.v, valueText: `${best.v.toFixed(1)}°`, sub: `${best.name} · ${fmtDate(best.date)}`, cls: tempClass(best.v) }
 }
 
 function recWarmestNight(yr: number | null): RecResult | null {
@@ -404,7 +413,7 @@ function recWarmestNight(yr: number | null): RecResult | null {
     }
   }
   if (!best) return null
-  return { id: best.id, name: best.name, valueText: `${best.v.toFixed(1)}°`, sub: `${best.name} · ${fmtDate(best.date)}`, cls: tempClass(best.v) }
+  return { id: best.id, name: best.name, v: best.v, valueText: `${best.v.toFixed(1)}°`, sub: `${best.name} · ${fmtDate(best.date)}`, cls: tempClass(best.v) }
 }
 
 function recLargestSpan(yr: number | null): RecResult | null {
@@ -423,7 +432,7 @@ function recLargestSpan(yr: number | null): RecResult | null {
     }
   }
   if (!best) return null
-  return { id: best.id, name: best.name, valueText: `${best.sp.toFixed(1)}°`, sub: `${best.name} · ${fmtDate(best.date)} (${best.mn.toFixed(1)}…${best.mx.toFixed(1)}°)`, cls: '' }
+  return { id: best.id, name: best.name, v: best.sp, valueText: `${best.sp.toFixed(1)}°`, sub: `${best.name} · ${fmtDate(best.date)} (${best.mn.toFixed(1)}…${best.mx.toFixed(1)}°)`, cls: '' }
 }
 
 function recStreak(yr: number | null, thr: number, above: boolean): RecResult | null {
@@ -446,7 +455,7 @@ function recStreak(yr: number | null, thr: number, above: boolean): RecResult | 
     }
   }
   if (!best || best.len < 2) return null
-  return { id: best.id, name: best.name, valueText: `${best.len} Tage`, sub: `${best.name} · ${fmtDate(best.start)}–${fmtDate(best.end)}`, cls: '' }
+  return { id: best.id, name: best.name, v: best.len, valueText: `${best.len} Tage`, sub: `${best.name} · ${fmtDate(best.start)}–${fmtDate(best.end)}`, cls: '' }
 }
 
 function recMostDays(yr: number | null, thr: number, key: 'max' | 'min', unit: string): RecResult | null {
@@ -467,7 +476,7 @@ function recMostDays(yr: number | null, thr: number, key: 'max' | 'min', unit: s
     }
   }
   if (!best) return null
-  return { id: best.id, name: best.name, valueText: `${best.count} ${unit}`, sub: `${best.name} · ${best.year}`, cls: '' }
+  return { id: best.id, name: best.name, v: best.count, valueText: `${best.count} ${unit}`, sub: `${best.name} · ${best.year}`, cls: '' }
 }
 
 // Anzahl DISTINKTER Tage in einem Jahr, an denen mind. eine Station die Bedingung erfüllt
@@ -501,6 +510,41 @@ function eventHeadline(thr: number, key: 'max' | 'min'): { count: number; year: 
   return best
 }
 
+/* ---- Allzeit-Rekorde aus records.json (Archiv) — für das „Gesamt"-Tab ---- */
+const recNm = (id: string) => coords[id]?.name ?? id
+// beste Station nach einem Feld; baut daraus eine RecResult
+function atBest(sel: (e: RecEntry) => number | undefined, higher: boolean,
+                build: (id: string, e: RecEntry, v: number) => RecResult): RecResult | null {
+  if (!records) return null
+  let best: { id: string; e: RecEntry; v: number } | null = null
+  for (const id in records.records) {
+    const e = records.records[id], v = sel(e)
+    if (v == null) continue
+    if (!best || (higher ? v > best.v : v < best.v)) best = { id, e, v }
+  }
+  return best ? build(best.id, best.e, best.v) : null
+}
+const atHottest = () => atBest((e) => e.maxC, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v.toFixed(1)}°`, sub: `${recNm(id)} · ${fmtDate(e.maxDate!)}`, cls: tempClass(v) }))
+const atColdest = () => atBest((e) => e.minC, false, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v.toFixed(1)}°`, sub: `${recNm(id)} · ${fmtDate(e.minDate!)}`, cls: tempClass(v) }))
+const atNight = () => atBest((e) => e.nightC, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v.toFixed(1)}°`, sub: `${recNm(id)} · ${fmtDate(e.nightDate!)}`, cls: tempClass(v) }))
+const atSpan = () => atBest((e) => e.spanC, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v.toFixed(1)}°`, sub: `${recNm(id)} · ${fmtDate(e.spanDate!)} (${e.spanMn!.toFixed(1)}…${e.spanMx!.toFixed(1)}°)`, cls: '' }))
+const atHeat = () => atBest((e) => e.heatLen, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v} Tage`, sub: `${recNm(id)} · ${fmtDate(e.heatStart!)}–${fmtDate(e.heatEnd!)}`, cls: '' }))
+const atIce = () => atBest((e) => e.iceLen, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v} Tage`, sub: `${recNm(id)} · ${fmtDate(e.iceStart!)}–${fmtDate(e.iceEnd!)}`, cls: '' }))
+const atMostHot = () => atBest((e) => e.hotDays, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v} Tage`, sub: `${recNm(id)} · ${e.hotYear}`, cls: '' }))
+const atMostTrop = () => atBest((e) => e.tropN, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v} Nächte`, sub: `${recNm(id)} · ${e.tropYear}`, cls: '' }))
+
+// besseren der beiden Rekorde wählen (Serie/Live vs. Archiv)
+function betterRec(a: RecResult | null, b: RecResult | null, higher = true): RecResult | null {
+  if (!a) return b
+  if (!b) return a
+  const av = a.v ?? -Infinity, bv = b.v ?? -Infinity
+  return (higher ? av >= bv : av <= bv) ? a : b
+}
+// nationale Kennzahl (bestes Einzeljahr): Serie vs. Archiv
+function betterNat(a: { count: number; year: string }, b?: NatBest): { count: number; year: string } {
+  return b && b.count > a.count ? { count: b.count, year: String(b.year) } : a
+}
+
 function recCard(icon: string, label: string, rec: RecResult | null, note?: string): string {
   const head = `<span class="rec-ico">${icon}</span><span class="rec-k">${label}${note ? ` <span class="rec-note">${note}</span>` : ''}</span>`
   if (!rec) return `<div class="rec-card is-empty">${head}<span class="rec-sub">keine Daten</span></div>`
@@ -523,24 +567,27 @@ function renderRecords(): void {
   const bar = `<div class="seg rec-filter">` + opts.map((v) =>
     `<button type="button" data-recyear="${v}" class="${recYear === v ? 'active' : ''}">${v === 'all' ? 'Gesamt' : v}</button>`).join('') + `</div>`
   const yr = recYear === 'all' ? null : +recYear
-  const hot = eventHeadline(30, 'max')
-  const trop = eventHeadline(20, 'min')
-  const yrNote = (y: string) => (recYear === 'all' ? `Rekordjahr ${y}` : y)
+  const all = recYear === 'all'   // „Gesamt" = Allzeit: Serie/Live gegen Archiv (records.json) mergen
+  const nat = records?.national
+  const hot = all ? betterNat(eventHeadline(30, 'max'), nat?.hotDaysBest) : eventHeadline(30, 'max')
+  const trop = all ? betterNat(eventHeadline(20, 'min'), nat?.tropBest) : eventHeadline(20, 'min')
+  const yrNote = (y: string) => (all ? `Rekordjahr ${y}` : y)
+  const M = (s: RecResult | null, a: RecResult | null, higher = true) => (all ? betterRec(s, a, higher) : s)
   const cards = [
     // Reihe 1 — Extreme
-    recCard('🔥', 'Höchste Temperatur', recExtreme(yr, 'max', true)),
-    recCard('❄', 'Tiefste Temperatur', recExtreme(yr, 'min', false)),
-    recCard('🌡', 'Größte Tagesspanne', recLargestSpan(yr)),
+    recCard('🔥', 'Höchste Temperatur', M(recExtreme(yr, 'max', true), atHottest())),
+    recCard('❄', 'Tiefste Temperatur', M(recExtreme(yr, 'min', false), atColdest(), false)),
+    recCard('🌡', 'Größte Tagesspanne', M(recLargestSpan(yr), atSpan())),
     // Reihe 2 — Nächte
-    recCard('🌴', 'Wärmste Nacht', recWarmestNight(yr), 'ohne heute'),
-    recCard('🌙', 'Meiste Tropennächte', recMostDays(yr, 20, 'min', 'Nächte')),
+    recCard('🌴', 'Wärmste Nacht', M(recWarmestNight(yr), atNight()), 'ohne heute'),
+    recCard('🌙', 'Meiste Tropennächte', M(recMostDays(yr, 20, 'min', 'Nächte'), atMostTrop())),
     statCard('📅', 'Tropennächte gesamt', `${trop.count} Nächte`, yrNote(trop.year)),
     // Reihe 3 — Hitze
-    recCard('♨', 'Längste Hitzeserie', recStreak(yr, 30, true)),
-    recCard('☀', 'Meiste Hitzetage', recMostDays(yr, 30, 'max', 'Tage')),
+    recCard('♨', 'Längste Hitzeserie', M(recStreak(yr, 30, true), atHeat())),
+    recCard('☀', 'Meiste Hitzetage', M(recMostDays(yr, 30, 'max', 'Tage'), atMostHot())),
     statCard('📅', 'Hitzetage gesamt', `${hot.count} Tage`, yrNote(hot.year)),
   ]
-  const ice = recStreak(yr, 0, false)
+  const ice = M(recStreak(yr, 0, false), atIce())
   const info = ice
     ? `<div class="rec-info"><span>🧊 Längste Eisserie <b>${ice.valueText}</b> <span class="dim">${esc(ice.sub)}</span></span></div>`
     : ''
@@ -575,11 +622,13 @@ function render(): void {
   // --- Rekorde-Tafel ---
   if (rek) {
     tableEl.hidden = true; mapWrap.hidden = true; recordsEl.hidden = false
-    if (!series) {
+    // Serie (2025+) + Archiv-Rekorde (records.json) laden; „Gesamt" merged beides
+    if (!seriesPromise || !recordsPromise) {
       metaEl.textContent = 'lädt Verlaufsdaten …'; recordsEl.innerHTML = ''
-      void ensureSeries().then(render); return
+      void Promise.all([ensureSeries(), ensureRecords()]).then(render); return
     }
-    metaEl.innerHTML = `Rekorde · <strong>${recYear === 'all' ? 'seit Aufzeichnung 2025' : recYear}</strong>`
+    if (!series) { metaEl.innerHTML = '<span class="err">Für die Rekorde liegen noch keine Daten vor.</span>'; return }
+    metaEl.innerHTML = `Rekorde · <strong>${recYear === 'all' ? 'Allzeit (mit Archiv)' : recYear}</strong>`
     renderRecords()
     return
   }
