@@ -59,6 +59,13 @@ interface Records {
     tropBest?: NatBest; wnightBest?: NatBest; stropBest?: NatBest
   }
 }
+// timeline.json: nationale Jahres-Zeitreihe je Metrik (per ./reference.sh) — fürs Rekord-Modal
+interface TLMetric {
+  kind: 'ext' | 'count'; dir?: 'max' | 'min'
+  val?: (number | null)[]; st?: (string | null)[]; dt?: (string | null)[]   // Extremwerte
+  all?: number[]; panel?: (number | null)[]                                 // Zähler
+}
+interface Timeline { years: number[]; panelCutoff: number; panelSize: number; metrics: Record<string, TLMetric> }
 
 type PeriodKey = 'day' | 'week' | 'month' | 'year'
 type View = 'now' | PeriodKey
@@ -144,6 +151,8 @@ let reference: Reference | null = null
 let referencePromise: Promise<void> | null = null
 let records: Records | null = null
 let recordsPromise: Promise<void> | null = null
+let timeline: Timeline | null = null
+let timelinePromise: Promise<void> | null = null
 const historyRaw = new Map<string, Hist | null>()                 // geladene history/<id>.json (null = keine)
 const combinedCache = new Map<string, { dates: string[]; ser: SeriesEntry }>()  // Historie + Live je Station
 
@@ -175,6 +184,12 @@ function ensureReference(): Promise<void> {
 function ensureRecords(): Promise<void> {
   if (!recordsPromise) recordsPromise = fetchJson<Records>('data/records.json').then((r) => { records = r })
   return recordsPromise
+}
+
+// timeline.json (nationale Jahres-Zeitreihen) einmalig nachladen
+function ensureTimeline(): Promise<void> {
+  if (!timelinePromise) timelinePromise = fetchJson<Timeline>('data/timeline.json').then((t) => { timeline = t })
+  return timelinePromise
 }
 
 // history/<id>.json on-demand laden (je Station genau einmal) und mit Live-Reihe mergen
@@ -552,26 +567,256 @@ function betterNat(a: { count: number; year: string }, b?: NatBest): { count: nu
   return b && b.count > a.count ? { count: b.count, year: String(b.year) } : a
 }
 
-function recCard(icon: string, label: string, rec: RecResult | null, note?: string): string {
+// rec = Datensatz; metric gesetzt -> Klick öffnet Rekord-Zeitverlauf, sonst die Station
+function recCard(icon: string, label: string, rec: RecResult | null, note?: string, metric?: string): string {
   const head = `<span class="rec-ico">${icon}</span><span class="rec-k">${label}${note ? ` <span class="rec-note">${note}</span>` : ''}</span>`
   if (!rec) return `<div class="rec-card is-empty">${head}<span class="rec-sub">keine Daten</span></div>`
-  return `<button type="button" class="rec-card" data-id="${rec.id}">${head}` +
+  const attr = metric ? `data-rec="${metric}"` : `data-id="${rec.id}"`
+  return `<button type="button" class="rec-card" ${attr}>${head}` +
     `<span class="rec-v ${rec.cls}">${rec.valueText}</span>` +
     `<span class="rec-sub">${esc(rec.sub)}</span></button>`
 }
 
-// nicht-klickbare Karte für nationale Kennzahlen (keine Einzelstation)
-function statCard(icon: string, label: string, valueText: string, sub: string): string {
-  return `<div class="rec-card is-stat"><span class="rec-ico">${icon}</span>` +
-    `<span class="rec-k">${label}</span><span class="rec-v">${valueText}</span>` +
-    `<span class="rec-sub">${esc(sub)}</span></div>`
+// nationale Kennzahl; metric gesetzt -> klickbar (Rekord-Zeitverlauf), sonst statisch
+function statCard(icon: string, label: string, valueText: string, sub: string, metric?: string): string {
+  const inner = `<span class="rec-ico">${icon}</span>` +
+    `<span class="rec-k">${label}</span><span class="rec-v">${valueText}</span><span class="rec-sub">${esc(sub)}</span>`
+  return metric
+    ? `<button type="button" class="rec-card is-stat lnk" data-rec="${metric}">${inner}</button>`
+    : `<div class="rec-card is-stat">${inner}</div>`
 }
 
-// Zähl-/Serien-Karte: mit Rekord klickbar, sonst als "0" (noch nie) sichtbar statt „keine Daten"
-function countCard(icon: string, label: string, rec: RecResult | null, unit: string, note?: string): string {
-  if (rec) return recCard(icon, label, rec, note)
+// Zähl-/Serien-Karte: metric gesetzt -> Klick öffnet den Rekord-Zeitverlauf
+function countCard(icon: string, label: string, rec: RecResult | null, unit: string, note?: string, metric?: string): string {
+  if (rec) return recCard(icon, label, rec, note, metric)
   const k = `${label}${note ? ` <span class="rec-note">${note}</span>` : ''}`
-  return statCard(icon, k, `0 ${unit}`, 'noch nie')
+  return statCard(icon, k, `0 ${unit}`, 'noch nie', metric)
+}
+
+/* ---------- Rekord über die Zeit (Modal aus timeline.json) ---------- */
+const REC_METRICS: Record<string, { title: string; unit: string; thr?: string }> = {
+  maxTemp: { title: 'Höchste Temperatur', unit: '°' },
+  minTemp: { title: 'Tiefste Temperatur', unit: '°' },
+  warmNight: { title: 'Wärmste Nacht', unit: '°' },
+  hotDays: { title: 'Hitzetage', unit: 'Tage', thr: '≥ 30 °C' },
+  desertDays: { title: 'Wüstentage', unit: 'Tage', thr: '≥ 35 °C' },
+  extremeDays: { title: 'Extreme Hitze', unit: 'Tage', thr: '≥ 40 °C' },
+  glutDays: { title: 'Gluttage', unit: 'Tage', thr: '≥ 45 °C' },
+  tropN: { title: 'Tropennächte', unit: 'Nächte', thr: '≥ 20 °C' },
+  wnightN: { title: 'Wüstennächte', unit: 'Nächte', thr: '≥ 25 °C' },
+  stropN: { title: 'Super-Tropennächte', unit: 'Nächte', thr: '≥ 30 °C' },
+  // „Meiste X" — Höchstwert einer Station pro Jahr (national)
+  hotDaysMax: { title: 'Meiste Hitzetage', unit: 'Tage', thr: '≥ 30 °C · Bestwert einer Station' },
+  desertDaysMax: { title: 'Meiste Wüstentage', unit: 'Tage', thr: '≥ 35 °C · Bestwert einer Station' },
+  extremeDaysMax: { title: 'Meiste Extremtage', unit: 'Tage', thr: '≥ 40 °C · Bestwert einer Station' },
+  glutDaysMax: { title: 'Meiste Gluttage', unit: 'Tage', thr: '≥ 45 °C · Bestwert einer Station' },
+  tropNMax: { title: 'Meiste Tropennächte', unit: 'Nächte', thr: '≥ 20 °C · Bestwert einer Station' },
+  wnightNMax: { title: 'Meiste Wüstennächte', unit: 'Nächte', thr: '≥ 25 °C · Bestwert einer Station' },
+  stropNMax: { title: 'Meiste Super-Tropennächte', unit: 'Nächte', thr: '≥ 30 °C · Bestwert einer Station' },
+  // „Längste Serie" — längste Serie irgendeiner Station pro Jahr (national)
+  hotStreak: { title: 'Längste Hitzeserie', unit: 'Tage', thr: '≥ 30 °C' },
+  desertStreak: { title: 'Längste Wüstenserie', unit: 'Tage', thr: '≥ 35 °C' },
+  extremeStreak: { title: 'Längste Extremserie', unit: 'Tage', thr: '≥ 40 °C' },
+  glutStreak: { title: 'Längste Gluttag-Serie', unit: 'Tage', thr: '≥ 45 °C' },
+  tropStreak: { title: 'Längste Tropennacht-Serie', unit: 'Nächte', thr: '≥ 20 °C' },
+  wnightStreak: { title: 'Längste Wüstennacht-Serie', unit: 'Nächte', thr: '≥ 25 °C' },
+  stropStreak: { title: 'Längste Super-Tropennacht-Serie', unit: 'Nächte', thr: '≥ 30 °C' },
+}
+
+// Konfiguration zur Berechnung des aktuellen (Live-)Jahres aus series.json je Metrik
+const REC_LIVE: Record<string, { arr: 'max' | 'min'; thr: number; agg: 'distinct' | 'maxcount' | 'maxrun' | 'extmax' | 'extmin' }> = {
+  maxTemp: { arr: 'max', thr: 0, agg: 'extmax' }, minTemp: { arr: 'min', thr: 0, agg: 'extmin' }, warmNight: { arr: 'min', thr: 0, agg: 'extmax' },
+  hotDays: { arr: 'max', thr: 30, agg: 'distinct' }, desertDays: { arr: 'max', thr: 35, agg: 'distinct' }, extremeDays: { arr: 'max', thr: 40, agg: 'distinct' }, glutDays: { arr: 'max', thr: 45, agg: 'distinct' },
+  tropN: { arr: 'min', thr: 20, agg: 'distinct' }, wnightN: { arr: 'min', thr: 25, agg: 'distinct' }, stropN: { arr: 'min', thr: 30, agg: 'distinct' },
+  hotDaysMax: { arr: 'max', thr: 30, agg: 'maxcount' }, desertDaysMax: { arr: 'max', thr: 35, agg: 'maxcount' }, extremeDaysMax: { arr: 'max', thr: 40, agg: 'maxcount' }, glutDaysMax: { arr: 'max', thr: 45, agg: 'maxcount' },
+  tropNMax: { arr: 'min', thr: 20, agg: 'maxcount' }, wnightNMax: { arr: 'min', thr: 25, agg: 'maxcount' }, stropNMax: { arr: 'min', thr: 30, agg: 'maxcount' },
+  hotStreak: { arr: 'max', thr: 30, agg: 'maxrun' }, desertStreak: { arr: 'max', thr: 35, agg: 'maxrun' }, extremeStreak: { arr: 'max', thr: 40, agg: 'maxrun' }, glutStreak: { arr: 'max', thr: 45, agg: 'maxrun' },
+  tropStreak: { arr: 'min', thr: 20, agg: 'maxrun' }, wnightStreak: { arr: 'min', thr: 25, agg: 'maxrun' }, stropStreak: { arr: 'min', thr: 30, agg: 'maxrun' },
+}
+
+// nationaler Wert eines Jahres aus der Live-Reihe (series.json) — inkl. Station/Datum, fürs laufende Jahr
+function liveNational(key: string, year: number): { v: number | null; st: string | null; dt: string | null } {
+  const c = REC_LIVE[key]
+  if (!c || !series) return { v: null, st: null, dt: null }
+  const { dates, stations } = series
+  if (c.agg === 'distinct') return { v: distinctEventDays(year, c.thr, c.arr), st: null, dt: null }
+  if (c.agg === 'extmax' || c.agg === 'extmin') {
+    let bv: number | null = null, bst: string | null = null, bdt: string | null = null
+    for (const id in stations) {
+      const a = stations[id][c.arr]
+      for (let i = 0; i < dates.length; i++) {
+        if (+dates[i].slice(0, 4) !== year) continue
+        const v = a[i]; if (v == null) continue
+        if (bv === null || (c.agg === 'extmax' ? v > bv : v < bv)) { bv = v; bst = id; bdt = dates[i] }
+      }
+    }
+    return { v: bv, st: bst, dt: bdt }
+  }
+  // maxcount / maxrun: Bestwert über die Stationen (+ verantwortliche Station)
+  let best = 0, bst: string | null = null
+  for (const id in stations) {
+    const a = stations[id][c.arr]
+    let cnt = 0, run = 0, stationBest = 0
+    for (let i = 0; i < dates.length; i++) {
+      if (+dates[i].slice(0, 4) !== year) { run = 0; continue }
+      const ok = a[i] != null && a[i]! >= c.thr
+      if (ok) { cnt++; run++; if (run > stationBest) stationBest = run } else run = 0
+    }
+    const sv = c.agg === 'maxrun' ? stationBest : cnt
+    if (sv > best) { best = sv; bst = id }
+  }
+  return { v: best, st: bst, dt: null }
+}
+
+// Timeline-Metrik + laufendes Jahr (aus series.json) zusammenführen
+function mergedMetric(key: string): { years: number[]; m: TLMetric } {
+  const t = timeline!, base = t.metrics[key]
+  const liveY = [...new Set((series?.dates ?? []).map((d) => +d.slice(0, 4)))].sort((a, b) => a - b)
+  const extra = liveY.filter((y) => y > t.years[t.years.length - 1])
+  if (!extra.length) return { years: t.years, m: base }
+  const years = [...t.years, ...extra]
+  const live = extra.map((y) => liveNational(key, y))
+  if (base.kind === 'ext' && base.val) {
+    return {
+      years, m: {
+        ...base, val: [...base.val, ...live.map((r) => r.v)],
+        st: base.st ? [...base.st, ...live.map((r) => r.st)] : undefined,
+        dt: base.dt ? [...base.dt, ...live.map((r) => r.dt)] : undefined,
+      },
+    }
+  }
+  return {
+    years, m: {
+      ...base, all: [...(base.all ?? []), ...live.map((r) => r.v ?? 0)],
+      st: base.st ? [...base.st, ...live.map((r) => r.st)] : undefined,
+    },
+  }
+}
+
+type RecCtx = {
+  years: number[]; val: (number | null)[]; st: (string | null)[] | null; dt: (string | null)[] | null
+  unit: string; lo: number; hi: number; W: number; H: number; padL: number; padR: number; padT: number; padB: number
+}
+let recCtx: RecCtx | null = null
+
+async function openRecord(key: string): Promise<void> {
+  detailId = null
+  recCtx = null
+  detailEl.hidden = false
+  detailBody.innerHTML = '<p class="empty">lädt …</p>'
+  await ensureTimeline()
+  renderRecord(key)
+}
+
+// Hover über dem Rekord-Chart: nächstes Jahr bestimmen, Führungslinie + Tooltip (Wert · Station · Datum)
+function onRecordMove(svg: SVGSVGElement, clientX: number, clientY: number): void {
+  const c = recCtx
+  if (!c) return
+  const rect = svg.getBoundingClientRect()
+  if (rect.width === 0) return
+  const n = c.years.length
+  const sx = (clientX - rect.left) / rect.width * c.W
+  let i = Math.round(((sx - c.padL) / (c.W - c.padL - c.padR)) * (n - 1))
+  i = Math.max(0, Math.min(n - 1, i))
+  const gx = c.padL + (n < 2 ? 0 : (i / (n - 1)) * (c.W - c.padL - c.padR))
+  const ys = (v: number) => c.padT + (1 - (v - c.lo) / (c.hi - c.lo)) * (c.H - c.padT - c.padB)
+  let g = `<line class="guide-line" x1="${gx.toFixed(1)}" y1="${c.padT}" x2="${gx.toFixed(1)}" y2="${(c.H - c.padB).toFixed(1)}"/>`
+  const v = c.val[i]
+  let tip: string
+  if (v == null) {
+    tip = `<b>${c.years[i]}</b><br>keine Daten`
+  } else {
+    g += `<circle class="guide-dot mx" cx="${gx.toFixed(1)}" cy="${ys(v).toFixed(1)}" r="3"/>`
+    const vtxt = c.unit === '°' ? v.toFixed(1).replace('.', ',') + '°' : `${v} ${c.unit}`
+    const stId = c.st?.[i], stName = stId ? (coords[stId]?.name ?? stId) : ''
+    const date = c.dt?.[i] ? fmtDate(c.dt[i]!) : ''
+    const extra = [stName, date].filter(Boolean).join(' · ')
+    tip = `<b>${c.years[i]}</b><br>${vtxt}${extra ? `<br><span class="dim">${esc(extra)}</span>` : ''}`
+  }
+  const gg = svg.querySelector('.recc-guide')
+  if (gg) gg.innerHTML = g
+  showTip(tip, clientX, clientY)
+}
+
+function renderRecord(key: string): void {
+  const meta = REC_METRICS[key]
+  if (!meta || !timeline?.metrics[key]) { detailBody.innerHTML = '<p class="empty">Keine Zeitreihe verfügbar.</p>'; return }
+  const { years, m } = mergedMetric(key)
+  const fmtV = (v: number) => (meta.unit === '°' ? v.toFixed(1).replace('.', ',') + '°' : `${v} ${meta.unit}`)
+  let headVal = '—', headSub = '', cls = key === 'minTemp' ? 'cool' : (meta.unit === '°' ? 'hot' : '')
+  if (m.kind === 'ext' && m.val) {
+    let bi = -1, bv = m.dir === 'min' ? Infinity : -Infinity
+    m.val.forEach((v, i) => { if (v != null && (m.dir === 'min' ? v < bv : v > bv)) { bv = v; bi = i } })
+    if (bi >= 0) { headVal = fmtV(bv); const st = m.st?.[bi]; headSub = `${st ? (coords[st]?.name ?? st) : ''} · ${m.dt?.[bi] ? fmtDate(m.dt[bi]!) : years[bi]}` }
+  } else if (m.all) {
+    let bi = 0; m.all.forEach((v, i) => { if (v > m.all![bi]) bi = i })
+    headVal = fmtV(m.all[bi]); headSub = `Rekordjahr ${years[bi]}`
+  }
+  const chart = recordChart(key, years, m)
+  recCtx = chart.ctx
+  detailBody.innerHTML =
+    `<h2>${meta.title}${meta.thr ? `<span class="detail-badge">${meta.thr}</span>` : ''}</h2>` +
+    `<div class="detail-sub">Deutschland · über die Zeit</div>` +
+    `<div class="facts"><div class="fact"><div class="k">Rekord</div><div class="v ${cls}">${headVal}</div>` +
+    `<div class="k">${esc(headSub)}</div></div></div>` +
+    `<div class="detail-panel">${chart.html}</div>`
+}
+
+function recordChart(key: string, years: number[], m: TLMetric): { html: string; ctx: RecCtx } {
+  const n = years.length, meta = REC_METRICS[key]
+  const W = 520, H = 200, padL = 30, padR = 12, padT = 16, padB = 22
+  const xs = (i: number) => padL + (n < 2 ? 0 : (i / (n - 1)) * (W - padL - padR))
+  const anchorFor = (x: number) => (x > W - padR - 30 ? 'end' : x < padL + 30 ? 'start' : 'middle')
+  let lo = 0, hi = 1
+  const ys = (v: number) => padT + (1 - (v - lo) / (hi - lo)) * (H - padT - padB)
+  let body = '', yl = '', cap = ''
+  const vals = (m.kind === 'ext' ? m.val : m.all) ?? []
+  if (m.kind === 'ext' && m.val) {
+    const dir = m.dir
+    const nums = m.val.filter((v): v is number => v != null)
+    lo = Math.min(...nums); hi = Math.max(...nums); if (hi - lo < 2) { hi += 1; lo -= 1 }
+    let best = dir === 'min' ? Infinity : -Infinity
+    const rec = m.val.map((v) => { if (v != null) best = dir === 'min' ? Math.min(best, v) : Math.max(best, v); return isFinite(best) ? best : null })
+    let dots = ''
+    m.val.forEach((v, i) => { if (v != null) dots += `<circle class="recc-dot" cx="${xs(i).toFixed(1)}" cy="${ys(v).toFixed(1)}" r="1.8"/>` })
+    let d = '', pen = false, mk = '', lastLblX = -99
+    rec.forEach((v, i) => {
+      if (v == null) return
+      const x = xs(i), y = ys(v)
+      d += `${pen ? 'L' : 'M'}${x.toFixed(1)},${y.toFixed(1)} `; pen = true
+      if (i > 0 && rec[i - 1] != null && v !== rec[i - 1]) {
+        mk += `<circle class="recc-mk" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3"/>`
+        if (x - lastLblX > 52) {
+          mk += `<text class="recc-lbl" x="${x.toFixed(1)}" y="${(y - 7).toFixed(1)}" text-anchor="${anchorFor(x)}">${v.toFixed(1).replace('.', ',')}° ${years[i]}</text>`
+          lastLblX = x
+        }
+      }
+    })
+    yl = `<text class="spark-lbl" x="2" y="${(ys(hi) + 3).toFixed(1)}">${hi.toFixed(0)}°</text>` +
+      `<text class="spark-lbl" x="2" y="${(ys(lo) + 3).toFixed(1)}">${lo.toFixed(0)}°</text>`
+    body = dots + `<path class="recc-rec ${dir === 'min' ? 'cool' : ''}" d="${d.trim()}"/>` + mk
+    cap = `<div class="spark-legend"><span class="recc-lbl-i">— Rekordverlauf</span> &nbsp; Punkte = heißester/kältester Tag je Jahr · bundesweit</div>`
+  } else if (m.all) {
+    hi = Math.max(...m.all, 1); lo = 0
+    let d = ''
+    m.all.forEach((v, i) => { d += `${i === 0 ? 'M' : 'L'}${xs(i).toFixed(1)},${ys(v).toFixed(1)} ` })
+    let bi = 0; m.all.forEach((v, i) => { if (v > m.all![bi]) bi = i })
+    const bx = xs(bi)
+    const mk = `<circle class="recc-mk" cx="${bx.toFixed(1)}" cy="${ys(m.all[bi]).toFixed(1)}" r="3"/>` +
+      `<text class="recc-lbl" x="${bx.toFixed(1)}" y="${(ys(m.all[bi]) - 7).toFixed(1)}" text-anchor="${anchorFor(bx)}">${m.all[bi]} · ${years[bi]}</text>`
+    yl = `<text class="spark-lbl" x="2" y="${(ys(hi) + 3).toFixed(1)}">${hi}</text>` +
+      `<text class="spark-lbl" x="2" y="${(ys(0) + 3).toFixed(1)}">0</text>`
+    body = `<path class="recc-line" d="${d.trim()}"/>` + mk
+    cap = `<div class="spark-legend">${meta.title} pro Jahr · bundesweit · Rekordjahr markiert · <span class="dim">Punkt für Details</span></div>`
+  }
+  let months = ''
+  years.forEach((y, i) => { if (y % 20 === 0) months += `<text class="spark-lbl" x="${xs(i).toFixed(1)}" y="${H - 6}" text-anchor="middle">${y}</text>` })
+  const svg = `<svg class="recc" viewBox="0 0 ${W} ${H}">` +
+    `<line class="spark-axis" x1="${padL}" y1="${padT}" x2="${padL}" y2="${H - padB}"/>` +
+    `<line class="spark-axis" x1="${padL}" y1="${(H - padB).toFixed(1)}" x2="${W - padR}" y2="${(H - padB).toFixed(1)}"/>` +
+    body + months + yl + `<g class="recc-guide"></g></svg>`
+  const ctx: RecCtx = { years, val: vals, st: m.st ?? null, dt: m.dt ?? null, unit: meta.unit, lo, hi, W, H, padL, padR, padT, padB }
+  return { html: svg + cap, ctx }
 }
 
 function renderRecords(): void {
@@ -594,38 +839,38 @@ function renderRecords(): void {
   const gesamtSub = (h: { count: number; year: string }) => (h.count > 0 ? yrNote(h.year) : 'noch nie')
   const M = (s: RecResult | null, a: RecResult | null, higher = true) => (all ? betterRec(s, a, higher) : s)
   const cards = [
-    // Reihe 1 — Extreme
-    recCard('🔥', 'Höchste Temperatur', M(recExtreme(yr, 'max', true), atHottest())),
-    recCard('❄', 'Tiefste Temperatur', M(recExtreme(yr, 'min', false), atColdest(), false)),
-    recCard('🌴', 'Wärmste Nacht', M(recWarmestNight(yr), atNight()), 'ohne heute'),
+    // Reihe 1 — Extreme (Klick öffnet den Rekord-Zeitverlauf)
+    recCard('🔥', 'Höchste Temperatur', M(recExtreme(yr, 'max', true), atHottest()), undefined, 'maxTemp'),
+    recCard('❄', 'Tiefste Temperatur', M(recExtreme(yr, 'min', false), atColdest(), false), undefined, 'minTemp'),
+    recCard('🌴', 'Wärmste Nacht', M(recWarmestNight(yr), atNight()), 'ohne heute', 'warmNight'),
     // Reihe 2 — Tropennächte (Tagesminimum ≥ 20 °C)
-    countCard('🌙', 'Längste Tropennacht-Serie', M(recStreak(yr, 20, 'min', true, 'Nächte'), atTropStreak()), 'Nächte'),
-    countCard('🌙', 'Meiste Tropennächte', M(recMostDays(yr, 20, 'min', 'Nächte'), atMostTrop()), 'Nächte'),
-    statCard('📅', 'Tropennächte gesamt', `${trop.count} Nächte`, gesamtSub(trop)),
+    countCard('🌙', 'Längste Tropennacht-Serie', M(recStreak(yr, 20, 'min', true, 'Nächte'), atTropStreak()), 'Nächte', undefined, 'tropStreak'),
+    countCard('🌙', 'Meiste Tropennächte', M(recMostDays(yr, 20, 'min', 'Nächte'), atMostTrop()), 'Nächte', undefined, 'tropNMax'),
+    statCard('📅', 'Tropennächte gesamt', `${trop.count} Nächte`, gesamtSub(trop), 'tropN'),
     // Reihe 3 — Wüstennächte (≥ 25 °C)
-    countCard('🏜', 'Längste Wüstennacht-Serie', M(recStreak(yr, 25, 'min', true, 'Nächte'), atWnightStreak()), 'Nächte', '≥ 25 °C'),
-    countCard('🏜', 'Meiste Wüstennächte', M(recMostDays(yr, 25, 'min', 'Nächte'), atMostWnight()), 'Nächte', '≥ 25 °C'),
-    statCard('📅', 'Wüstennächte gesamt', `${wnight.count} Nächte`, gesamtSub(wnight)),
+    countCard('🏜', 'Längste Wüstennacht-Serie', M(recStreak(yr, 25, 'min', true, 'Nächte'), atWnightStreak()), 'Nächte', '≥ 25 °C', 'wnightStreak'),
+    countCard('🏜', 'Meiste Wüstennächte', M(recMostDays(yr, 25, 'min', 'Nächte'), atMostWnight()), 'Nächte', '≥ 25 °C', 'wnightNMax'),
+    statCard('📅', 'Wüstennächte gesamt', `${wnight.count} Nächte`, gesamtSub(wnight), 'wnightN'),
     // Reihe 4 — Super-Tropennächte (≥ 30 °C)
-    countCard('🥵', 'Längste Super-Tropennacht-Serie', M(recStreak(yr, 30, 'min', true, 'Nächte'), atStropStreak()), 'Nächte', '≥ 30 °C'),
-    countCard('🥵', 'Meiste Super-Tropennächte', M(recMostDays(yr, 30, 'min', 'Nächte'), atMostStrop()), 'Nächte', '≥ 30 °C'),
-    statCard('📅', 'Super-Tropennächte gesamt', `${strop.count} Nächte`, gesamtSub(strop)),
+    countCard('🥵', 'Längste Super-Tropennacht-Serie', M(recStreak(yr, 30, 'min', true, 'Nächte'), atStropStreak()), 'Nächte', '≥ 30 °C', 'stropStreak'),
+    countCard('🥵', 'Meiste Super-Tropennächte', M(recMostDays(yr, 30, 'min', 'Nächte'), atMostStrop()), 'Nächte', '≥ 30 °C', 'stropNMax'),
+    statCard('📅', 'Super-Tropennächte gesamt', `${strop.count} Nächte`, gesamtSub(strop), 'stropN'),
     // Reihe 5 — Hitze (≥ 30 °C)
-    countCard('♨', 'Längste Hitzeserie', M(recStreak(yr, 30, 'max', true, 'Tage'), atHeat()), 'Tage'),
-    countCard('☀', 'Meiste Hitzetage', M(recMostDays(yr, 30, 'max', 'Tage'), atMostHot()), 'Tage'),
-    statCard('📅', 'Hitzetage gesamt', `${hot.count} Tage`, gesamtSub(hot)),
+    countCard('♨', 'Längste Hitzeserie', M(recStreak(yr, 30, 'max', true, 'Tage'), atHeat()), 'Tage', undefined, 'hotStreak'),
+    countCard('☀', 'Meiste Hitzetage', M(recMostDays(yr, 30, 'max', 'Tage'), atMostHot()), 'Tage', undefined, 'hotDaysMax'),
+    statCard('📅', 'Hitzetage gesamt', `${hot.count} Tage`, gesamtSub(hot), 'hotDays'),
     // Reihe 6 — Wüstentage (≥ 35 °C)
-    countCard('🏜', 'Längste Wüstenserie', M(recStreak(yr, 35, 'max', true, 'Tage'), atDesertStreak()), 'Tage', '≥ 35 °C'),
-    countCard('🌵', 'Meiste Wüstentage', M(recMostDays(yr, 35, 'max', 'Tage'), atMostDesert()), 'Tage', '≥ 35 °C'),
-    statCard('📅', 'Wüstentage gesamt', `${desert.count} Tage`, gesamtSub(desert)),
+    countCard('🏜', 'Längste Wüstenserie', M(recStreak(yr, 35, 'max', true, 'Tage'), atDesertStreak()), 'Tage', '≥ 35 °C', 'desertStreak'),
+    countCard('🌵', 'Meiste Wüstentage', M(recMostDays(yr, 35, 'max', 'Tage'), atMostDesert()), 'Tage', '≥ 35 °C', 'desertDaysMax'),
+    statCard('📅', 'Wüstentage gesamt', `${desert.count} Tage`, gesamtSub(desert), 'desertDays'),
     // Reihe 7 — Extreme Hitze (≥ 40 °C)
-    countCard('🥵', 'Längste Extremserie', M(recStreak(yr, 40, 'max', true, 'Tage'), atExtremeStreak()), 'Tage', '≥ 40 °C'),
-    countCard('🌋', 'Meiste Extremtage', M(recMostDays(yr, 40, 'max', 'Tage'), atMostExtreme()), 'Tage', '≥ 40 °C'),
-    statCard('📅', 'Extreme Hitze gesamt', `${extreme.count} Tage`, gesamtSub(extreme)),
+    countCard('🥵', 'Längste Extremserie', M(recStreak(yr, 40, 'max', true, 'Tage'), atExtremeStreak()), 'Tage', '≥ 40 °C', 'extremeStreak'),
+    countCard('🌋', 'Meiste Extremtage', M(recMostDays(yr, 40, 'max', 'Tage'), atMostExtreme()), 'Tage', '≥ 40 °C', 'extremeDaysMax'),
+    statCard('📅', 'Extreme Hitze gesamt', `${extreme.count} Tage`, gesamtSub(extreme), 'extremeDays'),
     // Reihe 8 — Gluttage (≥ 45 °C) — in DE bisher nie erreicht
-    countCard('🫠', 'Längste Gluttag-Serie', M(recStreak(yr, 45, 'max', true, 'Tage'), atGlutStreak()), 'Tage', '≥ 45 °C'),
-    countCard('🫠', 'Meiste Gluttage', M(recMostDays(yr, 45, 'max', 'Tage'), atMostGlut()), 'Tage', '≥ 45 °C'),
-    statCard('📅', 'Gluttage gesamt', `${glut.count} Tage`, gesamtSub(glut)),
+    countCard('🫠', 'Längste Gluttag-Serie', M(recStreak(yr, 45, 'max', true, 'Tage'), atGlutStreak()), 'Tage', '≥ 45 °C', 'glutStreak'),
+    countCard('🫠', 'Meiste Gluttage', M(recMostDays(yr, 45, 'max', 'Tage'), atMostGlut()), 'Tage', '≥ 45 °C', 'glutDaysMax'),
+    statCard('📅', 'Gluttage gesamt', `${glut.count} Tage`, gesamtSub(glut), 'glutDays'),
   ]
   const ice = M(recStreak(yr, 0, 'max', false, 'Tage'), atIce())
   const info = ice
@@ -848,7 +1093,7 @@ function showTip(html: string, x: number, y: number): void {
 }
 function hideTip(): void { if (tipEl) tipEl.style.display = 'none' }
 function clearGuide(): void {
-  detailBody.querySelectorAll('.spark-guide, .dist-guide').forEach((g) => { g.innerHTML = '' })
+  detailBody.querySelectorAll('.spark-guide, .dist-guide, .recc-guide').forEach((g) => { g.innerHTML = '' })
 }
 
 async function openDetail(id: string): Promise<void> {
@@ -1279,7 +1524,7 @@ function calendarSvg(maxByDoy: (number | null)[], year: number): string {
     `<svg class="cal-svg" viewBox="0 0 ${W.toFixed(1)} ${H.toFixed(1)}" preserveAspectRatio="xMinYMin meet">${cells}</svg></div>`
 }
 
-function closeDetail(): void { detailEl.hidden = true; detailBody.innerHTML = ''; sparkCtx = null; distCtx = null; hideTip() }
+function closeDetail(): void { detailEl.hidden = true; detailBody.innerHTML = ''; sparkCtx = null; distCtx = null; recCtx = null; hideTip() }
 
 /* ---------- URL-State ---------- */
 function readHash(): void {
@@ -1343,8 +1588,10 @@ viewEl.addEventListener('click', (e) => {
 recordsEl.addEventListener('click', (e) => {
   const yb = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-recyear]')
   if (yb) { recYear = yb.dataset.recyear!; render(); return }
+  const rc = (e.target as HTMLElement).closest<HTMLElement>('[data-rec]')
+  if (rc) { void openRecord(rc.dataset.rec!); return }         // Rekord über die Zeit
   const card = (e.target as HTMLElement).closest<HTMLElement>('[data-id]')
-  if (card) void openDetail(card.dataset.id!)
+  if (card) void openDetail(card.dataset.id!)                  // Station (Meiste/Serie)
 })
 yearSelEl.addEventListener('click', (e) => {
   const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-year]')
@@ -1370,6 +1617,8 @@ detailBody.addEventListener('mousemove', (e) => {
   if (svg) { onSparkMove(svg, e.clientX, e.clientY); return }
   const dist = e.target.closest('.dist') as SVGSVGElement | null
   if (dist) { onDistMove(dist, e.clientX, e.clientY); return }
+  const recc = e.target.closest('.recc') as SVGSVGElement | null
+  if (recc) { onRecordMove(recc, e.clientX, e.clientY); return }
   hideTip(); clearGuide()
 })
 detailBody.addEventListener('mouseleave', () => { hideTip(); clearGuide() })

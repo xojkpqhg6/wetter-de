@@ -55,6 +55,7 @@ aktualisiert per GitHub Actions und über GitHub Pages ausgeliefert.
 | `history.csv` | Roh-Log aller Messungen (dedupliziert) | ✅ |
 | `reference.json` | Tages-Klimatologie 1991–2020 je Station (Normal-Verlauf + Referenzverteilung) | ✅ statisch |
 | `history/<wmo>.json` | volle Tageshistorie je Station (oft Jahrzehnte zurück), on-demand geladen | ✅ statisch |
+| `timeline.json` | nationale Jahres-Zeitreihen je Rekord-Metrik (heißester Tag / Zähler pro Jahr, + festes Panel) — speist den Rekord-Zeitverlauf im Modal | ✅ statisch |
 | `records.json` | Allzeit-Rekorde je Station (heißester/kältester Tag, wärmste Nacht, längste Hitze-/Wüsten-/Extrem-/Glut-/Eis- & Tropennacht-/Wüstennacht-/Super-Tropennacht-Serie, meiste Hitze-/Wüsten-/Extrem-/Gluttage & Tropen-/Wüsten-/Super-Tropennächte) + nationale Bestjahre — speist „Allzeit"-Rangliste & Rekorde-Tafel („Gesamt") | ✅ statisch |
 | `series.json`, `stations.json`, `stats.json` | abgeleitet (Verlauf, Koordinaten, Überblick) | ❌ neu erzeugt |
 | `poi/`, `stations.cfg`, `de_stations.tsv`, `kl_hist_stations.txt` | Roh-Cache / Hilfsdateien | ❌ neu erzeugt |
@@ -74,11 +75,13 @@ Gespeichert wird durchgängig **UTC**; die Website rechnet für die Anzeige in
   Tiefstwerte) aus dem DWD-Klimaarchiv nach (Standard: aktuelles Jahr; `recent`
   deckt aktuelles + Vorjahr ab). Zuordnung der internen DWD-IDs zu den WMO-IDs über
   Koordinaten + Namens-Fallback. `--gaps` zieht nur für das Jahr fehlende Stationen nach.
-- **`reference.sh [VON BIS]`** erzeugt **einmalig** `reference.json` **und `records.json`**:
+- **`reference.sh [VON BIS]`** erzeugt **einmalig** `reference.json`, `records.json` **und `timeline.json`**:
   pro Station die Tages-Klimatologie der Normalperiode (Standard 1991–2020) aus dem
   `historical`-KL-Archiv (TXK/TNK) — geglättete Normalwerte je Kalendertag (Referenzkurve im
   Verlauf) plus die gepoolte Verteilung (Referenzkurve in „Verteilung Max/Min"); `records.json`
-  enthält zusätzlich den Allzeit-Höchst/-Tiefstwert je Station (über das gesamte Archiv).
+  enthält zusätzlich den Allzeit-Höchst/-Tiefstwert je Station, `timeline.json` die nationalen
+  Jahres-Zeitreihen je Rekord-Metrik (für den Rekord-Zeitverlauf, inkl. festem Stations-Panel
+  ab `REF_PANEL_YEAR` zur Abdeckungs-Kontrolle).
   Rate-limit-schonend: Verzeichnis-Listing nur 1×, kleine Parallelität (`--jobs`),
   Backoff-Retries, **resumebarer ZIP-Cache** (zweiter Lauf nach Abbruch lädt nur
   Fehlendes; `--refresh` erzwingt Neuladen). Eine Normal-Linie entsteht nur bei

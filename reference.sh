@@ -69,6 +69,9 @@ KL_BASE="https://opendata.dwd.de/climate_environment/CDC/observations_germany/cl
 CACHE="${TMPDIR:-/tmp}/dwd_kl_hist_cache"   # stabiler, resumebarer ZIP-Cache
 OUT="$DATA/reference.json"
 OUT_RECORDS="$DATA/records.json"
+OUT_TIMELINE="$DATA/timeline.json"
+PANEL_CUTOFF="${REF_PANEL_YEAR:-1961}"   # festes Panel: Stationen aktiv seit <= PANEL_CUTOFF und heute
+TL_START="${REF_TIMELINE_START:-1936}"   # Startjahr der Zeitreihe (davor zu dünne Abdeckung)
 
 if [ ! -s "$DATA/stations.cfg" ] || [ ! -s "$DATA/de_stations.tsv" ]; then
   echo "Fehlt: stations.cfg / de_stations.tsv — bitte zuerst ./temp-leaderboard.sh ausführen." >&2
@@ -256,13 +259,13 @@ echo "  im Cache: $GOT / $N"
 # 5) TXK/TNK parsen, je Kalendertag mitteln + glätten, Verteilung poolen -> JSON
 # ---------------------------------------------------------------------------
 echo "» Parse TXK/TNK, mittel je Kalendertag (geglättet) & poole Verteilung …"
-python3 - "$XWALK" "$DLLIST" "$CACHE" "$OUT" "$FROM" "$TO" "$WINDOW" "$MIN_SAMPLES" "$MIN_STATION" "$OUT_RECORDS" "$MIN_YEARS" <<'PY'
+python3 - "$XWALK" "$DLLIST" "$CACHE" "$OUT" "$FROM" "$TO" "$WINDOW" "$MIN_SAMPLES" "$MIN_STATION" "$OUT_RECORDS" "$MIN_YEARS" "$OUT_TIMELINE" "$PANEL_CUTOFF" "$TL_START" <<'PY'
 import sys, os, io, json, zipfile, datetime
 
-xwalk, dllist, cache, out_path, frm, to, window, min_samples, min_station, out_records, min_years = (
+xwalk, dllist, cache, out_path, frm, to, window, min_samples, min_station, out_records, min_years, out_timeline, panel_cutoff, tl_start = (
     sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],
     int(sys.argv[5]), int(sys.argv[6]), int(sys.argv[7]), int(sys.argv[8]), int(sys.argv[9]),
-    sys.argv[10], int(sys.argv[11]))
+    sys.argv[10], int(sys.argv[11]), sys.argv[12], int(sys.argv[13]), int(sys.argv[14]))
 
 # interne ID -> WMO
 internal2wmo = {}
@@ -316,6 +319,9 @@ def new_acc():
             "rnight": None, "rnightd": "",                          # wärmste Nacht (max TNK)
             "days": {t: {} for t in HEAT_THRS},                    # heiße Tage je Jahr, je Schwelle
             "nights": {t: {} for t in NIGHT_THRS},                 # warme Nächte je Jahr, je Schwelle
+            "fy": None, "ly": None,                                # erstes/letztes Jahr mit Daten (Panel)
+            "hit": {t: {} for t in HEAT_THRS},                     # Tage-Treffer: Schwelle -> Jahr -> Ordinalmenge
+            "hitn": {t: {} for t in NIGHT_THRS},                   # Nacht-Treffer: Schwelle -> Jahr -> Ordinalmenge
             "prevo": None,
             # Serien: Tage (Tagesmax>=Schwelle), Nächte ("n25" etc., Tagesmin>=Schwelle), Eis
             "streak": dict([(t, new_streak()) for t in HEAT_THRS]
@@ -324,6 +330,8 @@ def new_acc():
 acc = {}
 nat = {t: {} for t in HEAT_THRS}        # Schwelle -> Jahr -> Tagesmenge (national, Tagesmax >= Schwelle)
 nat_night = {t: {} for t in NIGHT_THRS} # Schwelle -> Jahr -> Nachtmenge (national, Tagesmin >= Schwelle)
+# nationale Jahres-Extreme (für die Zeitreihe): Jahr -> (Wert, Station, Datum)
+yr_maxt, yr_mint, yr_night = {}, {}, {}
 
 lo_i, hi_i = frm * 10000 + 101, to * 10000 + 1231
 for internal in internals:
@@ -368,16 +376,27 @@ for internal in internals:
             a["rmn"] = tnk; a["rmnd"] = ds
         if tnk is not None and (a["rnight"] is None or tnk > a["rnight"]):
             a["rnight"] = tnk; a["rnightd"] = ds
-        if txk is not None:                                       # Tage >= Schwelle (30/35/40) + national
+        # erstes/letztes Jahr mit Daten (für Panel-Zugehörigkeit)
+        if a["fy"] is None or y < a["fy"]: a["fy"] = y
+        if a["ly"] is None or y > a["ly"]: a["ly"] = y
+        # nationale Jahres-Extreme (Zeitreihe)
+        if txk is not None and (y not in yr_maxt or txk > yr_maxt[y][0]): yr_maxt[y] = (txk, wmo, ds)
+        if tnk is not None and (y not in yr_mint or tnk < yr_mint[y][0]): yr_mint[y] = (tnk, wmo, ds)
+        if tnk is not None and (y not in yr_night or tnk > yr_night[y][0]): yr_night[y] = (tnk, wmo, ds)
+        if txk is not None:                                       # Tage >= Schwelle (30/35/40/45) + national + Panel-Treffer
             for t in HEAT_THRS:
                 if txk >= t:
                     a["days"][t][y] = a["days"][t].get(y, 0) + 1
-                    if o is not None: nat[t].setdefault(y, set()).add(o)
+                    if o is not None:
+                        nat[t].setdefault(y, set()).add(o)
+                        a["hit"][t].setdefault(y, set()).add(o)
         if tnk is not None:                                       # warme Nächte >= Schwelle (20/25/30)
             for t in NIGHT_THRS:
                 if tnk >= t:
                     a["nights"][t][y] = a["nights"][t].get(y, 0) + 1
-                    if o is not None: nat_night[t].setdefault(y, set()).add(o)
+                    if o is not None:
+                        nat_night[t].setdefault(y, set()).add(o)
+                        a["hitn"][t].setdefault(y, set()).add(o)
         if o is not None:                                         # Serien (aufeinanderfolgende Tage)
             cons = a["prevo"] is not None and o == a["prevo"] + 1
             for t in HEAT_THRS:
@@ -476,10 +495,91 @@ for key, t in (("tropBest", 20), ("wnightBest", 25), ("stropBest", 30)):
 with io.open(out_records, "w", encoding="utf-8") as f:
     json.dump({"records": records, "national": national}, f, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
 
+# ---- Zeitreihe je Metrik (national), für das Rekord-Modal -> timeline.json ----
+end_y = max((a["ly"] for a in acc.values() if a["ly"]), default=to)
+tyears = list(range(tl_start, end_y + 1))
+# festes Panel: Stationen mit durchgehender Reihe (aktiv seit <= cutoff und noch heute)
+panel = set(wmo for wmo, a in acc.items()
+            if a["fy"] is not None and a["fy"] <= panel_cutoff and a["ly"] is not None and a["ly"] >= end_y - 1)
+
+def r1(v):
+    return round(v, 1) if v is not None else None
+
+# Extremwerte: ein Wert je Jahr (+ Station/Datum für den Hover)
+def ext_series(src):
+    val, st, dt = [], [], []
+    for y in tyears:
+        e = src.get(y)
+        val.append(r1(e[0]) if e else None)
+        st.append(e[1] if e else None); dt.append(e[2] if e else None)
+    return {"val": val, "st": st, "dt": dt}
+
+# Panel-Zähler: pro Schwelle die Ordinalmengen der Panel-Stationen je Jahr vereinigen
+def panel_counts(hitattr, thr):
+    out = {}
+    for wmo in panel:
+        h = acc[wmo][hitattr][thr]
+        for y, s in h.items():
+            out.setdefault(y, set()).update(s)
+    return out
+
+metrics = {}
+metrics["maxTemp"] = {"kind": "ext", "dir": "max", **ext_series(yr_maxt)}
+metrics["minTemp"] = {"kind": "ext", "dir": "min", **ext_series(yr_mint)}
+metrics["warmNight"] = {"kind": "ext", "dir": "max", **ext_series(yr_night)}
+for thr, key in ((30, "hotDays"), (35, "desertDays"), (40, "extremeDays"), (45, "glutDays")):
+    pc = panel_counts("hit", thr)
+    metrics[key] = {"kind": "count",
+                    "all": [len(nat[thr].get(y, ())) for y in tyears],
+                    "panel": [len(pc.get(y, ())) if y >= panel_cutoff else None for y in tyears]}
+for thr, key in ((20, "tropN"), (25, "wnightN"), (30, "stropN")):
+    pc = panel_counts("hitn", thr)
+    metrics[key] = {"kind": "count",
+                    "all": [len(nat_night[thr].get(y, ())) for y in tyears],
+                    "panel": [len(pc.get(y, ())) if y >= panel_cutoff else None for y in tyears]}
+
+# „Meiste" (Höchstwert je Station/Jahr) und „Serie" (längste Serie/Jahr), national = Maximum über Stationen
+def longest_run(ordset):
+    if not ordset:
+        return 0
+    xs = sorted(ordset); best = run = 1
+    for i in range(1, len(xs)):
+        run = run + 1 if xs[i] == xs[i - 1] + 1 else 1
+        if run > best: best = run
+    return best
+
+def max_over_stations(dayattr, thr, kind):
+    out = {}   # Jahr -> (Wert, Station-WMO)
+    for wmo, a in acc.items():
+        src = a[dayattr][thr]
+        for y, x in src.items():
+            v = x if kind == "count" else longest_run(x)
+            if y not in out or v > out[y][0]:
+                out[y] = (v, wmo)
+    return out
+
+def series_metric(o):
+    return {"kind": "count",
+            "all": [o.get(y, (0, None))[0] for y in tyears],
+            "st": [o.get(y, (0, None))[1] for y in tyears]}   # Station je Jahr (für Hover)
+
+for thr, base in ((30, "hot"), (35, "desert"), (40, "extreme"), (45, "glut")):
+    metrics[base + "DaysMax"] = series_metric(max_over_stations("days", thr, "count"))
+    metrics[base + "Streak"] = series_metric(max_over_stations("hit", thr, "run"))
+for thr, base in ((20, "trop"), (25, "wnight"), (30, "strop")):
+    metrics[base + "NMax"] = series_metric(max_over_stations("nights", thr, "count"))
+    metrics[base + "Streak"] = series_metric(max_over_stations("hitn", thr, "run"))
+
+tl = {"years": tyears, "panelCutoff": panel_cutoff, "panelSize": len(panel), "metrics": metrics}
+with io.open(out_timeline, "w", encoding="utf-8") as f:
+    json.dump(tl, f, ensure_ascii=False, separators=(",", ":"))
+
 print("   Stationen mit Referenz: %d  (zu wenig Daten verworfen: %d)" % (kept, dropped),
       file=sys.stderr)
 print("   geschrieben: %s" % out_path, file=sys.stderr)
 print("   records.json: %d Stationen (Allzeit-Rekorde)" % len(records), file=sys.stderr)
+print("   timeline.json: %d Jahre, Panel %d Stationen (ab %d)"
+      % (len(tyears), len(panel), panel_cutoff), file=sys.stderr)
 PY
 
 # ---------------------------------------------------------------------------

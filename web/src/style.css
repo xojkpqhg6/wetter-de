@@ -363,6 +363,17 @@ body {
 .dist-line.faint { opacity: .3; stroke-width: 1; }
 .dist-line.ref { stroke: var(--t-ref); stroke-width: 1.2; stroke-dasharray: 4 3; opacity: .85; }
 
+/* Rekord-Zeitverlauf (Modal) */
+.recc { width: 100%; height: auto; cursor: crosshair; }
+.recc-guide { pointer-events: none; }
+.recc-dot { fill: var(--ink-soft); opacity: .35; }
+.recc-rec { fill: none; stroke: var(--t-hot); stroke-width: 2; }
+.recc-rec.cool { stroke: var(--t-cool); }
+.recc-line { fill: none; stroke: var(--t-hot); stroke-width: 1.8; }
+.recc-mk { fill: var(--t-hot); }
+.recc-lbl { fill: var(--t-hot); font-family: var(--mono); font-size: 10px; font-weight: 700; }
+.spark-legend .recc-lbl-i { color: var(--t-hot); font-weight: 700; }
+
 /* ---- Rekorde-Tafel ---- */
 .rec-filter { display: flex; justify-content: center; margin: 0 0 16px; }
 .rec-grid {
@@ -385,6 +396,9 @@ body {
 .rec-card.is-empty { cursor: default; opacity: .65; }
 .rec-card.is-stat { cursor: default; }
 .rec-card.is-stat:hover { background: var(--paper-2); border-color: var(--line-2); }
+/* klickbare Statistik-Karte (öffnet Rekord-Zeitverlauf) */
+.rec-card.is-stat.lnk { cursor: pointer; }
+.rec-card.is-stat.lnk:hover { background: rgba(180, 160, 110, .14); border-color: var(--ink-soft); }
 .rec-ico { font-size: 18px; line-height: 1; }
 .rec-k { font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
 .rec-note { text-transform: none; letter-spacing: 0; font-style: italic; }
