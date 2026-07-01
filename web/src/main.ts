@@ -58,14 +58,20 @@ interface Records {
     hotDaysBest?: NatBest; desertDaysBest?: NatBest; extremeDaysBest?: NatBest; glutDaysBest?: NatBest
     tropBest?: NatBest; wnightBest?: NatBest; stropBest?: NatBest
   }
+  names?: Record<string, string>   // Namen reiner Klimastationen (haben keinen coords-Eintrag)
 }
 // timeline.json: nationale Jahres-Zeitreihe je Metrik (per ./reference.sh) — fürs Rekord-Modal
 interface TLMetric {
   kind: 'ext' | 'count'; dir?: 'max' | 'min'
   val?: (number | null)[]; st?: (string | null)[]; dt?: (string | null)[]   // Extremwerte
-  all?: number[]; panel?: (number | null)[]                                 // Zähler
+  all?: number[]                                                             // Zähler
 }
-interface Timeline { years: number[]; panelCutoff: number; panelSize: number; metrics: Record<string, TLMetric> }
+interface Timeline { years: number[]; metrics: Record<string, TLMetric>; names?: Record<string, string> }
+
+// Anzeigename einer Station: POI aus coords, reine Klimastationen aus den names-Maps
+function stName(id: string): string {
+  return coords[id]?.name ?? records?.names?.[id] ?? timeline?.names?.[id] ?? id
+}
 
 type PeriodKey = 'day' | 'week' | 'month' | 'year'
 type View = 'now' | PeriodKey
@@ -379,7 +385,7 @@ function computeAllTimeItems(): Item[] {
       if (lv?.mn != null && (v === null || lv.mn < v)) { v = lv.mn; obs = lv.mnd }
     }
     if (v == null) continue
-    items.push({ id, name: coords[id]?.name ?? latest?.stations.find((s) => s.id === id)?.name ?? id, value: v, obs })
+    items.push({ id, name: stName(id), value: v, obs })
   }
   return items
 }
@@ -523,7 +529,7 @@ function eventHeadline(thr: number, key: 'max' | 'min'): { count: number; year: 
 }
 
 /* ---- Allzeit-Rekorde aus records.json (Archiv) — für das „Gesamt"-Tab ---- */
-const recNm = (id: string) => coords[id]?.name ?? id
+const recNm = (id: string) => stName(id)
 // beste Station nach einem Feld; baut daraus eine RecResult
 function atBest(sel: (e: RecEntry) => number | undefined, higher: boolean,
                 build: (id: string, e: RecEntry, v: number) => RecResult): RecResult | null {
@@ -728,9 +734,9 @@ function onRecordMove(svg: SVGSVGElement, clientX: number, clientY: number): voi
   } else {
     g += `<circle class="guide-dot mx" cx="${gx.toFixed(1)}" cy="${ys(v).toFixed(1)}" r="3"/>`
     const vtxt = c.unit === '°' ? v.toFixed(1).replace('.', ',') + '°' : `${v} ${c.unit}`
-    const stId = c.st?.[i], stName = stId ? (coords[stId]?.name ?? stId) : ''
+    const stId = c.st?.[i]
     const date = c.dt?.[i] ? fmtDate(c.dt[i]!) : ''
-    const extra = [stName, date].filter(Boolean).join(' · ')
+    const extra = [stId ? stName(stId) : '', date].filter(Boolean).join(' · ')
     tip = `<b>${c.years[i]}</b><br>${vtxt}${extra ? `<br><span class="dim">${esc(extra)}</span>` : ''}`
   }
   const gg = svg.querySelector('.recc-guide')
@@ -747,7 +753,7 @@ function renderRecord(key: string): void {
   if (m.kind === 'ext' && m.val) {
     let bi = -1, bv = m.dir === 'min' ? Infinity : -Infinity
     m.val.forEach((v, i) => { if (v != null && (m.dir === 'min' ? v < bv : v > bv)) { bv = v; bi = i } })
-    if (bi >= 0) { headVal = fmtV(bv); const st = m.st?.[bi]; headSub = `${st ? (coords[st]?.name ?? st) : ''} · ${m.dt?.[bi] ? fmtDate(m.dt[bi]!) : years[bi]}` }
+    if (bi >= 0) { headVal = fmtV(bv); const st = m.st?.[bi]; headSub = `${st ? stName(st) : ''} · ${m.dt?.[bi] ? fmtDate(m.dt[bi]!) : years[bi]}` }
   } else if (m.all) {
     let bi = 0; m.all.forEach((v, i) => { if (v > m.all![bi]) bi = i })
     headVal = fmtV(m.all[bi]); headSub = `Rekordjahr ${years[bi]}`
@@ -1152,7 +1158,15 @@ function countersHtml(ser: SeriesEntry, dates: string[]): string {
 function renderDetail(): void {
   const id = detailId
   if (!id) return
-  const name = coords[id]?.name ?? latest?.stations.find((s) => s.id === id)?.name ?? id
+  const name = stName(id)
+  // reine Klimastation (nur in Rekorden, kein POI/Live-Verlauf): kurzer Hinweis statt leerer Charts
+  if (!series?.stations[id] && !coords[id]) {
+    detailBody.innerHTML = `<h2>${esc(name)}</h2>` +
+      `<div class="detail-sub">Reine DWD-Klimastation</div>` +
+      `<p class="empty">Diese Station meldet nicht stündlich (kein „Jetzt"/Live-Verlauf). ` +
+      `Sie erscheint nur in den Allzeit-Rekorden.</p>`
+    return
+  }
   const cur = latest?.stations.find((s) => s.id === id)
   const y = tops?.periods.year.stations.find((s) => s.id === id)
   const ser = series?.stations[id]

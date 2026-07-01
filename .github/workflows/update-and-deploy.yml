@@ -35,6 +35,20 @@ jobs:
       - name: DWD-Daten aktualisieren
         run: bash temp-leaderboard.sh
 
+      # Einmal täglich (≈04 UTC) das aktuelle KL-Produkt ziehen und neue Rekorde –
+      # auch reiner Klimastationen, die nicht im Live-POI-Feed stehen – in
+      # records.json + timeline.json mergen. Läuft nicht bei jedem Push (nur
+      # geplant zur Rekord-Stunde oder manuell), damit die DWD-Last klein bleibt.
+      - name: Aktuelle Rekorde nachführen (täglich)
+        if: github.event_name != 'push'
+        timeout-minutes: 10
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$(date -u +%H)" != "04" ]; then
+            echo "Nicht die tägliche Rekord-Stunde (nur 04 UTC) – übersprungen."
+            exit 0
+          fi
+          bash reference.sh --recent --jobs 8
+
       - name: Aktualisierte Daten committen
         run: |
           git config user.name  "github-actions[bot]"

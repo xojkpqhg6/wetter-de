@@ -55,8 +55,8 @@ aktualisiert per GitHub Actions und über GitHub Pages ausgeliefert.
 | `history.csv` | Roh-Log aller Messungen (dedupliziert) | ✅ |
 | `reference.json` | Tages-Klimatologie 1991–2020 je Station (Normal-Verlauf + Referenzverteilung) | ✅ statisch |
 | `history/<wmo>.json` | volle Tageshistorie je Station (oft Jahrzehnte zurück), on-demand geladen | ✅ statisch |
-| `timeline.json` | nationale Jahres-Zeitreihen je Rekord-Metrik (heißester Tag / Zähler pro Jahr, + festes Panel) — speist den Rekord-Zeitverlauf im Modal | ✅ statisch |
-| `records.json` | Allzeit-Rekorde je Station (heißester/kältester Tag, wärmste Nacht, längste Hitze-/Wüsten-/Extrem-/Glut-/Eis- & Tropennacht-/Wüstennacht-/Super-Tropennacht-Serie, meiste Hitze-/Wüsten-/Extrem-/Gluttage & Tropen-/Wüsten-/Super-Tropennächte) + nationale Bestjahre — speist „Allzeit"-Rangliste & Rekorde-Tafel („Gesamt") | ✅ statisch |
+| `timeline.json` | nationale Jahres-Zeitreihen je Rekord-Metrik (heißester Tag / Zähler pro Jahr) — speist den Rekord-Zeitverlauf im Modal | ✅ statisch |
+| `records.json` | Allzeit-Rekorde je Station (heißester/kältester Tag, wärmste Nacht, längste Hitze-/Wüsten-/Extrem-/Glut-/Eis- & Tropennacht-/Wüstennacht-/Super-Tropennacht-Serie, meiste Hitze-/Wüsten-/Extrem-/Gluttage & Tropen-/Wüsten-/Super-Tropennächte) + nationale Bestjahre — speist „Allzeit"-Rangliste & Rekorde-Tafel („Gesamt"). Deckt **alle** DWD-Klimastationen ab, auch reine Klimastationen ohne Live-POI-Feed (Namen in `names`), damit kein Rekord fehlt | ✅ statisch |
 | `series.json`, `stations.json`, `stats.json` | abgeleitet (Verlauf, Koordinaten, Überblick) | ❌ neu erzeugt |
 | `poi/`, `stations.cfg`, `de_stations.tsv`, `kl_hist_stations.txt` | Roh-Cache / Hilfsdateien | ❌ neu erzeugt |
 
@@ -80,8 +80,9 @@ Gespeichert wird durchgängig **UTC**; die Website rechnet für die Anzeige in
   `historical`-KL-Archiv (TXK/TNK) — geglättete Normalwerte je Kalendertag (Referenzkurve im
   Verlauf) plus die gepoolte Verteilung (Referenzkurve in „Verteilung Max/Min"); `records.json`
   enthält zusätzlich den Allzeit-Höchst/-Tiefstwert je Station, `timeline.json` die nationalen
-  Jahres-Zeitreihen je Rekord-Metrik (für den Rekord-Zeitverlauf, inkl. festem Stations-Panel
-  ab `REF_PANEL_YEAR` zur Abdeckungs-Kontrolle).
+  Jahres-Zeitreihen je Rekord-Metrik (für den Rekord-Zeitverlauf). `records.json`/`timeline.json`
+  decken **alle** aktiven Klimastationen ab (nicht nur die mit Live-POI-Feed), damit auch
+  reine Klimastationen als Rekordhalter erscheinen.
   Rate-limit-schonend: Verzeichnis-Listing nur 1×, kleine Parallelität (`--jobs`),
   Backoff-Retries, **resumebarer ZIP-Cache** (zweiter Lauf nach Abbruch lädt nur
   Fehlendes; `--refresh` erzwingt Neuladen). Eine Normal-Linie entsteht nur bei
@@ -91,9 +92,17 @@ Gespeichert wird durchgängig **UTC**; die Website rechnet für die Anzeige in
   volle Tageshistorie je Station, aus demselben ZIP-Cache) — vom Frontend on-demand
   beim Öffnen einer Station geladen, sodass Kalender/Verlauf/Verteilung die gesamte
   Historie zeigen, ohne `series.json` aufzublähen.
+- **`reference.sh --recent`** hält die Rekorde aktuell, ohne einen Vollauf: es lädt nur das
+  tägliche `recent`-KL-Produkt (feste Dateinamen, kein Verzeichnis-Listing, ephemerer Cache)
+  aller zuletzt aktiven Stationen und **merged** neue Werte in die bestehende `records.json` +
+  `timeline.json` (Extreme richtungsabhängig, Zähler/Serien als Maximum; nie schlechter). So
+  werden aktuelle Rekorde — auch reiner Klimastationen, die im Live-POI-Feed fehlen — erfasst,
+  die das `historical`-Archiv (das ~1 Jahr nachhängt) noch nicht enthält. `reference.json`
+  bleibt unangetastet.
 - **GitHub Actions** (`update-and-deploy.yml`) führt stündlich `temp-leaderboard.sh`
   aus, committet die aktualisierten Daten zurück, baut die Seite und deployt sie auf
-  GitHub Pages.
+  GitHub Pages. Einmal täglich (≈04 UTC) läuft zusätzlich `reference.sh --recent`, sodass
+  neue Rekorde reiner Klimastationen automatisch nachgeführt werden.
 
 ## Lokal
 
