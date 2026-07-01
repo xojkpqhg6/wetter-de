@@ -227,7 +227,9 @@ function buildCombined(id: string): void {
     if (mx == null && mn == null) continue
     map.set(isoUTC(t0 + i * DAY_MS), [mx, mn])
   }
-  liveDates.forEach((ds, i) => { map.set(ds, [live?.max[i] ?? null, live?.min[i] ?? null]) })
+  // Live-Reihe nur bei echten POI-Stationen einmischen; reine Klimastationen bleiben
+  // reines Archiv (sonst hinge der aktuelle, leere Live-Jahrgang als Null-Schwanz an).
+  if (live) liveDates.forEach((ds, i) => { map.set(ds, [live.max[i], live.min[i]]) })
   const dates = [...map.keys()].sort()
   const ser: SeriesEntry = { max: dates.map((d) => map.get(d)![0]), min: dates.map((d) => map.get(d)![1]) }
   combinedCache.set(id, { dates, ser })
@@ -1155,21 +1157,33 @@ function countersHtml(ser: SeriesEntry, dates: string[]): string {
     `</div>`
 }
 
+// letzte n verschiedene Jahre einer (aufsteigend sortierbaren) Datumsreihe
+function lastYears(dates: string[], n: number): Set<number> {
+  const ys = [...new Set(dates.map((d) => +d.slice(0, 4)))].sort((a, b) => a - b)
+  return new Set(ys.slice(-n))
+}
+
 function renderDetail(): void {
   const id = detailId
   if (!id) return
   const name = stName(id)
-  // reine Klimastation (nur in Rekorden, kein POI/Live-Verlauf): kurzer Hinweis statt leerer Charts
-  if (!series?.stations[id] && !coords[id]) {
+  const ser = series?.stations[id]
+  const isLive = !!ser || !!coords[id]          // POI: hat „Jetzt"/Live-Verlauf (series/coords)
+  const combined = combinedCache.get(id)
+  // Reine Klimastation (kein Live-Feed): die Detailansicht speist sich allein aus dem
+  // Tagesarchiv (history/). Solange die Historie noch lädt: Ladehinweis; ist sie geladen,
+  // aber leer/nicht vorhanden: kurzer Hinweis statt leerer Charts.
+  if (!isLive && !combined) {
     detailBody.innerHTML = `<h2>${esc(name)}</h2>` +
       `<div class="detail-sub">Reine DWD-Klimastation</div>` +
-      `<p class="empty">Diese Station meldet nicht stündlich (kein „Jetzt"/Live-Verlauf). ` +
-      `Sie erscheint nur in den Allzeit-Rekorden.</p>`
+      (historyRaw.has(id)
+        ? `<p class="empty">Diese Station meldet nicht stündlich (kein „Jetzt"/Live-Verlauf) ` +
+          `und hat keine abrufbare Tageshistorie. Sie erscheint nur in den Allzeit-Rekorden.</p>`
+        : `<p class="empty">lädt …</p>`)
     return
   }
   const cur = latest?.stations.find((s) => s.id === id)
   const y = tops?.periods.year.stations.find((s) => s.id === id)
-  const ser = series?.stations[id]
   const dates = series?.dates ?? []
   const ref = reference?.stations[id] ?? null
   // Label = tatsächlich genutzte Jahresspanne der Station (nicht die Zielperiode),
@@ -1177,10 +1191,13 @@ function renderDetail(): void {
   const refPeriod = ref?.y0 && ref?.y1 ? `${ref.y0}–${ref.y1}` : (reference?.period ?? '')
   // Charts nutzen die kombinierte Reihe (Historie + Live), sobald die Historie geladen ist;
   // Fakten/Zähler bleiben auf der Live-Reihe (kanonisch für den Rest der Seite).
-  const combined = combinedCache.get(id)
   const chartSer = combined?.ser ?? ser
   const chartDates = combined?.dates ?? dates
-  const liveYears = new Set(dates.map((d) => +d.slice(0, 4)))
+  // „Aktuelle" Jahre (farbige Linien vs. Normal): bei POI die Live-Jahre, bei reinen
+  // Archivstationen die letzten beiden Jahre der eigenen Reihe (kein Live vorhanden).
+  const liveYears = isLive
+    ? new Set(dates.map((d) => +d.slice(0, 4)))
+    : lastYears(chartDates, 2)
 
   let isRecordToday = false
   if (ser && dates.length) {
@@ -1225,7 +1242,7 @@ function renderDetail(): void {
 
   detailBody.innerHTML =
     `<h2>${esc(name)}${isRecordToday ? '<span class="detail-badge">★ Jahresrekord heute</span>' : ''}</h2>` +
-    `<div class="detail-sub">Tagesmaximum & -minimum je Tag</div>` +
+    `<div class="detail-sub">${isLive ? 'Tagesmaximum & -minimum je Tag' : 'Reine DWD-Klimastation · Tagesarchiv'}</div>` +
     `<div class="facts">${facts.join('')}</div>` +
     (ser ? countersHtml(ser, dates) : '') +
     tabs +

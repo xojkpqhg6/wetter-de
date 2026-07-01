@@ -85,13 +85,19 @@ Gespeichert wird durchgängig **UTC**; die Website rechnet für die Anzeige in
   reine Klimastationen als Rekordhalter erscheinen.
   Rate-limit-schonend: Verzeichnis-Listing nur 1×, kleine Parallelität (`--jobs`),
   Backoff-Retries, **resumebarer ZIP-Cache** (zweiter Lauf nach Abbruch lädt nur
-  Fehlendes; `--refresh` erzwingt Neuladen). Eine Normal-Linie entsteht nur bei
-  **≥ 20 abgedeckten Jahren** in der Periode (`REF_MIN_YEARS`); bei Teilabdeckung
-  trägt das Label die tatsächliche Spanne. Nur nötig, wenn sich die Normalperiode ändert.
-  Mit **`--history`** schreibt dasselbe Skript zusätzlich `history/<wmo>.json` (die
+  Fehlendes; `--refresh` erzwingt Neuladen). Eine Normal-Linie entsteht für Stationen
+  mit **Detailansicht** (POI immer; reine Klimastationen nur, wenn noch aktuell — s.&nbsp;u.)
+  und nur bei **≥ 20 abgedeckten Jahren** in der Periode (`REF_MIN_YEARS`); bei
+  Teilabdeckung trägt das Label die tatsächliche Spanne. Nur nötig, wenn sich die
+  Normalperiode ändert.
+  Mit **`--history`** schreibt dasselbe Skript zusätzlich `history/<key>.json` (die
   volle Tageshistorie je Station, aus demselben ZIP-Cache) — vom Frontend on-demand
   beim Öffnen einer Station geladen, sodass Kalender/Verlauf/Verteilung die gesamte
-  Historie zeigen, ohne `series.json` aufzublähen.
+  Historie zeigen, ohne `series.json` aufzublähen. Geschrieben wird für **alle POI**
+  plus reine Klimastationen, die **noch aktuell senden** (Reihen-Ende ≥ akt. Jahr −
+  `REF_HIST_MAX_LAG`) und **≥ 20 Jahre** (`REF_MIN_HIST_YEARS`) umfassen. **Veraltete**
+  Stationen (Reihe endet vor Jahren, z.&nbsp;B. Heidelberg bis 2012) bleiben reine
+  Rekordhalter — ein Verlauf, der weit vor den Live-Stationen endet, wäre irreführend.
 - **`reference.sh --recent`** hält die Rekorde aktuell, ohne einen Vollauf: es lädt nur das
   tägliche `recent`-KL-Produkt (feste Dateinamen, kein Verzeichnis-Listing, ephemerer Cache)
   aller zuletzt aktiven Stationen und **merged** neue Werte in die bestehende `records.json` +

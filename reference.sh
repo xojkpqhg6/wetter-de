@@ -44,6 +44,8 @@ WINDOW="${REF_WINDOW:-7}"          # Glättungsfenster ±N Kalendertage
 MIN_SAMPLES="${REF_MIN_SAMPLES:-50}"  # min. Messwerte je Fenster, sonst null
 MIN_STATION="${REF_MIN_STATION:-1500}" # min. Messwerte je Station, sonst keine Referenz
 MIN_YEARS="${REF_MIN_YEARS:-20}"   # min. abgedeckte Jahre in der Periode, sonst keine Normal-Linie
+MIN_HIST_YEARS="${REF_MIN_HIST_YEARS:-20}" # min. Gesamt-Jahre für history/ (reine Klimastationen; POI immer)
+HIST_MAX_LAG="${REF_HIST_MAX_LAG:-2}" # reine Klimastationen: max. Jahre Rückstand des Reihen-Endes, sonst nur Rekord (kein Detail)
 
 YEARS=()
 while [ $# -gt 0 ]; do
@@ -54,8 +56,11 @@ while [ $# -gt 0 ]; do
     --recent)  RECENT=1; shift ;;
     -h|--help)
       echo "Verwendung: $(basename "$0") [VON BIS] [--jobs N] [--refresh] [--history] [--recent]"
-      echo "  --history  zusätzlich web/public/data/history/<wmo>.json (volle Tageshistorie,"
-      echo "             on-demand vom Frontend geladen) aus demselben ZIP-Cache schreiben."
+      echo "  --history  zusätzlich web/public/data/history/<key>.json (volle Tageshistorie,"
+      echo "             on-demand vom Frontend geladen) aus demselben ZIP-Cache schreiben —"
+      echo "             für alle POI + reine Klimastationen, die noch aktuell senden"
+      echo "             (Reihen-Ende >= aktuelles Jahr - REF_HIST_MAX_LAG) und >= REF_MIN_HIST_YEARS"
+      echo "             Jahre umfassen. Veraltete Stationen bleiben reine Rekordhalter."
       echo "  --recent   NUR das tägliche 'recent'-KL-Produkt laden (kein Verzeichnis-Listing,"
       echo "             ephemerer Cache) und neue Werte in records.json + timeline.json mergen."
       echo "             Fängt aktuelle Rekorde (auch reiner Klimastationen) ohne Vollauf ab;"
@@ -72,9 +77,13 @@ elif [ "${#YEARS[@]}" -ne 0 ]; then echo "Bitte VON und BIS angeben (zwei Jahre)
 # Fenster für die WMO->intern-Zuordnung (welche KL-Stationen berücksichtigt werden).
 # Vollauf: Normalperiode. --recent: nur zuletzt aktive Stationen (letzte ~2 Jahre).
 XW_FROM="$FROM"; XW_TO="$TO"
+NOW_Y="$(date -u +%Y)"
+# reine Klimastationen bekommen nur dann ein Detail (reference/history), wenn ihre Reihe
+# bis ~heute reicht — sonst wäre ein Verlauf, der vor Jahren endet, neben den Live-Stationen
+# irreführend. Sie bleiben dann reine Rekordhalter (Allzeit-Tabelle).
+MIN_LAST_YEAR="$((NOW_Y - HIST_MAX_LAG))"
 if [ "$RECENT" -eq 1 ]; then
   HISTORY=0                          # im recent-Modus keine history/-Dateien (nur Kurzfenster)
-  NOW_Y="$(date -u +%Y)"
   XW_FROM="$((NOW_Y - 2))"; XW_TO="$NOW_Y"
 fi
 
@@ -316,18 +325,18 @@ echo "  im Cache: $GOT / $N"
 # 5) TXK/TNK parsen, je Kalendertag mitteln + glätten, Verteilung poolen -> JSON
 # ---------------------------------------------------------------------------
 echo "» Parse TXK/TNK, mittel je Kalendertag (geglättet) & poole Verteilung …"
-python3 - "$XWALK" "$DLLIST" "$CACHE" "$OUT" "$FROM" "$TO" "$WINDOW" "$MIN_SAMPLES" "$MIN_STATION" "$OUT_RECORDS" "$MIN_YEARS" "$OUT_TIMELINE" "$TL_START" "$RECENT" <<'PY'
+python3 - "$XWALK" "$DLLIST" "$CACHE" "$OUT" "$FROM" "$TO" "$WINDOW" "$MIN_SAMPLES" "$MIN_STATION" "$OUT_RECORDS" "$MIN_YEARS" "$OUT_TIMELINE" "$TL_START" "$RECENT" "$MIN_LAST_YEAR" <<'PY'
 import sys, os, io, json, zipfile, datetime
 
-xwalk, dllist, cache, out_path, frm, to, window, min_samples, min_station, out_records, min_years, out_timeline, tl_start, recent = (
+xwalk, dllist, cache, out_path, frm, to, window, min_samples, min_station, out_records, min_years, out_timeline, tl_start, recent, min_last_year = (
     sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],
     int(sys.argv[5]), int(sys.argv[6]), int(sys.argv[7]), int(sys.argv[8]), int(sys.argv[9]),
-    sys.argv[10], int(sys.argv[11]), sys.argv[12], int(sys.argv[13]), int(sys.argv[14]))
+    sys.argv[10], int(sys.argv[11]), sys.argv[12], int(sys.argv[13]), int(sys.argv[14]), int(sys.argv[15]))
 
 # interne ID -> Key (WMO für POI, interne ID für reine Klimastationen) + Namen + POI-Set
 internal2wmo = {}
 names = {}       # Key -> Name (nur reine Klimastationen; POI-Namen kommen aus coords)
-poi_keys = set() # Keys mit POI-Bezug (bekommen reference.json-Normal + history/)
+poi_keys = set() # Keys mit POI-Bezug — trennt reine Klimastationen (-> names) von POI
 with io.open(xwalk, encoding="utf-8") as f:
     for ln in f:
         p = ln.rstrip("\n").split("\t")
@@ -499,8 +508,12 @@ def smooth(sums, counts):
 stations = {}
 kept = dropped = 0
 for wmo, a in acc.items():
-    # Normal-Linie nur für POI-Stationen (die ein Detail-Modal haben) + ausreichend lange Reihe
-    if wmo not in poi_keys or a["n"] < min_station or len(a["years"]) < min_years:
+    # Normal-Linie nur für Stationen mit Detailansicht: POI immer (haben Live-Verlauf),
+    # reine Klimastationen nur, wenn ihre Reihe noch bis ~heute reicht (sonst wäre ein
+    # veralteter Verlauf neben den Live-Stationen irreführend — sie bleiben Rekordhalter).
+    # Dazu das übliche Datenmenge-Gate (min_station Messwerte, min_years Jahre in der Periode).
+    recent_enough = a["ly"] is not None and a["ly"] >= min_last_year
+    if (wmo not in poi_keys and not recent_enough) or a["n"] < min_station or len(a["years"]) < min_years:
         dropped += 1; continue
     ys = a["years"]
     stations[wmo] = {
@@ -748,24 +761,38 @@ else:
 PY
 
 # ---------------------------------------------------------------------------
-# 6) Optional: volle Tageshistorie je Station -> history/<wmo>.json
-#    (alle Jahre, aus demselben Cache; vom Frontend on-demand geladen)
+# 6) Optional: volle Tageshistorie je Station -> history/<key>.json
+#    (alle Jahre, aus demselben Cache; vom Frontend on-demand geladen).
+#    Für JEDE Station mit Detailansicht — Gleichbehandlung von POI und reinen
+#    Klimastationen: alle POI (haben stets ein Live-Detail) plus reine Klima-
+#    stationen, die noch AKTUELL senden (Reihen-Ende >= MIN_LAST_YEAR) und eine
+#    substanzielle Reihe haben (>= MIN_HIST_YEARS Gesamt-Jahre). Veraltete oder zu
+#    kurze reine Klimastationen bleiben außen vor (nur Rekordhalter; das Frontend
+#    zeigt beim Klick den Hinweistext) — ein Verlauf, der vor Jahren endet, wäre
+#    neben den Live-Stationen irreführend.
+#    Voller Neuaufbau (alte JSON zuerst löschen), damit die committete Menge exakt
+#    den aktuell berechtigten Stationen entspricht (sonst blieben veraltete Dateien).
 # ---------------------------------------------------------------------------
 if [ "$HISTORY" -eq 1 ]; then
-  echo "» Schreibe volle Tageshistorie je Station (history/<wmo>.json) …"
+  echo "» Schreibe volle Tageshistorie je Station (history/<key>.json) …"
   HIST_DIR="$DATA/history"
   mkdir -p "$HIST_DIR"
-  python3 - "$XWALK" "$DLLIST" "$CACHE" "$HIST_DIR" <<'PY'
+  rm -f "$HIST_DIR"/*.json 2>/dev/null   # deterministisch: nur berechtigte Stationen behalten
+  python3 - "$XWALK" "$DLLIST" "$CACHE" "$HIST_DIR" "$MIN_HIST_YEARS" "$MIN_LAST_YEAR" <<'PY'
 import sys, os, io, json, zipfile, datetime
 
-xwalk, dllist, cache, out_dir = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+xwalk, dllist, cache, out_dir, min_hist_years, min_last_year = (
+    sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], int(sys.argv[5]), int(sys.argv[6]))
 
-internal2wmo = {}   # nur POI (poi==1) -> history/ nur für Stationen mit Detail-Modal
+# interne ID -> (Key, POI?) für alle Stationen; POI werden stets geschrieben,
+# reine Klimastationen erst nach dem Parsen (Aktualität + genügend Gesamt-Jahre, Gate unten).
+internal2wmo = {}
 with io.open(xwalk, encoding="utf-8") as f:
     for ln in f:
         p = ln.rstrip("\n").split("\t")
-        if len(p) >= 4 and p[3] == "1":
-            internal2wmo[p[1]] = p[0]
+        if len(p) < 2:
+            continue
+        internal2wmo[p[1]] = (p[0], len(p) >= 4 and p[3] == "1")
 
 internals = []
 with io.open(dllist, encoding="utf-8") as f:
@@ -783,11 +810,12 @@ def num(x):
     return None if v <= -999 else v
 
 EPOCH = datetime.date(1, 1, 1)
-written = total_days = 0
+written = total_days = skipped = 0
 for internal in internals:
-    wmo = internal2wmo.get(internal)
-    if not wmo:
+    ent = internal2wmo.get(internal)
+    if not ent:
         continue
+    wmo, is_poi = ent
     zp = os.path.join(cache, internal + ".zip")
     if not os.path.exists(zp):
         continue
@@ -819,6 +847,13 @@ for internal in internals:
         rec[o] = (txk, tnk)
     if not rec:
         continue
+    # reine Klimastationen: nur wenn noch AKTUELL sendend (Reihen-Ende >= min_last_year) und
+    # substanziell (>= min_hist_years Jahre). POI haben stets ein Live-Detail -> immer.
+    if not is_poi:
+        yrs = {datetime.date.fromordinal(o).year for o in rec}
+        if max(yrs) < min_last_year or len(yrs) < min_hist_years:
+            skipped += 1
+            continue
     lo_o, hi_o = min(rec), max(rec)
     n = hi_o - lo_o + 1
     mx = [None] * n
@@ -833,7 +868,8 @@ for internal in internals:
         json.dump(doc, f, ensure_ascii=False, separators=(",", ":"))
     written += 1; total_days += len(rec)
 
-print("   history-Dateien: %d  (Σ %d Tageswerte)" % (written, total_days), file=sys.stderr)
+print("   history-Dateien: %d  (Σ %d Tageswerte; %d zu kurze Klimastationen übersprungen)"
+      % (written, total_days, skipped), file=sys.stderr)
 print("   geschrieben unter: %s" % out_dir, file=sys.stderr)
 PY
 fi
