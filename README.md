@@ -55,7 +55,7 @@ aktualisiert per GitHub Actions und über GitHub Pages ausgeliefert.
 | `history.csv` | Roh-Log aller Messungen (dedupliziert) | ✅ |
 | `reference.json` | Tages-Klimatologie 1991–2020 je Station (Normal-Verlauf + Referenzverteilung) | ✅ statisch |
 | `history/<wmo>.json` | volle Tageshistorie je Station (oft Jahrzehnte zurück), on-demand geladen | ✅ statisch |
-| `records.json` | Allzeit-Rekorde je Station (heißester/kältester Tag, wärmste Nacht, größte Spanne, längste Hitze-/Eisserie, meiste Hitzetage/Tropennächte) + nationale Bestjahre — speist „Allzeit"-Rangliste & Rekorde-Tafel („Gesamt") | ✅ statisch |
+| `records.json` | Allzeit-Rekorde je Station (heißester/kältester Tag, wärmste Nacht, längste Hitze-/Wüsten-/Extrem-/Glut-/Eis- & Tropennacht-/Wüstennacht-/Super-Tropennacht-Serie, meiste Hitze-/Wüsten-/Extrem-/Gluttage & Tropen-/Wüsten-/Super-Tropennächte) + nationale Bestjahre — speist „Allzeit"-Rangliste & Rekorde-Tafel („Gesamt") | ✅ statisch |
 | `series.json`, `stations.json`, `stats.json` | abgeleitet (Verlauf, Koordinaten, Überblick) | ❌ neu erzeugt |
 | `poi/`, `stations.cfg`, `de_stations.tsv`, `kl_hist_stations.txt` | Roh-Cache / Hilfsdateien | ❌ neu erzeugt |
 

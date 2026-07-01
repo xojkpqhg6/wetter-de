@@ -35,14 +35,30 @@ interface Hist { start: string; max: (number | null)[]; min: (number | null)[] }
 interface RecEntry {
   maxC?: number; maxDate?: string; minC?: number; minDate?: string   // heißester / kältester Tag
   nightC?: number; nightDate?: string                                // wärmste Nacht (max TNK)
-  spanC?: number; spanDate?: string; spanMx?: number; spanMn?: number // größte Tagesspanne
-  heatLen?: number; heatStart?: string; heatEnd?: string             // längste Hitzeserie
+  tropLen?: number; tropStart?: string; tropEnd?: string             // längste Tropennacht-Serie (≥20)
+  wnightLen?: number; wnightStart?: string; wnightEnd?: string       // längste Wüstennacht-Serie (≥25)
+  stropLen?: number; stropStart?: string; stropEnd?: string          // längste Super-Tropennacht-Serie (≥30)
+  heatLen?: number; heatStart?: string; heatEnd?: string             // längste Hitzeserie (≥30)
+  desertLen?: number; desertStart?: string; desertEnd?: string       // längste Wüstenserie (≥35)
+  extremeLen?: number; extremeStart?: string; extremeEnd?: string    // längste Extremserie (≥40)
+  glutLen?: number; glutStart?: string; glutEnd?: string             // längste Gluttag-Serie (≥45)
   iceLen?: number; iceStart?: string; iceEnd?: string                // längste Eisserie
-  hotDays?: number; hotYear?: number                                 // meiste Hitzetage/Jahr
-  tropN?: number; tropYear?: number                                  // meiste Tropennächte/Jahr
+  hotDays?: number; hotYear?: number                                 // meiste Hitzetage/Jahr (≥30)
+  desertDays?: number; desertYear?: number                           // meiste Wüstentage/Jahr (≥35)
+  extremeDays?: number; extremeYear?: number                         // meiste Extremtage/Jahr (≥40)
+  glutDays?: number; glutYear?: number                               // meiste Gluttage/Jahr (≥45)
+  tropN?: number; tropYear?: number                                  // meiste Tropennächte/Jahr (≥20)
+  wnightN?: number; wnightYear?: number                              // meiste Wüstennächte/Jahr (≥25)
+  stropN?: number; stropYear?: number                                // meiste Super-Tropennächte/Jahr (≥30)
 }
 interface NatBest { count: number; year: number }
-interface Records { records: Record<string, RecEntry>; national?: { hotDaysBest?: NatBest; tropBest?: NatBest } }
+interface Records {
+  records: Record<string, RecEntry>
+  national?: {
+    hotDaysBest?: NatBest; desertDaysBest?: NatBest; extremeDaysBest?: NatBest; glutDaysBest?: NatBest
+    tropBest?: NatBest; wnightBest?: NatBest; stropBest?: NatBest
+  }
+}
 
 type PeriodKey = 'day' | 'week' | 'month' | 'year'
 type View = 'now' | PeriodKey
@@ -416,35 +432,16 @@ function recWarmestNight(yr: number | null): RecResult | null {
   return { id: best.id, name: best.name, v: best.v, valueText: `${best.v.toFixed(1)}°`, sub: `${best.name} · ${fmtDate(best.date)}`, cls: tempClass(best.v) }
 }
 
-function recLargestSpan(yr: number | null): RecResult | null {
-  if (!series) return null
-  const { dates, stations } = series
-  let best: { id: string; sp: number; mx: number; mn: number; date: string; name: string } | null = null
-  for (const id in stations) {
-    if (stationDataDays(id) < REC_MIN_DAYS) continue
-    const s = stations[id]
-    for (let i = 0; i < dates.length; i++) {
-      if (yr !== null && +dates[i].slice(0, 4) !== yr) continue
-      const mx = s.max[i], mn = s.min[i]
-      if (mx == null || mn == null) continue
-      const sp = mx - mn
-      if (best === null || sp > best.sp) best = { id, sp, mx, mn, date: dates[i], name: coords[id]?.name ?? id }
-    }
-  }
-  if (!best) return null
-  return { id: best.id, name: best.name, v: best.sp, valueText: `${best.sp.toFixed(1)}°`, sub: `${best.name} · ${fmtDate(best.date)} (${best.mn.toFixed(1)}…${best.mx.toFixed(1)}°)`, cls: '' }
-}
-
-function recStreak(yr: number | null, thr: number, above: boolean): RecResult | null {
+function recStreak(yr: number | null, thr: number, key: 'max' | 'min', above: boolean, unit: string): RecResult | null {
   if (!series) return null
   const { dates, stations } = series
   let best: { id: string; name: string; len: number; start: string; end: string } | null = null
   for (const id in stations) {
-    const mx = stations[id].max
+    const arr = key === 'max' ? stations[id].max : stations[id].min
     let run = 0, startIdx = -1
     for (let i = 0; i < dates.length; i++) {
       if (yr !== null && +dates[i].slice(0, 4) !== yr) { run = 0; continue }
-      const v = mx[i]
+      const v = arr[i]
       const ok = v != null && (above ? v >= thr : v < thr)
       if (ok) {
         if (run === 0) startIdx = i
@@ -455,7 +452,7 @@ function recStreak(yr: number | null, thr: number, above: boolean): RecResult | 
     }
   }
   if (!best || best.len < 2) return null
-  return { id: best.id, name: best.name, v: best.len, valueText: `${best.len} Tage`, sub: `${best.name} · ${fmtDate(best.start)}–${fmtDate(best.end)}`, cls: '' }
+  return { id: best.id, name: best.name, v: best.len, valueText: `${best.len} ${unit}`, sub: `${best.name} · ${fmtDate(best.start)}–${fmtDate(best.end)}`, cls: '' }
 }
 
 function recMostDays(yr: number | null, thr: number, key: 'max' | 'min', unit: string): RecResult | null {
@@ -527,11 +524,21 @@ function atBest(sel: (e: RecEntry) => number | undefined, higher: boolean,
 const atHottest = () => atBest((e) => e.maxC, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v.toFixed(1)}°`, sub: `${recNm(id)} · ${fmtDate(e.maxDate!)}`, cls: tempClass(v) }))
 const atColdest = () => atBest((e) => e.minC, false, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v.toFixed(1)}°`, sub: `${recNm(id)} · ${fmtDate(e.minDate!)}`, cls: tempClass(v) }))
 const atNight = () => atBest((e) => e.nightC, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v.toFixed(1)}°`, sub: `${recNm(id)} · ${fmtDate(e.nightDate!)}`, cls: tempClass(v) }))
-const atSpan = () => atBest((e) => e.spanC, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v.toFixed(1)}°`, sub: `${recNm(id)} · ${fmtDate(e.spanDate!)} (${e.spanMn!.toFixed(1)}…${e.spanMx!.toFixed(1)}°)`, cls: '' }))
+const atTropStreak = () => atBest((e) => e.tropLen, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v} Nächte`, sub: `${recNm(id)} · ${fmtDate(e.tropStart!)}–${fmtDate(e.tropEnd!)}`, cls: '' }))
+const atWnightStreak = () => atBest((e) => e.wnightLen, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v} Nächte`, sub: `${recNm(id)} · ${fmtDate(e.wnightStart!)}–${fmtDate(e.wnightEnd!)}`, cls: '' }))
+const atStropStreak = () => atBest((e) => e.stropLen, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v} Nächte`, sub: `${recNm(id)} · ${fmtDate(e.stropStart!)}–${fmtDate(e.stropEnd!)}`, cls: '' }))
 const atHeat = () => atBest((e) => e.heatLen, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v} Tage`, sub: `${recNm(id)} · ${fmtDate(e.heatStart!)}–${fmtDate(e.heatEnd!)}`, cls: '' }))
 const atIce = () => atBest((e) => e.iceLen, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v} Tage`, sub: `${recNm(id)} · ${fmtDate(e.iceStart!)}–${fmtDate(e.iceEnd!)}`, cls: '' }))
 const atMostHot = () => atBest((e) => e.hotDays, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v} Tage`, sub: `${recNm(id)} · ${e.hotYear}`, cls: '' }))
 const atMostTrop = () => atBest((e) => e.tropN, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v} Nächte`, sub: `${recNm(id)} · ${e.tropYear}`, cls: '' }))
+const atMostWnight = () => atBest((e) => e.wnightN, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v} Nächte`, sub: `${recNm(id)} · ${e.wnightYear}`, cls: '' }))
+const atMostStrop = () => atBest((e) => e.stropN, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v} Nächte`, sub: `${recNm(id)} · ${e.stropYear}`, cls: '' }))
+const atDesertStreak = () => atBest((e) => e.desertLen, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v} Tage`, sub: `${recNm(id)} · ${fmtDate(e.desertStart!)}–${fmtDate(e.desertEnd!)}`, cls: '' }))
+const atMostDesert = () => atBest((e) => e.desertDays, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v} Tage`, sub: `${recNm(id)} · ${e.desertYear}`, cls: '' }))
+const atExtremeStreak = () => atBest((e) => e.extremeLen, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v} Tage`, sub: `${recNm(id)} · ${fmtDate(e.extremeStart!)}–${fmtDate(e.extremeEnd!)}`, cls: '' }))
+const atMostExtreme = () => atBest((e) => e.extremeDays, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v} Tage`, sub: `${recNm(id)} · ${e.extremeYear}`, cls: '' }))
+const atGlutStreak = () => atBest((e) => e.glutLen, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v} Tage`, sub: `${recNm(id)} · ${fmtDate(e.glutStart!)}–${fmtDate(e.glutEnd!)}`, cls: '' }))
+const atMostGlut = () => atBest((e) => e.glutDays, true, (id, e, v) => ({ id, name: recNm(id), v, valueText: `${v} Tage`, sub: `${recNm(id)} · ${e.glutYear}`, cls: '' }))
 
 // besseren der beiden Rekorde wählen (Serie/Live vs. Archiv)
 function betterRec(a: RecResult | null, b: RecResult | null, higher = true): RecResult | null {
@@ -560,6 +567,13 @@ function statCard(icon: string, label: string, valueText: string, sub: string): 
     `<span class="rec-sub">${esc(sub)}</span></div>`
 }
 
+// Zähl-/Serien-Karte: mit Rekord klickbar, sonst als "0" (noch nie) sichtbar statt „keine Daten"
+function countCard(icon: string, label: string, rec: RecResult | null, unit: string, note?: string): string {
+  if (rec) return recCard(icon, label, rec, note)
+  const k = `${label}${note ? ` <span class="rec-note">${note}</span>` : ''}`
+  return statCard(icon, k, `0 ${unit}`, 'noch nie')
+}
+
 function renderRecords(): void {
   if (!series) return
   const years = [...new Set(series.dates.map((d) => +d.slice(0, 4)))].sort((a, b) => a - b)
@@ -571,23 +585,49 @@ function renderRecords(): void {
   const nat = records?.national
   const hot = all ? betterNat(eventHeadline(30, 'max'), nat?.hotDaysBest) : eventHeadline(30, 'max')
   const trop = all ? betterNat(eventHeadline(20, 'min'), nat?.tropBest) : eventHeadline(20, 'min')
+  const desert = all ? betterNat(eventHeadline(35, 'max'), nat?.desertDaysBest) : eventHeadline(35, 'max')
+  const extreme = all ? betterNat(eventHeadline(40, 'max'), nat?.extremeDaysBest) : eventHeadline(40, 'max')
+  const glut = all ? betterNat(eventHeadline(45, 'max'), nat?.glutDaysBest) : eventHeadline(45, 'max')
+  const wnight = all ? betterNat(eventHeadline(25, 'min'), nat?.wnightBest) : eventHeadline(25, 'min')
+  const strop = all ? betterNat(eventHeadline(30, 'min'), nat?.stropBest) : eventHeadline(30, 'min')
   const yrNote = (y: string) => (all ? `Rekordjahr ${y}` : y)
+  const gesamtSub = (h: { count: number; year: string }) => (h.count > 0 ? yrNote(h.year) : 'noch nie')
   const M = (s: RecResult | null, a: RecResult | null, higher = true) => (all ? betterRec(s, a, higher) : s)
   const cards = [
     // Reihe 1 — Extreme
     recCard('🔥', 'Höchste Temperatur', M(recExtreme(yr, 'max', true), atHottest())),
     recCard('❄', 'Tiefste Temperatur', M(recExtreme(yr, 'min', false), atColdest(), false)),
-    recCard('🌡', 'Größte Tagesspanne', M(recLargestSpan(yr), atSpan())),
-    // Reihe 2 — Nächte
     recCard('🌴', 'Wärmste Nacht', M(recWarmestNight(yr), atNight()), 'ohne heute'),
-    recCard('🌙', 'Meiste Tropennächte', M(recMostDays(yr, 20, 'min', 'Nächte'), atMostTrop())),
-    statCard('📅', 'Tropennächte gesamt', `${trop.count} Nächte`, yrNote(trop.year)),
-    // Reihe 3 — Hitze
-    recCard('♨', 'Längste Hitzeserie', M(recStreak(yr, 30, true), atHeat())),
-    recCard('☀', 'Meiste Hitzetage', M(recMostDays(yr, 30, 'max', 'Tage'), atMostHot())),
-    statCard('📅', 'Hitzetage gesamt', `${hot.count} Tage`, yrNote(hot.year)),
+    // Reihe 2 — Tropennächte (Tagesminimum ≥ 20 °C)
+    countCard('🌙', 'Längste Tropennacht-Serie', M(recStreak(yr, 20, 'min', true, 'Nächte'), atTropStreak()), 'Nächte'),
+    countCard('🌙', 'Meiste Tropennächte', M(recMostDays(yr, 20, 'min', 'Nächte'), atMostTrop()), 'Nächte'),
+    statCard('📅', 'Tropennächte gesamt', `${trop.count} Nächte`, gesamtSub(trop)),
+    // Reihe 3 — Wüstennächte (≥ 25 °C)
+    countCard('🏜', 'Längste Wüstennacht-Serie', M(recStreak(yr, 25, 'min', true, 'Nächte'), atWnightStreak()), 'Nächte', '≥ 25 °C'),
+    countCard('🏜', 'Meiste Wüstennächte', M(recMostDays(yr, 25, 'min', 'Nächte'), atMostWnight()), 'Nächte', '≥ 25 °C'),
+    statCard('📅', 'Wüstennächte gesamt', `${wnight.count} Nächte`, gesamtSub(wnight)),
+    // Reihe 4 — Super-Tropennächte (≥ 30 °C)
+    countCard('🥵', 'Längste Super-Tropennacht-Serie', M(recStreak(yr, 30, 'min', true, 'Nächte'), atStropStreak()), 'Nächte', '≥ 30 °C'),
+    countCard('🥵', 'Meiste Super-Tropennächte', M(recMostDays(yr, 30, 'min', 'Nächte'), atMostStrop()), 'Nächte', '≥ 30 °C'),
+    statCard('📅', 'Super-Tropennächte gesamt', `${strop.count} Nächte`, gesamtSub(strop)),
+    // Reihe 5 — Hitze (≥ 30 °C)
+    countCard('♨', 'Längste Hitzeserie', M(recStreak(yr, 30, 'max', true, 'Tage'), atHeat()), 'Tage'),
+    countCard('☀', 'Meiste Hitzetage', M(recMostDays(yr, 30, 'max', 'Tage'), atMostHot()), 'Tage'),
+    statCard('📅', 'Hitzetage gesamt', `${hot.count} Tage`, gesamtSub(hot)),
+    // Reihe 6 — Wüstentage (≥ 35 °C)
+    countCard('🏜', 'Längste Wüstenserie', M(recStreak(yr, 35, 'max', true, 'Tage'), atDesertStreak()), 'Tage', '≥ 35 °C'),
+    countCard('🌵', 'Meiste Wüstentage', M(recMostDays(yr, 35, 'max', 'Tage'), atMostDesert()), 'Tage', '≥ 35 °C'),
+    statCard('📅', 'Wüstentage gesamt', `${desert.count} Tage`, gesamtSub(desert)),
+    // Reihe 7 — Extreme Hitze (≥ 40 °C)
+    countCard('🥵', 'Längste Extremserie', M(recStreak(yr, 40, 'max', true, 'Tage'), atExtremeStreak()), 'Tage', '≥ 40 °C'),
+    countCard('🌋', 'Meiste Extremtage', M(recMostDays(yr, 40, 'max', 'Tage'), atMostExtreme()), 'Tage', '≥ 40 °C'),
+    statCard('📅', 'Extreme Hitze gesamt', `${extreme.count} Tage`, gesamtSub(extreme)),
+    // Reihe 8 — Gluttage (≥ 45 °C) — in DE bisher nie erreicht
+    countCard('🫠', 'Längste Gluttag-Serie', M(recStreak(yr, 45, 'max', true, 'Tage'), atGlutStreak()), 'Tage', '≥ 45 °C'),
+    countCard('🫠', 'Meiste Gluttage', M(recMostDays(yr, 45, 'max', 'Tage'), atMostGlut()), 'Tage', '≥ 45 °C'),
+    statCard('📅', 'Gluttage gesamt', `${glut.count} Tage`, gesamtSub(glut)),
   ]
-  const ice = M(recStreak(yr, 0, false), atIce())
+  const ice = M(recStreak(yr, 0, 'max', false, 'Tage'), atIce())
   const info = ice
     ? `<div class="rec-info"><span>🧊 Längste Eisserie <b>${ice.valueText}</b> <span class="dim">${esc(ice.sub)}</span></span></div>`
     : ''

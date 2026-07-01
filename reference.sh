@@ -293,19 +293,37 @@ def rnd(v):                       # wie JS Math.round (halbe Werte Richtung +∞
 
 # pro WMO: Tagessummen/-zahlen je Kalendertag (1..366) + gepoolte Histogramme
 N = 367
+HEAT_THRS = (30, 35, 40, 45) # Hitze- / Wüsten- / Extreme-Hitze- / Gluttage (Tagesmaximum)
+NIGHT_THRS = (20, 25, 30)   # Tropennacht / Wüstennacht / Super-Tropennacht (Tagesminimum bleibt darüber)
+
+def new_streak():
+    return {"run": 0, "start": None, "best": 0, "beg": None, "end": None}
+
+def upd_streak(st, active, o, cons):
+    if active:
+        if cons and st["run"] >= 1: st["run"] += 1
+        else: st["run"] = 1; st["start"] = o
+        if st["run"] > st["best"]:
+            st["best"] = st["run"]; st["beg"] = st["start"]; st["end"] = o
+    else:
+        st["run"] = 0
+
 def new_acc():
     return {"smax": [0.0]*N, "cmax": [0]*N, "smin": [0.0]*N, "cmin": [0]*N,
             "hmax": {}, "hmin": {}, "n": 0, "years": set(),
             # Allzeit-Rekorde je Station (ungefiltert, ganze Historie) -> records.json
             "rmx": None, "rmxd": "", "rmn": None, "rmnd": "",       # heißester Tag / kältester Tag
             "rnight": None, "rnightd": "",                          # wärmste Nacht (max TNK)
-            "rspan": None, "rspand": "", "rspanmx": None, "rspanmn": None,  # größte Tagesspanne
-            "hotdays": {}, "tropn": {},                             # Hitzetage / Tropennächte je Jahr
-            "prevo": None, "hrun": 0, "hstart": None, "hbest": 0, "hbeg": None, "hend": None,  # Hitzeserie
-            "irun": 0, "istart": None, "ibest": 0, "ibeg": None, "iend": None}                 # Eisserie
+            "days": {t: {} for t in HEAT_THRS},                    # heiße Tage je Jahr, je Schwelle
+            "nights": {t: {} for t in NIGHT_THRS},                 # warme Nächte je Jahr, je Schwelle
+            "prevo": None,
+            # Serien: Tage (Tagesmax>=Schwelle), Nächte ("n25" etc., Tagesmin>=Schwelle), Eis
+            "streak": dict([(t, new_streak()) for t in HEAT_THRS]
+                           + [("n%d" % t, new_streak()) for t in NIGHT_THRS]
+                           + [("ice", new_streak())])}
 acc = {}
-nat_hot = {}   # Jahr -> Menge der Tage (national) mit mind. einer Station >= 30 °C
-nat_trop = {}  # Jahr -> Menge der Tage (national) mit mind. einer Station Tnk >= 20 °C
+nat = {t: {} for t in HEAT_THRS}        # Schwelle -> Jahr -> Tagesmenge (national, Tagesmax >= Schwelle)
+nat_night = {t: {} for t in NIGHT_THRS} # Schwelle -> Jahr -> Nachtmenge (national, Tagesmin >= Schwelle)
 
 lo_i, hi_i = frm * 10000 + 101, to * 10000 + 1231
 for internal in internals:
@@ -350,32 +368,23 @@ for internal in internals:
             a["rmn"] = tnk; a["rmnd"] = ds
         if tnk is not None and (a["rnight"] is None or tnk > a["rnight"]):
             a["rnight"] = tnk; a["rnightd"] = ds
-        if txk is not None and tnk is not None:
-            sp = txk - tnk
-            if a["rspan"] is None or sp > a["rspan"]:
-                a["rspan"] = sp; a["rspand"] = ds; a["rspanmx"] = txk; a["rspanmn"] = tnk
-        if txk is not None and txk >= 30:
-            a["hotdays"][y] = a["hotdays"].get(y, 0) + 1
-            if o is not None: nat_hot.setdefault(y, set()).add(o)
-        if tnk is not None and tnk >= 20:
-            a["tropn"][y] = a["tropn"].get(y, 0) + 1
-            if o is not None: nat_trop.setdefault(y, set()).add(o)
-        if o is not None:
+        if txk is not None:                                       # Tage >= Schwelle (30/35/40) + national
+            for t in HEAT_THRS:
+                if txk >= t:
+                    a["days"][t][y] = a["days"][t].get(y, 0) + 1
+                    if o is not None: nat[t].setdefault(y, set()).add(o)
+        if tnk is not None:                                       # warme Nächte >= Schwelle (20/25/30)
+            for t in NIGHT_THRS:
+                if tnk >= t:
+                    a["nights"][t][y] = a["nights"][t].get(y, 0) + 1
+                    if o is not None: nat_night[t].setdefault(y, set()).add(o)
+        if o is not None:                                         # Serien (aufeinanderfolgende Tage)
             cons = a["prevo"] is not None and o == a["prevo"] + 1
-            if txk is not None and txk >= 30:                     # Hitzeserie
-                if cons and a["hrun"] >= 1: a["hrun"] += 1
-                else: a["hrun"] = 1; a["hstart"] = o
-                if a["hrun"] > a["hbest"]:
-                    a["hbest"] = a["hrun"]; a["hbeg"] = a["hstart"]; a["hend"] = o
-            else:
-                a["hrun"] = 0
-            if txk is not None and txk < 0:                       # Eisserie (Eistag: TXK < 0)
-                if cons and a["irun"] >= 1: a["irun"] += 1
-                else: a["irun"] = 1; a["istart"] = o
-                if a["irun"] > a["ibest"]:
-                    a["ibest"] = a["irun"]; a["ibeg"] = a["istart"]; a["iend"] = o
-            else:
-                a["irun"] = 0
+            for t in HEAT_THRS:
+                upd_streak(a["streak"][t], txk is not None and txk >= t, o, cons)
+            for t in NIGHT_THRS:
+                upd_streak(a["streak"]["n%d" % t], tnk is not None and tnk >= t, o, cons)
+            upd_streak(a["streak"]["ice"], txk is not None and txk < 0, o, cons)   # Eistag: TXK < 0
             a["prevo"] = o
         # ab hier nur die Normalperiode (für reference.json)
         if dt < lo_i or dt > hi_i:
@@ -437,25 +446,32 @@ for wmo, a in acc.items():
         rec["minC"] = a["rmn"]; rec["minDate"] = a["rmnd"]
     if a["rnight"] is not None:
         rec["nightC"] = a["rnight"]; rec["nightDate"] = a["rnightd"]
-    if a["rspan"] is not None:
-        rec["spanC"] = round(a["rspan"], 1); rec["spanDate"] = a["rspand"]
-        rec["spanMx"] = a["rspanmx"]; rec["spanMn"] = a["rspanmn"]
-    if a["hbest"] >= 2:
-        rec["heatLen"] = a["hbest"]; rec["heatStart"] = od(a["hbeg"]); rec["heatEnd"] = od(a["hend"])
-    if a["ibest"] >= 2:
-        rec["iceLen"] = a["ibest"]; rec["iceStart"] = od(a["ibeg"]); rec["iceEnd"] = od(a["iend"])
-    if a["hotdays"]:
-        yy, cc = max(a["hotdays"].items(), key=lambda kv: kv[1]); rec["hotDays"] = cc; rec["hotYear"] = yy
-    if a["tropn"]:
-        yy, cc = max(a["tropn"].items(), key=lambda kv: kv[1]); rec["tropN"] = cc; rec["tropYear"] = yy
+    # Serien: Tage (Tagesmax), Nächte (Tagesmin), Eis
+    for skey, key in ((30, "heat"), (35, "desert"), (40, "extreme"), (45, "glut"),
+                      ("n20", "trop"), ("n25", "wnight"), ("n30", "strop"), ("ice", "ice")):
+        s = a["streak"][skey]
+        if s["best"] >= 2:
+            rec[key + "Len"] = s["best"]; rec[key + "Start"] = od(s["beg"]); rec[key + "End"] = od(s["end"])
+    for t, key in ((30, "hot"), (35, "desert"), (40, "extreme"), (45, "glut")):  # meiste Tage/Jahr je Schwelle
+        dd = a["days"][t]
+        if dd:
+            yy, cc = max(dd.items(), key=lambda kv: kv[1]); rec[key + "Days"] = cc; rec[key + "Year"] = yy
+    for t, key in ((20, "trop"), (25, "wnight"), (30, "strop")):     # meiste warme Nächte/Jahr je Schwelle
+        dd = a["nights"][t]
+        if dd:
+            yy, cc = max(dd.items(), key=lambda kv: kv[1]); rec[key + "N"] = cc; rec[key + "Year"] = yy
     if rec:
         records[wmo] = rec
 
 national = {}
-if nat_hot:
-    yy, dd = max(nat_hot.items(), key=lambda kv: len(kv[1])); national["hotDaysBest"] = {"count": len(dd), "year": yy}
-if nat_trop:
-    yy, dd = max(nat_trop.items(), key=lambda kv: len(kv[1])); national["tropBest"] = {"count": len(dd), "year": yy}
+for key, t in (("hotDaysBest", 30), ("desertDaysBest", 35), ("extremeDaysBest", 40), ("glutDaysBest", 45)):
+    ns = nat[t]
+    if ns:
+        yy, dd = max(ns.items(), key=lambda kv: len(kv[1])); national[key] = {"count": len(dd), "year": yy}
+for key, t in (("tropBest", 20), ("wnightBest", 25), ("stropBest", 30)):
+    ns = nat_night[t]
+    if ns:
+        yy, dd = max(ns.items(), key=lambda kv: len(kv[1])); national[key] = {"count": len(dd), "year": yy}
 
 with io.open(out_records, "w", encoding="utf-8") as f:
     json.dump({"records": records, "national": national}, f, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
