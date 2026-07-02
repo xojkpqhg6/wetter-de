@@ -615,7 +615,7 @@
       "min_c": 17.0,
       "min_obs_utc": "2026-07-01T22:00:00Z",
       "name": "MANSCHNOW",
-      "samples": 23
+      "samples": 24
     },
     "10400": {
       "max_c": 26.1,
@@ -1634,5 +1634,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-07-02T01:07:35Z"
+  "updated_utc": "2026-07-02T02:07:35Z"
 }
