@@ -35,6 +35,11 @@ jobs:
       - name: DWD-Daten aktualisieren
         run: bash temp-leaderboard.sh
 
+      # Offizielles DWD-Gebietsmittel (Jahresmitteltemperatur DE) mitziehen -> annual-mean.json.
+      # Robust: bei Download-/Parse-Fehler bleibt die bestehende Datei stehen (kein Abbruch).
+      - name: Jahresmitteltemperatur aktualisieren
+        run: bash annual-mean.sh
+
       # Einmal täglich (≈04 UTC) das aktuelle KL-Produkt ziehen und neue Rekorde –
       # auch reiner Klimastationen, die nicht im Live-POI-Feed stehen – in
       # records.json + timeline.json mergen. Läuft nicht bei jedem Push (nur

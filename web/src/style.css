@@ -386,6 +386,12 @@ body {
 .recc-legend > span:not(:first-child)::before { content: '·'; margin-right: 5px; opacity: .6; }
 
 /* ---- Rekorde-Tafel ---- */
+/* Jahresmitteltemperatur — volle Breite, ganz oben */
+.mean-card { border: 1px solid var(--line-2); background: var(--paper-2); padding: 14px 16px; margin: 0 0 18px; }
+.mean-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 8px; }
+.mean-title { font-family: var(--mono); font-size: 15px; font-weight: 700; color: var(--ink); }
+.mean-sub { font-family: var(--mono); font-size: 11.5px; color: var(--ink-soft); }
+.mean-card .recc { cursor: crosshair; }
 .rec-filter { display: flex; justify-content: center; margin: 0 0 16px; }
 .rec-grid {
   display: grid;

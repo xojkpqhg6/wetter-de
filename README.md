@@ -34,6 +34,7 @@ aktualisiert per GitHub Actions und über GitHub Pages ausgeliefert.
 ├─ temp-leaderboard.sh        # holt DWD-Daten, erzeugt latest/tops/series/stations/stats + daily + history
 ├─ backfill.sh                # Backfill der Tageshistorie eines Jahres aus dem DWD-Klimaarchiv
 ├─ reference.sh               # Tages-Klimatologie -> reference.json + records.json (+ --history -> history/<wmo>.json)
+├─ annual-mean.sh             # offizielles DWD-Gebietsmittel (Jahrestemperatur DE) -> annual-mean.json
 ├─ web/                       # Vite + TypeScript (kein Framework)
 │  ├─ index.html
 │  ├─ src/main.ts             # Rendering: Tabelle, Karte, Detail, Banderole, Theme, URL-State
@@ -56,6 +57,7 @@ aktualisiert per GitHub Actions und über GitHub Pages ausgeliefert.
 | `reference.json` | Tages-Klimatologie 1991–2020 je Station (Normal-Verlauf + Referenzverteilung) | ✅ statisch |
 | `history/<wmo>.json` | volle Tageshistorie je Station (oft Jahrzehnte zurück), on-demand geladen | ✅ statisch |
 | `timeline.json` | nationale Jahres-Zeitreihen je Rekord-Metrik (heißester Tag / Zähler pro Jahr) — speist den Rekord-Zeitverlauf im Modal | ✅ statisch |
+| `annual-mean.json` | offizielles DWD-Gebietsmittel der Jahres-Lufttemperatur Deutschlands (1881–heute) — speist die Kurve oben auf der Rekorde-Seite (Trend/30-J.-Mittel im Frontend) | ✅ |
 | `records.json` | Allzeit-Rekorde je Station (heißester/kältester Tag, wärmste Nacht, längste Hitze-/Wüsten-/Extrem-/Glut-/Eis- & Tropennacht-/Wüstennacht-/Super-Tropennacht-Serie, meiste Hitze-/Wüsten-/Extrem-/Gluttage & Tropen-/Wüsten-/Super-Tropennächte) + nationale Bestjahre — speist „Allzeit"-Rangliste & Rekorde-Tafel („Gesamt"). Deckt **alle** DWD-Klimastationen ab, auch reine Klimastationen ohne Live-POI-Feed (Namen in `names`), damit kein Rekord fehlt | ✅ statisch |
 | `series.json`, `stations.json`, `stats.json` | abgeleitet (Verlauf, Koordinaten, Überblick) | ❌ neu erzeugt |
 | `poi/`, `stations.cfg`, `de_stations.tsv`, `kl_hist_stations.txt` | Roh-Cache / Hilfsdateien | ❌ neu erzeugt |
@@ -105,6 +107,11 @@ Gespeichert wird durchgängig **UTC**; die Website rechnet für die Anzeige in
   werden aktuelle Rekorde — auch reiner Klimastationen, die im Live-POI-Feed fehlen — erfasst,
   die das `historical`-Archiv (das ~1 Jahr nachhängt) noch nicht enthält. `reference.json`
   bleibt unangetastet.
+- **`annual-mean.sh`** holt das **offizielle DWD-Gebietsmittel** der Jahres-Lufttemperatur für
+  Deutschland (`regional_averages_DE`, Spalte „Deutschland", ab 1881) und schreibt es nach
+  `annual-mean.json`. Trendlinie und gleitendes 30-Jahres-Mittel berechnet das Frontend selbst.
+  Läuft in der Pipeline bei jedem Lauf mit; robust (bei Download-/Parse-Fehler bleibt die
+  bestehende Datei unangetastet, kein Abbruch des Deploys).
 - **GitHub Actions** (`update-and-deploy.yml`) führt stündlich `temp-leaderboard.sh`
   aus, committet die aktualisierten Daten zurück, baut die Seite und deployt sie auf
   GitHub Pages. Einmal täglich (≈04 UTC) läuft zusätzlich `reference.sh --recent`, sodass

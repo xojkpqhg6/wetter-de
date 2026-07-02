@@ -67,6 +67,8 @@ interface TLMetric {
   all?: number[]                                                             // Zähler
 }
 interface Timeline { years: number[]; metrics: Record<string, TLMetric>; names?: Record<string, string> }
+// annual-mean.json: offizielles DWD-Gebietsmittel der Jahrestemperatur (per ./annual-mean.sh)
+interface AnnualMean { years: number[]; mean: (number | null)[]; source?: string }
 
 // Anzeigename einer Station: POI aus coords, reine Klimastationen aus den names-Maps
 function stName(id: string): string {
@@ -159,6 +161,8 @@ let records: Records | null = null
 let recordsPromise: Promise<void> | null = null
 let timeline: Timeline | null = null
 let timelinePromise: Promise<void> | null = null
+let annualMean: AnnualMean | null = null
+let annualMeanPromise: Promise<void> | null = null
 const historyRaw = new Map<string, Hist | null>()                 // geladene history/<id>.json (null = keine)
 const combinedCache = new Map<string, { dates: string[]; ser: SeriesEntry }>()  // Historie + Live je Station
 
@@ -199,6 +203,12 @@ function ensureRecords(): Promise<void> {
 function ensureTimeline(): Promise<void> {
   if (!timelinePromise) timelinePromise = fetchJson<Timeline>('data/timeline.json').then((t) => { timeline = t })
   return timelinePromise
+}
+
+// annual-mean.json (nationale Jahresmitteltemperatur) einmalig nachladen; Fehler ok
+function ensureAnnualMean(): Promise<void> {
+  if (!annualMeanPromise) annualMeanPromise = fetchJson<AnnualMean>('data/annual-mean.json').then((a) => { annualMean = a })
+  return annualMeanPromise
 }
 
 // history/<id>.json on-demand laden (je Station genau einmal) und mit Live-Reihe mergen
@@ -711,6 +721,7 @@ type RecCtx = {
   trend: { slope: number; intercept: number } | null; avg: (number | null)[] | null
 }
 let recCtx: RecCtx | null = null
+let meanCtx: RecCtx | null = null   // Hover-Kontext der Jahresmittel-Karte auf der Rekorde-Seite
 
 async function openRecord(key: string): Promise<void> {
   detailId = null
@@ -722,8 +733,7 @@ async function openRecord(key: string): Promise<void> {
 }
 
 // Hover über dem Rekord-Chart: nächstes Jahr bestimmen, Führungslinie + Tooltip (Wert · Station · Datum)
-function onRecordMove(svg: SVGSVGElement, clientX: number, clientY: number): void {
-  const c = recCtx
+function onRecordMove(svg: SVGSVGElement, clientX: number, clientY: number, c: RecCtx | null): void {
   if (!c) return
   const rect = svg.getBoundingClientRect()
   if (rect.width === 0) return
@@ -950,6 +960,55 @@ function recordChart(key: string, years: number[], m: TLMetric, local = false): 
   return { html: svg + cap, ctx }
 }
 
+// Jahresmitteltemperatur Deutschlands über die Zeit — schlichte Linie + Trend + 30-J.-Mittel.
+// Volle Breite, permanent oben auf der Rekorde-Seite. Datengrundlage: annual-mean.json.
+function meanChart(am: AnnualMean): { html: string; ctx: RecCtx } {
+  const years = am.years, vals = am.mean, n = years.length
+  const W = 900, H = 240, padL = 34, padR = 14, padT = 16, padB = 24
+  const xs = (i: number) => padL + (n < 2 ? 0 : (i / (n - 1)) * (W - padL - padR))
+  const nums = vals.filter((v): v is number => v != null)
+  let lo = Math.min(...nums), hi = Math.max(...nums)
+  const padv = Math.max(0.4, (hi - lo) * 0.08); lo -= padv; hi += padv
+  const ys = (v: number) => padT + (1 - (v - lo) / (hi - lo)) * (H - padT - padB)
+  let d = '', pen = false, dots = ''
+  vals.forEach((v, i) => {
+    if (v == null) { pen = false; return }
+    const x = xs(i), y = ys(v)
+    d += `${pen ? 'L' : 'M'}${x.toFixed(1)},${y.toFixed(1)} `; pen = true
+    dots += `<circle class="recc-dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.6"/>`
+  })
+  let body = dots + `<path class="recc-line" d="${d.trim()}"/>`
+  const avg = movingAvgLayer(years, vals, xs, ys, lo, hi, true)
+  const trend = trendLayer(years, vals, '°', xs, ys, lo, hi, true)
+  const segs = ['<span class="recc-lbl-i">— Jahresmittel</span>']
+  for (const o of [avg, trend]) if (o) { body += o.path; segs.push(o.legend) }
+  const cap = `<div class="spark-legend recc-legend">${segs.map((s) => `<span>${s}</span>`).join('')}</div>`
+  const yl = `<text class="spark-lbl" x="2" y="${(ys(hi) + 3).toFixed(1)}">${hi.toFixed(1).replace('.', ',')}°</text>` +
+    `<text class="spark-lbl" x="2" y="${(ys(lo) + 3).toFixed(1)}">${lo.toFixed(1).replace('.', ',')}°</text>`
+  let months = ''
+  years.forEach((y, i) => { if (y % 20 === 0) months += `<text class="spark-lbl" x="${xs(i).toFixed(1)}" y="${H - 6}" text-anchor="middle">${y}</text>` })
+  const svg = `<svg class="recc" viewBox="0 0 ${W} ${H}">` +
+    `<line class="spark-axis" x1="${padL}" y1="${padT}" x2="${padL}" y2="${H - padB}"/>` +
+    `<line class="spark-axis" x1="${padL}" y1="${(H - padB).toFixed(1)}" x2="${W - padR}" y2="${(H - padB).toFixed(1)}"/>` +
+    body + months + yl + `<g class="recc-guide"></g></svg>`
+  const ctx: RecCtx = { years, val: vals, st: null, dt: null, unit: '°', lo, hi, W, H, padL, padR, padT, padB, trend: trend?.fit ?? null, avg: avg?.values ?? null }
+  return { html: svg + cap, ctx }
+}
+
+// Volle-Breite-Karte für die Jahresmitteltemperatur (setzt meanCtx für den Hover); '' wenn keine Daten.
+function meanCardHtml(): string {
+  meanCtx = null
+  const am = annualMean
+  if (!am || !am.years.length || !am.mean.some((v) => v != null)) return ''
+  const chart = meanChart(am)
+  meanCtx = chart.ctx
+  const y0 = am.years[0], y1 = am.years[am.years.length - 1]
+  return `<div class="mean-card">` +
+    `<div class="mean-head"><span class="mean-title">🌡 Jahresmitteltemperatur Deutschland</span>` +
+    `<span class="mean-sub">Offizielles DWD-Gebietsmittel · ${y0}–${y1} · Trend &amp; 30-J.-Mittel selbst berechnet</span></div>` +
+    chart.html + `</div>`
+}
+
 function renderRecords(): void {
   if (!series) return
   const years = [...new Set(series.dates.map((d) => +d.slice(0, 4)))].sort((a, b) => a - b)
@@ -1007,7 +1066,7 @@ function renderRecords(): void {
   const info = ice
     ? `<div class="rec-info"><span>🧊 Längste Eisserie <b>${ice.valueText}</b> <span class="dim">${esc(ice.sub)}</span></span></div>`
     : ''
-  recordsEl.innerHTML = bar + `<div class="rec-grid">${cards.join('')}</div>` + info
+  recordsEl.innerHTML = meanCardHtml() + bar + `<div class="rec-grid">${cards.join('')}</div>` + info
 }
 
 function freshnessHtml(genUtc: string): string {
@@ -1044,6 +1103,7 @@ function render(): void {
       void Promise.all([ensureSeries(), ensureRecords()]).then(render); return
     }
     if (!series) { metaEl.innerHTML = '<span class="err">Für die Rekorde liegen noch keine Daten vor.</span>'; return }
+    if (!annualMeanPromise) void ensureAnnualMean().then(render)   // Jahresmittel-Karte nachladen (optional)
     metaEl.innerHTML = `Rekorde · <strong>${recYear === 'all' ? 'Allzeit (mit Archiv)' : recYear}</strong>`
     renderRecords()
     return
@@ -1224,7 +1284,7 @@ function showTip(html: string, x: number, y: number): void {
 }
 function hideTip(): void { if (tipEl) tipEl.style.display = 'none' }
 function clearGuide(): void {
-  detailBody.querySelectorAll('.spark-guide, .dist-guide, .recc-guide').forEach((g) => { g.innerHTML = '' })
+  document.querySelectorAll('.spark-guide, .dist-guide, .recc-guide').forEach((g) => { g.innerHTML = '' })
 }
 
 async function openDetail(id: string): Promise<void> {
@@ -1986,10 +2046,18 @@ detailBody.addEventListener('mousemove', (e) => {
   const dist = e.target.closest('.dist') as SVGSVGElement | null
   if (dist) { onDistMove(dist, e.clientX, e.clientY); return }
   const recc = e.target.closest('.recc') as SVGSVGElement | null
-  if (recc) { onRecordMove(recc, e.clientX, e.clientY); return }
+  if (recc) { onRecordMove(recc, e.clientX, e.clientY, recCtx); return }
   hideTip(); clearGuide()
 })
 detailBody.addEventListener('mouseleave', () => { hideTip(); clearGuide() })
+// Hover über der Jahresmittel-Karte auf der Rekorde-Seite (eigener Kontext, nicht das Modal)
+recordsEl.addEventListener('mousemove', (e) => {
+  if (!(e.target instanceof Element)) return
+  const recc = e.target.closest('.recc') as SVGSVGElement | null
+  if (recc) { onRecordMove(recc, e.clientX, e.clientY, meanCtx); return }
+  hideTip(); clearGuide()
+})
+recordsEl.addEventListener('mouseleave', () => { hideTip(); clearGuide() })
 filterEl.addEventListener('input', () => { filter = filterEl.value; render() })
 sortEl.addEventListener('click', () => {
   sortDir = sortDir === 'hot' ? 'cold' : 'hot'
