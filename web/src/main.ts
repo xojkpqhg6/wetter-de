@@ -170,8 +170,11 @@ let filter = ''
 let yearSel = 'current'              // bei view==='year': 'current' | '<jahr>' | 'all'
 let recYear = 'all'                  // Rekorde-Filter: 'all' | '<jahr>'
 let detailId: string | null = null
-type DetailTab = 'verlauf' | 'vmax' | 'vmin' | 'kalender'
+type DetailTab = 'verlauf' | 'vmax' | 'vmin' | 'kalender' | 'rekorde'
 let detailTab: DetailTab = 'verlauf'
+let recDetailMetric: string | null = null   // im Rekorde-Tab geöffnete Metrik (null = Kartenübersicht)
+// je Station: Jahres-Zeitreihe je Rekord-Metrik, aus der kombinierten Tagesreihe berechnet
+const stationStatsCache = new Map<string, Record<string, { years: number[]; m: TLMetric }>>()
 let calYears: number | 'all' = 2     // Kalender: wie viele (neueste) Jahre zeigen
 
 // series.json (Verlauf je Station) einmalig nachladen
@@ -233,6 +236,7 @@ function buildCombined(id: string): void {
   const dates = [...map.keys()].sort()
   const ser: SeriesEntry = { max: dates.map((d) => map.get(d)![0]), min: dates.map((d) => map.get(d)![1]) }
   combinedCache.set(id, { dates, ser })
+  stationStatsCache.delete(id)   // Rekord-Zeitreihen mit voller Historie neu berechnen
 }
 
 /* ---------- Daten ---------- */
@@ -813,13 +817,13 @@ function theilSen(pts: { x: number; y: number }[]): { slope: number; intercept: 
   return { slope, intercept: med(pts.map((p) => p.y - slope * p.x)) }
 }
 
-// Trendlinie (Theil-Sen) + Legendentext für eine Reihe; null wenn nicht whitelisted oder zu dünn.
+// Trendlinie (Theil-Sen) + Legendentext für eine Reihe; null wenn nicht erlaubt oder zu dünn.
 // vals sind die Jahreswerte (bei Extremen der Tageswert je Jahr, nicht der Rekord-Umriss).
 function trendLayer(
-  key: string, years: number[], vals: (number | null)[], unit: string,
-  xs: (i: number) => number, ys: (v: number) => number, lo: number, hi: number,
+  years: number[], vals: (number | null)[], unit: string,
+  xs: (i: number) => number, ys: (v: number) => number, lo: number, hi: number, allow: boolean,
 ): { path: string; legend: string; fit: { slope: number; intercept: number } } | null {
-  if (!REC_TREND.has(key)) return null
+  if (!allow) return null
   const pts = years
     .map((y, i) => ({ x: y, y: vals[i], i }))
     .filter((p): p is { x: number; y: number; i: number } => p.y != null)
@@ -856,10 +860,10 @@ function trendLayer(
 // Jahre — der zentrierte Schnitt endet daher bewusst ~4 Jahre vor dem aktuellen Rand (ein
 // zentriertes Mittel am letzten Jahr gäbe es sonst nur als verzerrtes Trailing-Mittel).
 function movingAvgLayer(
-  key: string, years: number[], vals: (number | null)[],
-  xs: (i: number) => number, ys: (v: number) => number, lo: number, hi: number,
+  years: number[], vals: (number | null)[],
+  xs: (i: number) => number, ys: (v: number) => number, lo: number, hi: number, allow: boolean,
 ): { path: string; legend: string; values: (number | null)[] } | null {
-  if (!REC_TREND.has(key)) return null
+  if (!allow) return null
   const before = 15, after = 14, minN = 20
   const clamp = (v: number) => Math.max(lo, Math.min(hi, v))
   const values: (number | null)[] = years.map(() => null)
@@ -877,14 +881,14 @@ function movingAvgLayer(
   return { path: `<path class="recc-avg" d="${d}"/>`, legend: `<span class="recc-avg-i">⎯ 30-J.-Mittel</span>`, values }
 }
 
-function recordChart(key: string, years: number[], m: TLMetric): { html: string; ctx: RecCtx } {
+function recordChart(key: string, years: number[], m: TLMetric, local = false): { html: string; ctx: RecCtx } {
   const n = years.length, meta = REC_METRICS[key]
   const W = 520, H = 200, padL = 30, padR = 12, padT = 16, padB = 22
   const xs = (i: number) => padL + (n < 2 ? 0 : (i / (n - 1)) * (W - padL - padR))
   const anchorFor = (x: number) => (x > W - padR - 30 ? 'end' : x < padL + 30 ? 'start' : 'middle')
   let lo = 0, hi = 1
   const ys = (v: number) => padT + (1 - (v - lo) / (hi - lo)) * (H - padT - padB)
-  let body = '', yl = '', cap = ''
+  let body = '', yl = '', legendSegs: string[] = []
   const vals = (m.kind === 'ext' ? m.val : m.all) ?? []
   if (m.kind === 'ext' && m.val) {
     const dir = m.dir
@@ -910,7 +914,8 @@ function recordChart(key: string, years: number[], m: TLMetric): { html: string;
     yl = `<text class="spark-lbl" x="2" y="${(ys(hi) + 3).toFixed(1)}">${hi.toFixed(0)}°</text>` +
       `<text class="spark-lbl" x="2" y="${(ys(lo) + 3).toFixed(1)}">${lo.toFixed(0)}°</text>`
     body = dots + `<path class="recc-rec ${dir === 'min' ? 'cool' : ''}" d="${d.trim()}"/>` + mk
-    cap = `<div class="spark-legend"><span class="recc-lbl-i">— Rekordverlauf</span> &nbsp; Punkte = heißester/kältester Tag je Jahr · bundesweit</div>`
+    legendSegs = ['<span class="recc-lbl-i">— Rekordverlauf</span>', 'Punkte = heißester/kältester Tag je Jahr']
+    if (!local) legendSegs.push('bundesweit')
   } else if (m.all) {
     hi = Math.max(...m.all, 1); lo = 0
     let d = ''
@@ -922,12 +927,19 @@ function recordChart(key: string, years: number[], m: TLMetric): { html: string;
     yl = `<text class="spark-lbl" x="2" y="${(ys(hi) + 3).toFixed(1)}">${hi}</text>` +
       `<text class="spark-lbl" x="2" y="${(ys(0) + 3).toFixed(1)}">0</text>`
     body = `<path class="recc-line" d="${d.trim()}"/>` + mk
-    cap = `<div class="spark-legend">${meta.title} pro Jahr · bundesweit · Rekordjahr markiert · <span class="dim">Punkt für Details</span></div>`
+    legendSegs = [`${meta.title} pro Jahr`]
+    if (!local) legendSegs.push('bundesweit')
+    legendSegs.push('Rekordjahr markiert')
+    if (!local) legendSegs.push('<span class="dim">Punkt für Details</span>')
   }
   // Overlays: gleitendes Mittel zuerst (darunter), dann die Trendlinie darüber.
-  const avg = movingAvgLayer(key, years, vals, xs, ys, lo, hi)
-  const trend = trendLayer(key, years, vals, meta.unit, xs, ys, lo, hi)
-  for (const o of [avg, trend]) if (o) { body += o.path; cap = cap.replace('</div>', ` · ${o.legend}</div>`) }
+  // National: nur die kuratierte Whitelist; lokal (Station): alle Metriken, Guards entscheiden.
+  const allow = local || REC_TREND.has(key)
+  const avg = movingAvgLayer(years, vals, xs, ys, lo, hi, allow)
+  const trend = trendLayer(years, vals, meta.unit, xs, ys, lo, hi, allow)
+  for (const o of [avg, trend]) if (o) { body += o.path; legendSegs.push(o.legend) }
+  // Legende als Flex-Segmente: Umbrüche nur zwischen „·"-Segmenten, nie mitten in „Trend +x".
+  const cap = `<div class="spark-legend recc-legend">${legendSegs.map((s) => `<span>${s}</span>`).join('')}</div>`
   let months = ''
   years.forEach((y, i) => { if (y % 20 === 0) months += `<text class="spark-lbl" x="${xs(i).toFixed(1)}" y="${H - 6}" text-anchor="middle">${y}</text>` })
   const svg = `<svg class="recc" viewBox="0 0 ${W} ${H}">` +
@@ -1218,6 +1230,7 @@ function clearGuide(): void {
 async function openDetail(id: string): Promise<void> {
   detailId = id
   detailTab = 'verlauf'
+  recDetailMetric = null
   calYears = 2
   detailEl.hidden = false
   detailBody.innerHTML = '<p class="empty">lädt …</p>'
@@ -1272,6 +1285,204 @@ function countersHtml(ser: SeriesEntry, dates: string[]): string {
 function lastYears(dates: string[], n: number): Set<number> {
   const ys = [...new Set(dates.map((d) => +d.slice(0, 4)))].sort((a, b) => a - b)
   return new Set(ys.slice(-n))
+}
+
+/* ---------- Rekorde je Station (Tabelle + Zeitverlauf im Detail-Tab) ---------- */
+// Anzeige-Reihenfolge & Beschriftung der Stations-Rekorde. Nur „Basis"-Metriken (kein
+// „Bestwert einer Station" — das ergibt je Station keinen Sinn). Schwellen/Einheiten
+// gespiegelt aus REC_METRICS, damit Karte und Zeitverlauf konsistent sind.
+const STATION_METRICS: { key: string; icon: string; label: string }[] = [
+  { key: 'maxTemp', icon: '🔥', label: 'Höchste Temperatur' },
+  { key: 'minTemp', icon: '❄', label: 'Tiefste Temperatur' },
+  { key: 'warmNight', icon: '🌴', label: 'Wärmste Nacht' },
+  { key: 'hotStreak', icon: '♨', label: 'Längste Hitzeserie' },
+  { key: 'hotDays', icon: '☀', label: 'Meiste Hitzetage' },
+  { key: 'desertStreak', icon: '🏜', label: 'Längste Wüstenserie' },
+  { key: 'desertDays', icon: '🌵', label: 'Meiste Wüstentage' },
+  { key: 'tropStreak', icon: '🌙', label: 'Längste Tropennacht-Serie' },
+  { key: 'tropN', icon: '🌙', label: 'Meiste Tropennächte' },
+  { key: 'extremeStreak', icon: '🥵', label: 'Längste Extremserie' },
+  { key: 'extremeDays', icon: '🌋', label: 'Meiste Extremtage' },
+  { key: 'wnightStreak', icon: '🏜', label: 'Längste Wüstennacht-Serie' },
+  { key: 'wnightN', icon: '🏜', label: 'Meiste Wüstennächte' },
+  { key: 'glutStreak', icon: '🫠', label: 'Längste Gluttag-Serie' },
+  { key: 'glutDays', icon: '🫠', label: 'Meiste Gluttage' },
+  { key: 'stropStreak', icon: '🥵', label: 'Längste Super-Tropennacht-Serie' },
+  { key: 'stropN', icon: '🥵', label: 'Meiste Super-Tropennächte' },
+]
+
+// Volle Jahres-Zeitreihe je Rekord-Metrik aus der kombinierten Tagesreihe (Historie + Live).
+// Semantik spiegelt reference.sh: Jahres-Extreme, Tage/Nächte ≥ Schwelle je Jahr, längste
+// Serie je Jahr (aufeinanderfolgende Kalendertage, innerhalb des Jahres). Ergebnis gecacht.
+function stationStats(id: string): Record<string, { years: number[]; m: TLMetric }> | null {
+  const cached = stationStatsCache.get(id)
+  if (cached) return cached
+  const combined = combinedCache.get(id)
+  const ser = combined?.ser ?? series?.stations[id]
+  const dates = combined?.dates ?? series?.dates
+  if (!ser || !dates || !dates.length) return null
+
+  const HEAT = [30, 35, 40, 45], NIGHT = [20, 25, 30]
+  const heatKey: Record<number, [string, string]> = { 30: ['hotDays', 'hotStreak'], 35: ['desertDays', 'desertStreak'], 40: ['extremeDays', 'extremeStreak'], 45: ['glutDays', 'glutStreak'] }
+  const nightKey: Record<number, [string, string]> = { 20: ['tropN', 'tropStreak'], 25: ['wnightN', 'wnightStreak'], 30: ['stropN', 'stropStreak'] }
+  type Y = {
+    hasMax: boolean; hasMin: boolean   // ob das Jahr überhaupt Max-/Min-Tage hat (Reihenlücken je Variable)
+    maxV: number | null; maxD: string | null; minV: number | null; minD: string | null; nightV: number | null; nightD: string | null
+    dayCount: Record<number, number>; nightCount: Record<number, number>; dayStreak: Record<number, number>; nightStreak: Record<number, number>
+  }
+  const yr = new Map<number, Y>()
+  const getY = (y: number): Y => {
+    let o = yr.get(y)
+    if (!o) { o = { hasMax: false, hasMin: false, maxV: null, maxD: null, minV: null, minD: null, nightV: null, nightD: null, dayCount: {}, nightCount: {}, dayStreak: {}, nightStreak: {} }; yr.set(y, o) }
+    return o
+  }
+  const dayRun: Record<number, number> = {}, nightRun: Record<number, number> = {}
+  let prevOrd = -2, prevYear = -1
+  for (let i = 0; i < dates.length; i++) {
+    const ds = dates[i], y = +ds.slice(0, 4)
+    const ord = Math.floor(Date.parse(ds + 'T00:00:00Z') / DAY_MS)
+    const mx = ser.max[i], mn = ser.min[i]
+    const o = getY(y)
+    if (mx != null) {
+      o.hasMax = true
+      if (o.maxV == null || mx > o.maxV) { o.maxV = mx; o.maxD = ds }
+    }
+    if (mn != null) {
+      o.hasMin = true
+      if (o.minV == null || mn < o.minV) { o.minV = mn; o.minD = ds }
+      if (o.nightV == null || mn > o.nightV) { o.nightV = mn; o.nightD = ds }
+    }
+    const cons = ord === prevOrd + 1 && y === prevYear    // aufeinanderfolgender Kalendertag, gleiches Jahr
+    for (const t of HEAT) {
+      if (mx != null && mx >= t) {
+        o.dayCount[t] = (o.dayCount[t] || 0) + 1
+        dayRun[t] = (cons ? dayRun[t] || 0 : 0) + 1
+        if (dayRun[t] > (o.dayStreak[t] || 0)) o.dayStreak[t] = dayRun[t]
+      } else dayRun[t] = 0
+    }
+    for (const t of NIGHT) {
+      if (mn != null && mn >= t) {
+        o.nightCount[t] = (o.nightCount[t] || 0) + 1
+        nightRun[t] = (cons ? nightRun[t] || 0 : 0) + 1
+        if (nightRun[t] > (o.nightStreak[t] || 0)) o.nightStreak[t] = nightRun[t]
+      } else nightRun[t] = 0
+    }
+    prevOrd = ord; prevYear = y
+  }
+
+  // Jahresbereich je Variable getrennt: eine max-basierte Metrik (Hitze) darf nicht durch
+  // frühe reine Min-Jahre (und umgekehrt) mit Null-Strecken verwässert werden — das zerhaut
+  // Trend & 30-J.-Mittel. Führende/nachlaufende Fremdvariablen-Jahre entfallen so; interne
+  // Lücken (z. B. Mannheim: zeitweise keine Min-Daten) bleiben als 0/lücke bestehen.
+  const contiguous = (has: (o: Y) => boolean): number[] | null => {
+    const ys: number[] = []
+    yr.forEach((o, y) => { if (has(o)) ys.push(y) })
+    if (!ys.length) return null
+    ys.sort((a, b) => a - b)
+    const r: number[] = []
+    for (let y = ys[0]; y <= ys[ys.length - 1]; y++) r.push(y)
+    return r
+  }
+  const maxYears = contiguous((o) => o.hasMax), minYears = contiguous((o) => o.hasMin)
+  if (!maxYears && !minYears) return null
+  const out: Record<string, { years: number[]; m: TLMetric }> = {}
+  const put = (k: string, v: { years: number[]; m: TLMetric } | null) => { if (v) out[k] = v }
+  const extSeries = (years: number[] | null, pick: (o: Y) => [number | null, string | null], dir: 'max' | 'min') => {
+    if (!years) return null
+    const val: (number | null)[] = [], dt: (string | null)[] = []
+    for (const y of years) { const o = yr.get(y); const p = o ? pick(o) : [null, null] as [number | null, string | null]; val.push(p[0]); dt.push(p[1]) }
+    return { years, m: { kind: 'ext' as const, dir, val, dt } }
+  }
+  put('maxTemp', extSeries(maxYears, (o) => [o.maxV, o.maxD], 'max'))
+  put('minTemp', extSeries(minYears, (o) => [o.minV, o.minD], 'min'))
+  put('warmNight', extSeries(minYears, (o) => [o.nightV, o.nightD], 'max'))
+  const cntSeries = (years: number[] | null, field: 'dayCount' | 'nightCount' | 'dayStreak' | 'nightStreak', t: number) => {
+    if (!years) return null
+    const all: number[] = []
+    for (const y of years) { const o = yr.get(y); all.push(o ? (o[field][t] || 0) : 0) }
+    return { years, m: { kind: 'count' as const, all } }
+  }
+  for (const t of HEAT) { const [dk, sk] = heatKey[t]; put(dk, cntSeries(maxYears, 'dayCount', t)); put(sk, cntSeries(maxYears, 'dayStreak', t)) }
+  for (const t of NIGHT) { const [dk, sk] = nightKey[t]; put(dk, cntSeries(minYears, 'nightCount', t)); put(sk, cntSeries(minYears, 'nightStreak', t)) }
+  if (!Object.keys(out).length) return null
+  stationStatsCache.set(id, out)
+  return out
+}
+
+// Rekord-Wert (Headline) je Metrik — autoritativ aus records.json (via reference.sh, inkl.
+// tagesaktuellem --recent-Merge). Bewusst nicht aus der berechneten Zeitreihe abgeleitet:
+// das KL-Produkt hinter records.json ist für das laufende Jahr frischer/exakter als die
+// kombinierte POI+Archiv-Reihe, aus der der Graph gezeichnet wird.
+function recEntryHead(key: string, r: RecEntry, unit: string): { valueText: string; sub: string; has: boolean } | null {
+  const fmtV = (v: number) => (unit === '°' ? v.toFixed(1).replace('.', ',') + '°' : `${v} ${unit}`)
+  const span = (a?: string, b?: string) => (a && b ? `${fmtDate(a)} – ${fmtDate(b)}` : a ? fmtDate(a) : '')
+  const ext = (v?: number, d?: string) => (v == null ? null : { valueText: fmtV(v), sub: d ? fmtDate(d) : '', has: true })
+  const cnt = (v?: number, y?: number) => ({ valueText: fmtV(v ?? 0), sub: (v ?? 0) > 0 && y ? `Rekordjahr ${y}` : 'noch nie', has: (v ?? 0) > 0 })
+  const streak = (v?: number, a?: string, b?: string) => ({ valueText: fmtV(v ?? 0), sub: (v ?? 0) > 0 ? span(a, b) : 'noch nie', has: (v ?? 0) > 0 })
+  switch (key) {
+    case 'maxTemp': return ext(r.maxC, r.maxDate)
+    case 'minTemp': return ext(r.minC, r.minDate)
+    case 'warmNight': return ext(r.nightC, r.nightDate)
+    case 'hotDays': return cnt(r.hotDays, r.hotYear)
+    case 'desertDays': return cnt(r.desertDays, r.desertYear)
+    case 'extremeDays': return cnt(r.extremeDays, r.extremeYear)
+    case 'glutDays': return cnt(r.glutDays, r.glutYear)
+    case 'tropN': return cnt(r.tropN, r.tropYear)
+    case 'wnightN': return cnt(r.wnightN, r.wnightYear)
+    case 'stropN': return cnt(r.stropN, r.stropYear)
+    case 'hotStreak': return streak(r.heatLen, r.heatStart, r.heatEnd)
+    case 'desertStreak': return streak(r.desertLen, r.desertStart, r.desertEnd)
+    case 'extremeStreak': return streak(r.extremeLen, r.extremeStart, r.extremeEnd)
+    case 'glutStreak': return streak(r.glutLen, r.glutStart, r.glutEnd)
+    case 'tropStreak': return streak(r.tropLen, r.tropStart, r.tropEnd)
+    case 'wnightStreak': return streak(r.wnightLen, r.wnightStart, r.wnightEnd)
+    case 'stropStreak': return streak(r.stropLen, r.stropStart, r.stropEnd)
+    default: return null
+  }
+}
+
+// Inhalt des Rekorde-Tabs: Übersicht (Karten) oder — wenn eine Metrik gewählt ist — deren
+// Zeitverlauf mit „zurück". Setzt recCtx (für den Hover) als Seiteneffekt via Rückgabe.
+function stationRecordPanel(id: string): { html: string; ctx: RecCtx | null } {
+  const rec = records?.records[id]
+  if (!rec) return { html: '<p class="empty">Keine Rekorddaten verfügbar.</p>', ctx: null }
+  const isExt = (k: string) => k === 'maxTemp' || k === 'minTemp' || k === 'warmNight'
+
+  // Einzelne Metrik gewählt -> Zeitverlauf (Graph aus der kombinierten Reihe) + „zurück".
+  if (recDetailMetric) {
+    const key = recDetailMetric, meta = REC_METRICS[key]
+    const back = `<button type="button" class="rec-back" data-recback="1">← Alle Rekorde</button>`
+    const s = stationStats(id)?.[key]
+    if (!s) return { html: back + '<p class="empty">Kein Verlauf verfügbar.</p>', ctx: null }
+    const chart = recordChart(key, s.years, s.m, true)
+    const head = recEntryHead(key, rec, meta.unit)
+    const html = back +
+      `<h3 class="rec-detail-h">${esc(meta.title)}${meta.thr ? `<span class="detail-badge">${meta.thr}</span>` : ''}</h3>` +
+      (head?.has ? `<div class="rec-detail-sub">Rekord: <b>${esc(head.valueText)}</b> · ${esc(head.sub)}</div>` : '') +
+      `<div class="detail-panel">${chart.html}</div>`
+    return { html, ctx: chart.ctx }
+  }
+
+  // Übersicht: Karten (Werte aus records.json). Extreme immer; Zähl-/Serien-Metriken nur wenn
+  // je erreicht — nicht erreichte Schwellen werden knapp als „nie erreicht" gesammelt.
+  const cards: string[] = [], never: string[] = []
+  for (const sm of STATION_METRICS) {
+    const meta = REC_METRICS[sm.key]
+    const head = recEntryHead(sm.key, rec, meta.unit)
+    const note = meta.thr ? ` <span class="rec-note">${meta.thr}</span>` : ''
+    const headTxt = `<span class="rec-ico">${sm.icon}</span><span class="rec-k">${sm.label}${note}</span>`
+    if (head?.has) {
+      const vcls = isExt(sm.key) ? (sm.key === 'minTemp' ? 'cool' : 'hot') : ''
+      cards.push(`<button type="button" class="rec-card" data-recmetric="${sm.key}">${headTxt}` +
+        `<span class="rec-v ${vcls}">${head.valueText}</span><span class="rec-sub">${esc(head.sub)}</span></button>`)
+    } else if (!sm.key.includes('Streak')) {
+      never.push(`${sm.label}${meta.thr ? ` (${meta.thr})` : ''}`)
+    }
+  }
+  const neverTxt = never.length ? `<div class="rec-never">Nie erreicht: ${esc(never.join(' · '))}</div>` : ''
+  const html = `<div class="rec-grid">${cards.join('')}</div>${neverTxt}` +
+    `<div class="rec-hint dim">Karte antippen für den Verlauf über die Jahre.</div>`
+  return { html, ctx: null }
 }
 
 function renderDetail(): void {
@@ -1331,12 +1542,23 @@ function renderDetail(): void {
     `<button data-tab="${t}" class="${detailTab === t ? 'active' : ''}">${lbl}</button>`
   const tabs = `<div class="seg detail-tabs">` +
     tabBtn('verlauf', 'Verlauf') + tabBtn('vmax', 'Verteilung Max') +
-    tabBtn('vmin', 'Verteilung Min') + tabBtn('kalender', 'Kalender') + `</div>`
+    tabBtn('vmin', 'Verteilung Min') + tabBtn('kalender', 'Kalender') +
+    tabBtn('rekorde', 'Rekorde') + `</div>`
 
   let panel = '<p class="empty">Kein Verlauf verfügbar.</p>'
   sparkCtx = null
   distCtx = null
-  if (chartSer) {
+  recCtx = null
+  if (detailTab === 'rekorde') {
+    if (!records) {                                  // records.json (Rekord-Werte) erst bei Bedarf laden
+      panel = '<p class="empty">lädt Rekorde …</p>'
+      void ensureRecords().then(() => { if (detailId === id && detailTab === 'rekorde') renderDetail() })
+    } else {
+      const r = stationRecordPanel(id)
+      recCtx = r.ctx
+      panel = r.html
+    }
+  } else if (chartSer) {
     if (detailTab === 'verlauf') {
       const o = overlayBuild(chartSer, chartDates, ref, liveYears)
       sparkCtx = o.ctx
@@ -1743,7 +1965,11 @@ yearSelEl.addEventListener('click', (e) => {
 })
 detailBody.addEventListener('click', (e) => {
   const t = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-tab]')
-  if (t) { detailTab = t.dataset.tab as DetailTab; renderDetail(); return }
+  if (t) { detailTab = t.dataset.tab as DetailTab; recDetailMetric = null; renderDetail(); return }
+  const rm = (e.target as HTMLElement).closest<HTMLElement>('[data-recmetric]')
+  if (rm) { recDetailMetric = rm.dataset.recmetric!; renderDetail(); return }   // Stations-Rekord -> Zeitverlauf
+  const rb = (e.target as HTMLElement).closest<HTMLElement>('[data-recback]')
+  if (rb) { recDetailMetric = null; renderDetail(); return }                    // zurück zur Übersicht
   const cy = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-calyears]')
   if (cy) {
     const v = cy.dataset.calyears!
