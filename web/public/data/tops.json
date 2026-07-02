@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-07-02T19:07:43Z",
+  "generated_utc": "2026-07-02T20:07:34Z",
   "periods": {
     "day": {
       "key": "2026-07-02",
@@ -1427,8 +1427,8 @@
           "name": "WESTERMARKELSDORF",
           "max_c": 20.9,
           "max_obs_utc": "2026-07-02T11:00:00Z",
-          "min_c": 17.9,
-          "min_obs_utc": "2026-07-02T03:00:00Z"
+          "min_c": 17.6,
+          "min_obs_utc": "2026-07-02T19:00:00Z"
         },
         {
           "id": "10044",
@@ -1579,8 +1579,8 @@
           "name": "HELGOLAND",
           "max_c": 18.8,
           "max_obs_utc": "2026-07-02T08:00:00Z",
-          "min_c": 17.2,
-          "min_obs_utc": "2026-07-02T17:00:00Z"
+          "min_c": 17.0,
+          "min_obs_utc": "2026-07-02T19:00:00Z"
         },
         {
           "id": "10033",
@@ -4833,8 +4833,8 @@
           "name": "HELGOLAND",
           "max_c": 20.3,
           "max_obs_utc": "2026-07-01T14:00:00Z",
-          "min_c": 17.2,
-          "min_obs_utc": "2026-07-02T17:00:00Z"
+          "min_c": 17.0,
+          "min_obs_utc": "2026-07-02T19:00:00Z"
         },
         {
           "id": "10574",
