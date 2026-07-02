@@ -53,7 +53,7 @@ aktualisiert per GitHub Actions und über GitHub Pages ausgeliefert.
 | `latest.json` | aktueller Snapshot (Rangliste „Jetzt") | ✅ |
 | `tops.json` | Höchst-/Tiefstwerte je Station für Tag/Woche/Monat/Jahr | ✅ |
 | `daily/<datum>.json` | Tages-Min/Max je Station | ✅ |
-| `history.csv` | Roh-Log aller Messungen (dedupliziert) | ✅ |
+| `history.csv` | Roh-Log der Messungen (dedupliziert), **rollierendes Fenster** der letzten 7 Tage (`HISTORY_KEEP_DAYS`) — dient nur als Dedup-Quelle für `daily/`; das Langzeit-Archiv liegt in `daily/` | ✅ |
 | `reference.json` | Tages-Klimatologie 1991–2020 je Station (Normal-Verlauf + Referenzverteilung) | ✅ statisch |
 | `history/<wmo>.json` | volle Tageshistorie je Station (oft Jahrzehnte zurück), on-demand geladen | ✅ statisch |
 | `timeline.json` | nationale Jahres-Zeitreihen je Rekord-Metrik (heißester Tag / Zähler pro Jahr) — speist den Rekord-Zeitverlauf im Modal | ✅ statisch |
@@ -70,8 +70,9 @@ Gespeichert wird durchgängig **UTC**; die Website rechnet für die Anzeige in
 - **`temp-leaderboard.sh`** lädt die aktuellen POI-Messwerte des DWD (eine CSV je
   Station), ermittelt die deutschen Stationen über den MOSMIX-Katalog und schreibt
   daraus `latest.json` + `tops.json` + `series.json` + `stations.json` + `stats.json`,
-  führt die Tages-Min/Max in `daily/` fort und hängt neue Messungen dedupliziert an
-  `history.csv` an. Gibt zusätzlich ein Leaderboard im Terminal aus
+  führt die Tages-Min/Max in `daily/` fort und pflegt `history.csv` (Dedup-Quelle,
+  rollierendes 7-Tage-Fenster via `HISTORY_KEEP_DAYS`; ältere Messungen kann die ~24 h-POI-Datei
+  ohnehin nicht erneut liefern). Gibt zusätzlich ein Leaderboard im Terminal aus
   (`--help` zeigt alle Optionen).
 - **`backfill.sh [JAHR] [--gaps]`** füllt die Tageshistorie eines Jahres (Höchst-/
   Tiefstwerte) aus dem DWD-Klimaarchiv nach (Standard: aktuelles Jahr; `recent`

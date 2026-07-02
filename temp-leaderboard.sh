@@ -204,7 +204,7 @@ fi
 log "${DIM}» Schreibe Historie & Tages-JSON …${R}"
 python3 - "$DATA" "$RES" <<'PY'
 import sys, os, io, csv, json, glob, math
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 data_dir, res_path = sys.argv[1], sys.argv[2]
 now_dt = datetime.now(timezone.utc)
@@ -253,22 +253,30 @@ json.dump({"generated_utc": run_utc, "station_count": len(snap), "stations": sna
 hist = os.path.join(data_dir, "history.csv")
 daily_dir = os.path.join(data_dir, "daily")
 os.makedirs(daily_dir, exist_ok=True)
+# history.csv dient nur als Dedup-Quelle (Station, obs_utc), damit Messungen nicht doppelt in
+# daily/ zaehlen. Sie wird auf ein rollierendes Fenster (Default 7 Tage) beschnitten: aeltere
+# Messungen kann die ~24h-POI-Datei nie erneut liefern, sind fuers Dedup also irrelevant. Das
+# Langzeit-Archiv steckt ohnehin in daily/. So bleibt die Datei beschraenkt statt endlos zu wachsen.
+keep_days = int(os.environ.get("HISTORY_KEEP_DAYS", "7"))
+cutoff = (now_dt - timedelta(days=keep_days)).strftime("%Y-%m-%dT%H:%M:%SZ")
 seen = set()
+kept = []                                  # bestehende Zeilen im Fenster (obs_utc >= cutoff)
 if os.path.exists(hist):
     with io.open(hist, encoding="utf-8", newline="") as f:
         r = csv.reader(f); next(r, None)
         for rec in r:
-            if len(rec) >= 4 and rec[3]:
-                seen.add((rec[1], rec[3]))
+            if len(rec) >= 5 and rec[3] and rec[3] >= cutoff:
+                kept.append(rec); seen.add((rec[1], rec[3]))
 fresh = [row for row in rows if row[3] and (row[1], row[3]) not in seen]
-if fresh:
-    new = not os.path.exists(hist)
-    with io.open(hist, "a", encoding="utf-8", newline="") as f:
+# Datei komplett neu schreiben (Header + Fenster-Zeilen + neue) -> beschneidet zugleich Altzeilen
+if fresh or os.path.exists(hist):
+    with io.open(hist, "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f)
-        if new:
-            w.writerow(["run_utc", "station_id", "name", "obs_utc", "temp_c"])
+        w.writerow(["run_utc", "station_id", "name", "obs_utc", "temp_c"])
+        w.writerows(kept)
         for t, sid, name, obs_iso, _ in fresh:
             w.writerow([run_utc, sid, name, obs_iso, t])
+if fresh:
     buckets = {}
     for t, sid, name, obs_iso, obs_date in fresh:
         buckets.setdefault(obs_date, []).append((t, sid, name, obs_iso))
