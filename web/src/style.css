@@ -378,6 +378,12 @@ body {
 .spark-legend .recc-lbl-i { color: var(--t-hot); font-weight: 700; }
 .recc-trend { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-dasharray: 5 3; opacity: .5; }
 .spark-legend .recc-trend-i { color: var(--ink); font-weight: 700; }
+/* zweiter Trend (Jahresmittel, ab 1960): solide & kräftig (Gesamttrend ist dünn-gestrichelt) —
+   hebt die Beschleunigung hervor; bewusst neutral (Ink), Datenfarben tragen Linie & 30-J.-Mittel */
+.recc-trend2 { fill: none; stroke: var(--ink); stroke-width: 2; opacity: .8; }
+.spark-legend .recc-trend2-i { color: var(--ink); font-weight: 700; }
+.chart-tip .trend2lbl { color: var(--ink); font-weight: 700; }
+.guide-dot.trend2 { fill: var(--ink); }
 .recc-avg { fill: none; stroke: var(--t-ref); stroke-width: 1.6; opacity: .85; }
 .spark-legend .recc-avg-i { color: var(--t-ref); font-weight: 700; }
 /* Record-Chart-Legende: Segmente umbrechen nur als Ganzes, „·"-Trenner klebt am Segment */

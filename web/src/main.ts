@@ -719,6 +719,7 @@ type RecCtx = {
   years: number[]; val: (number | null)[]; st: (string | null)[] | null; dt: (string | null)[] | null
   unit: string; lo: number; hi: number; W: number; H: number; padL: number; padR: number; padT: number; padB: number
   trend: { slope: number; intercept: number } | null; avg: (number | null)[] | null
+  trend2?: { slope: number; intercept: number; from: number } | null   // zweiter Trend (Jahresmittel: ab X)
 }
 let recCtx: RecCtx | null = null
 let meanCtx: RecCtx | null = null   // Hover-Kontext der Jahresmittel-Karte auf der Rekorde-Seite
@@ -759,6 +760,11 @@ function onRecordMove(svg: SVGSVGElement, clientX: number, clientY: number, c: R
     const tv = c.trend.intercept + c.trend.slope * c.years[i]
     if (inRange(tv)) g += `<circle class="guide-dot trend" cx="${gx.toFixed(1)}" cy="${ys(tv).toFixed(1)}" r="3"/>`
     rows.push(`<span class="trendlbl">Trend ${fmtC(tv)}</span>`)
+  }
+  if (c.trend2 && c.years[i] >= c.trend2.from) {
+    const tv = c.trend2.intercept + c.trend2.slope * c.years[i]
+    if (inRange(tv)) g += `<circle class="guide-dot trend2" cx="${gx.toFixed(1)}" cy="${ys(tv).toFixed(1)}" r="3"/>`
+    rows.push(`<span class="trend2lbl">Trend ab ${c.trend2.from} ${fmtC(tv)}</span>`)
   }
   const av = c.avg?.[i]
   if (av != null) {
@@ -832,8 +838,10 @@ function theilSen(pts: { x: number; y: number }[]): { slope: number; intercept: 
 function trendLayer(
   years: number[], vals: (number | null)[], unit: string,
   xs: (i: number) => number, ys: (v: number) => number, lo: number, hi: number, allow: boolean,
+  opts: { label?: string; lineCls?: string; iCls?: string; glyph?: string } = {},
 ): { path: string; legend: string; fit: { slope: number; intercept: number } } | null {
   if (!allow) return null
+  const label = opts.label ?? 'Trend', lineCls = opts.lineCls ?? 'recc-trend', iCls = opts.iCls ?? 'recc-trend-i', glyph = opts.glyph ?? '╌'
   const pts = years
     .map((y, i) => ({ x: y, y: vals[i], i }))
     .filter((p): p is { x: number; y: number; i: number } => p.y != null)
@@ -856,12 +864,12 @@ function trendLayer(
   if (t0 >= t1) return null
   const lerp = (t: number) => ({ i: i0 + t * (i1 - i0), v: v0 + t * dv })
   const a = lerp(t0), b = lerp(t1)
-  const path = `<line class="recc-trend" x1="${xs(a.i).toFixed(1)}" y1="${ys(a.v).toFixed(1)}" ` +
+  const path = `<line class="${lineCls}" x1="${xs(a.i).toFixed(1)}" y1="${ys(a.v).toFixed(1)}" ` +
     `x2="${xs(b.i).toFixed(1)}" y2="${ys(b.v).toFixed(1)}"/>`
   const per10 = fit.slope * 10
   const mag = Math.abs(per10).toFixed(1).replace('.', ',')
   const val = unit === '°' ? `${mag}°` : `${mag} ${unit}`
-  const legend = `<span class="recc-trend-i">╌ Trend ${per10 >= 0 ? '+' : '−'}${val}/Jahrzehnt</span>`
+  const legend = `<span class="${iCls}">${glyph} ${label} ${per10 >= 0 ? '+' : '−'}${val}/Jahrzehnt</span>`
   return { path, legend, fit }
 }
 
@@ -960,8 +968,10 @@ function recordChart(key: string, years: number[], m: TLMetric, local = false): 
   return { html: svg + cap, ctx }
 }
 
-// Jahresmitteltemperatur Deutschlands über die Zeit — schlichte Linie + Trend + 30-J.-Mittel.
-// Volle Breite, permanent oben auf der Rekorde-Seite. Datengrundlage: annual-mean.json.
+// Jahresmitteltemperatur Deutschlands über die Zeit — schlichte Linie + Gesamttrend + zweiter
+// Trend ab TREND2_FROM (zeigt die Beschleunigung) + 30-J.-Mittel. Volle Breite, permanent oben
+// auf der Rekorde-Seite. Datengrundlage: annual-mean.json (offizielles DWD-Gebietsmittel).
+const TREND2_FROM = 1960
 function meanChart(am: AnnualMean): { html: string; ctx: RecCtx } {
   const years = am.years, vals = am.mean, n = years.length
   const W = 900, H = 240, padL = 34, padR = 14, padT = 16, padB = 24
@@ -979,9 +989,14 @@ function meanChart(am: AnnualMean): { html: string; ctx: RecCtx } {
   })
   let body = dots + `<path class="recc-line" d="${d.trim()}"/>`
   const avg = movingAvgLayer(years, vals, xs, ys, lo, hi, true)
-  const trend = trendLayer(years, vals, '°', xs, ys, lo, hi, true)
+  const trend = trendLayer(years, vals, '°', xs, ys, lo, hi, true, { label: 'Trend gesamt' })
+  // Zweiter Trend ab TREND2_FROM: gleiche Reihe, Jahre davor ausgeblendet -> Fit nur über jüngeren Teil
+  const from = TREND2_FROM
+  const valsRecent = vals.map((v, i) => (years[i] >= from ? v : null))
+  const trend2 = trendLayer(years, valsRecent, '°', xs, ys, lo, hi, true,
+    { label: `Trend ab ${from}`, lineCls: 'recc-trend2', iCls: 'recc-trend2-i', glyph: '—' })
   const segs = ['<span class="recc-lbl-i">— Jahresmittel</span>']
-  for (const o of [avg, trend]) if (o) { body += o.path; segs.push(o.legend) }
+  for (const o of [avg, trend, trend2]) if (o) { body += o.path; segs.push(o.legend) }
   const cap = `<div class="spark-legend recc-legend">${segs.map((s) => `<span>${s}</span>`).join('')}</div>`
   const yl = `<text class="spark-lbl" x="2" y="${(ys(hi) + 3).toFixed(1)}">${hi.toFixed(1).replace('.', ',')}°</text>` +
     `<text class="spark-lbl" x="2" y="${(ys(lo) + 3).toFixed(1)}">${lo.toFixed(1).replace('.', ',')}°</text>`
@@ -991,7 +1006,7 @@ function meanChart(am: AnnualMean): { html: string; ctx: RecCtx } {
     `<line class="spark-axis" x1="${padL}" y1="${padT}" x2="${padL}" y2="${H - padB}"/>` +
     `<line class="spark-axis" x1="${padL}" y1="${(H - padB).toFixed(1)}" x2="${W - padR}" y2="${(H - padB).toFixed(1)}"/>` +
     body + months + yl + `<g class="recc-guide"></g></svg>`
-  const ctx: RecCtx = { years, val: vals, st: null, dt: null, unit: '°', lo, hi, W, H, padL, padR, padT, padB, trend: trend?.fit ?? null, avg: avg?.values ?? null }
+  const ctx: RecCtx = { years, val: vals, st: null, dt: null, unit: '°', lo, hi, W, H, padL, padR, padT, padB, trend: trend?.fit ?? null, avg: avg?.values ?? null, trend2: trend2 ? { ...trend2.fit, from } : null }
   return { html: svg + cap, ctx }
 }
 
