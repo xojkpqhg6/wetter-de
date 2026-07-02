@@ -398,6 +398,10 @@ body {
 .mean-title { font-family: var(--mono); font-size: 15px; font-weight: 700; color: var(--ink); }
 .mean-sub { font-family: var(--mono); font-size: 11.5px; color: var(--ink-soft); }
 .mean-card .recc { cursor: crosshair; }
+/* vorindustrielles Referenzniveau (Ø 1881–1910) */
+.mean-base { stroke: var(--t-cool); stroke-width: 1; stroke-dasharray: 2 3; opacity: .8; }
+.mean-base-lbl { fill: var(--t-cool); font-family: var(--mono); font-size: 10px; font-weight: 700; }
+.chart-tip .baselbl { color: var(--t-cool); font-weight: 700; }
 .rec-filter { display: flex; justify-content: center; margin: 0 0 16px; }
 .rec-grid {
   display: grid;

@@ -720,6 +720,7 @@ type RecCtx = {
   unit: string; lo: number; hi: number; W: number; H: number; padL: number; padR: number; padT: number; padB: number
   trend: { slope: number; intercept: number } | null; avg: (number | null)[] | null
   trend2?: { slope: number; intercept: number; from: number } | null   // zweiter Trend (Jahresmittel: ab X)
+  base?: number | null                                                 // vorindustrielles Niveau (Jahresmittel)
 }
 let recCtx: RecCtx | null = null
 let meanCtx: RecCtx | null = null   // Hover-Kontext der Jahresmittel-Karte auf der Rekorde-Seite
@@ -754,6 +755,10 @@ function onRecordMove(svg: SVGSVGElement, clientX: number, clientY: number, c: R
   } else {
     g += `<circle class="guide-dot mx" cx="${gx.toFixed(1)}" cy="${ys(v).toFixed(1)}" r="3"/>`
     rows.push(c.unit === '°' ? v.toFixed(1).replace('.', ',') + '°' : `${v} ${c.unit}`)
+  }
+  if (c.base != null && v != null) {
+    const dvb = v - c.base
+    rows.push(`<span class="baselbl">${dvb >= 0 ? '+' : '−'}${Math.abs(dvb).toFixed(1).replace('.', ',')}° ggü. vorindustriell</span>`)
   }
   // Trendwert (über die volle Spanne definiert) und gleitendes 30-J.-Mittel (nur wo berechnet)
   if (c.trend) {
@@ -987,7 +992,18 @@ function meanChart(am: AnnualMean): { html: string; ctx: RecCtx } {
     d += `${pen ? 'L' : 'M'}${x.toFixed(1)},${y.toFixed(1)} `; pen = true
     dots += `<circle class="recc-dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.6"/>`
   })
-  let body = dots + `<path class="recc-line" d="${d.trim()}"/>`
+  // Vorindustrielles Niveau: Ø 1881–1910 (Proxy für 1850–1900 — nur ~0,04° über 1881–1900, dafür
+  // volle 30-Jahre-Periode; eher konservativ). Horizontale Referenzlinie + Label (rechts, im Freiraum).
+  const PRE0 = 1881, PRE1 = 1910
+  const preVals = years.map((y, i) => (y >= PRE0 && y <= PRE1 ? vals[i] : null)).filter((v): v is number => v != null)
+  const base = preVals.length ? preVals.reduce((a, b) => a + b, 0) / preVals.length : null
+  let baseline = ''
+  if (base != null && base >= lo && base <= hi) {
+    const by = ys(base)
+    baseline = `<line class="mean-base" x1="${padL}" y1="${by.toFixed(1)}" x2="${W - padR}" y2="${by.toFixed(1)}"/>` +
+      `<text class="mean-base-lbl" x="${W - padR - 2}" y="${(by - 4).toFixed(1)}" text-anchor="end">vorindustriell ~${base.toFixed(1).replace('.', ',')}° · Ø ${PRE0}–${PRE1}</text>`
+  }
+  let body = baseline + dots + `<path class="recc-line" d="${d.trim()}"/>`
   const avg = movingAvgLayer(years, vals, xs, ys, lo, hi, true)
   const trend = trendLayer(years, vals, '°', xs, ys, lo, hi, true, { label: 'Trend gesamt' })
   // Zweiter Trend ab TREND2_FROM: gleiche Reihe, Jahre davor ausgeblendet -> Fit nur über jüngeren Teil
@@ -1006,7 +1022,7 @@ function meanChart(am: AnnualMean): { html: string; ctx: RecCtx } {
     `<line class="spark-axis" x1="${padL}" y1="${padT}" x2="${padL}" y2="${H - padB}"/>` +
     `<line class="spark-axis" x1="${padL}" y1="${(H - padB).toFixed(1)}" x2="${W - padR}" y2="${(H - padB).toFixed(1)}"/>` +
     body + months + yl + `<g class="recc-guide"></g></svg>`
-  const ctx: RecCtx = { years, val: vals, st: null, dt: null, unit: '°', lo, hi, W, H, padL, padR, padT, padB, trend: trend?.fit ?? null, avg: avg?.values ?? null, trend2: trend2 ? { ...trend2.fit, from } : null }
+  const ctx: RecCtx = { years, val: vals, st: null, dt: null, unit: '°', lo, hi, W, H, padL, padR, padT, padB, trend: trend?.fit ?? null, avg: avg?.values ?? null, trend2: trend2 ? { ...trend2.fit, from } : null, base }
   return { html: svg + cap, ctx }
 }
 
