@@ -347,12 +347,15 @@ body {
 .chart-tip .mn { color: var(--t-cool); font-weight: 700; }
 .chart-tip .dim { color: var(--ink-soft); }
 .chart-tip .reflbl { color: var(--t-ref); font-weight: 700; }
+.chart-tip .trendlbl { color: var(--ink-soft); font-weight: 700; }
 .spark { cursor: crosshair; }
 .spark-guide { pointer-events: none; }
 .guide-line { stroke: var(--ink-soft); stroke-width: 1; stroke-dasharray: 3 2; }
 .guide-dot.mx { fill: var(--t-hot); }
 .guide-dot.mn { fill: var(--t-cool); }
 .guide-dot.ref { fill: var(--t-ref); }
+.guide-dot.trend { fill: var(--ink); opacity: .6; }
+.guide-dot.avg { fill: var(--t-ref); }
 
 /* Verteilungskurve (Tabs "Verteilung Max/Min") */
 .dist { width: 100%; height: auto; cursor: crosshair; }
@@ -373,6 +376,10 @@ body {
 .recc-mk { fill: var(--t-hot); }
 .recc-lbl { fill: var(--t-hot); font-family: var(--mono); font-size: 10px; font-weight: 700; }
 .spark-legend .recc-lbl-i { color: var(--t-hot); font-weight: 700; }
+.recc-trend { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-dasharray: 5 3; opacity: .5; }
+.spark-legend .recc-trend-i { color: var(--ink); font-weight: 700; }
+.recc-avg { fill: none; stroke: var(--t-ref); stroke-width: 1.6; opacity: .85; }
+.spark-legend .recc-avg-i { color: var(--t-ref); font-weight: 700; }
 
 /* ---- Rekorde-Tafel ---- */
 .rec-filter { display: flex; justify-content: center; margin: 0 0 16px; }

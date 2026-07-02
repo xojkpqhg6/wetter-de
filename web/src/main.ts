@@ -704,6 +704,7 @@ function mergedMetric(key: string): { years: number[]; m: TLMetric } {
 type RecCtx = {
   years: number[]; val: (number | null)[]; st: (string | null)[] | null; dt: (string | null)[] | null
   unit: string; lo: number; hi: number; W: number; H: number; padL: number; padR: number; padT: number; padB: number
+  trend: { slope: number; intercept: number } | null; avg: (number | null)[] | null
 }
 let recCtx: RecCtx | null = null
 
@@ -729,18 +730,34 @@ function onRecordMove(svg: SVGSVGElement, clientX: number, clientY: number): voi
   const gx = c.padL + (n < 2 ? 0 : (i / (n - 1)) * (c.W - c.padL - c.padR))
   const ys = (v: number) => c.padT + (1 - (v - c.lo) / (c.hi - c.lo)) * (c.H - c.padT - c.padB)
   let g = `<line class="guide-line" x1="${gx.toFixed(1)}" y1="${c.padT}" x2="${gx.toFixed(1)}" y2="${(c.H - c.padB).toFixed(1)}"/>`
+  const inRange = (x: number) => x >= c.lo && x <= c.hi
+  const fmtC = (x: number) => (c.unit === '°' ? x.toFixed(1).replace('.', ',') + '°' : `${x.toFixed(1).replace('.', ',')} ${c.unit}`)
   const v = c.val[i]
-  let tip: string
+  const rows: string[] = []
   if (v == null) {
-    tip = `<b>${c.years[i]}</b><br>keine Daten`
+    rows.push('keine Daten')
   } else {
     g += `<circle class="guide-dot mx" cx="${gx.toFixed(1)}" cy="${ys(v).toFixed(1)}" r="3"/>`
-    const vtxt = c.unit === '°' ? v.toFixed(1).replace('.', ',') + '°' : `${v} ${c.unit}`
+    rows.push(c.unit === '°' ? v.toFixed(1).replace('.', ',') + '°' : `${v} ${c.unit}`)
+  }
+  // Trendwert (über die volle Spanne definiert) und gleitendes 30-J.-Mittel (nur wo berechnet)
+  if (c.trend) {
+    const tv = c.trend.intercept + c.trend.slope * c.years[i]
+    if (inRange(tv)) g += `<circle class="guide-dot trend" cx="${gx.toFixed(1)}" cy="${ys(tv).toFixed(1)}" r="3"/>`
+    rows.push(`<span class="trendlbl">Trend ${fmtC(tv)}</span>`)
+  }
+  const av = c.avg?.[i]
+  if (av != null) {
+    g += `<circle class="guide-dot avg" cx="${gx.toFixed(1)}" cy="${ys(av).toFixed(1)}" r="3"/>`
+    rows.push(`<span class="reflbl">30-J.-Mittel ${fmtC(av)}</span>`)
+  }
+  if (v != null) {
     const stId = c.st?.[i]
     const date = c.dt?.[i] ? fmtDate(c.dt[i]!) : ''
     const extra = [stId ? stName(stId) : '', date].filter(Boolean).join(' · ')
-    tip = `<b>${c.years[i]}</b><br>${vtxt}${extra ? `<br><span class="dim">${esc(extra)}</span>` : ''}`
+    if (extra) rows.push(`<span class="dim">${esc(extra)}</span>`)
   }
+  const tip = `<b>${c.years[i]}</b><br>${rows.join('<br>')}`
   const gg = svg.querySelector('.recc-guide')
   if (gg) gg.innerHTML = g
   showTip(tip, clientX, clientY)
@@ -768,6 +785,96 @@ function renderRecord(key: string): void {
     `<div class="facts"><div class="fact"><div class="k">Rekord</div><div class="v ${cls}">${headVal}</div>` +
     `<div class="k">${esc(headSub)}</div></div></div>` +
     `<div class="detail-panel">${chart.html}</div>`
+}
+
+// Metriken, für die eine Trendlinie sinnvoll ist: dicht besetzt (fast alle Jahre seit 1936)
+// und aussagekräftig. Bewusst ausgeschlossen (zu selten/nie in Deutschland, s. Diskussion):
+// Extremtage ≥ 40 °C, Gluttage ≥ 45 °C, Wüsten- (≥ 25 °C) und Super-Tropennächte (≥ 30 °C).
+const REC_TREND = new Set([
+  'maxTemp', 'minTemp', 'warmNight',
+  'hotStreak', 'desertDays', 'desertStreak',
+  'tropN', 'tropNMax', 'tropStreak',
+])
+
+// Theil-Sen-Trend über (Jahr, Wert)-Punkte: Median der paarweisen Steigungen — robust gegen
+// Ausreißer, ohne Verteilungsannahme (passt zu den schiefen Zähl-/Extremreihen).
+function theilSen(pts: { x: number; y: number }[]): { slope: number; intercept: number } | null {
+  if (pts.length < 3) return null
+  const med = (a: number[]): number => {
+    const s = [...a].sort((p, q) => p - q), h = s.length >> 1
+    return s.length % 2 ? s[h] : (s[h - 1] + s[h]) / 2
+  }
+  const slopes: number[] = []
+  for (let i = 0; i < pts.length; i++)
+    for (let j = i + 1; j < pts.length; j++)
+      if (pts[j].x !== pts[i].x) slopes.push((pts[j].y - pts[i].y) / (pts[j].x - pts[i].x))
+  if (!slopes.length) return null
+  const slope = med(slopes)
+  return { slope, intercept: med(pts.map((p) => p.y - slope * p.x)) }
+}
+
+// Trendlinie (Theil-Sen) + Legendentext für eine Reihe; null wenn nicht whitelisted oder zu dünn.
+// vals sind die Jahreswerte (bei Extremen der Tageswert je Jahr, nicht der Rekord-Umriss).
+function trendLayer(
+  key: string, years: number[], vals: (number | null)[], unit: string,
+  xs: (i: number) => number, ys: (v: number) => number, lo: number, hi: number,
+): { path: string; legend: string; fit: { slope: number; intercept: number } } | null {
+  if (!REC_TREND.has(key)) return null
+  const pts = years
+    .map((y, i) => ({ x: y, y: vals[i], i }))
+    .filter((p): p is { x: number; y: number; i: number } => p.y != null)
+  if (pts.length < 3) return null
+  const fit = theilSen(pts.map((p) => ({ x: p.x, y: p.y })))
+  if (!fit || fit.slope === 0) return null
+  // Endpunkte über die volle Datenspanne; Index ∝ Jahr (lückenlose Reihe) → Gerade bleibt gerade.
+  const i0 = pts[0].i, i1 = pts[pts.length - 1].i
+  let v0 = fit.intercept + fit.slope * pts[0].x
+  let v1 = fit.intercept + fit.slope * pts[pts.length - 1].x
+  // Segment auf den sichtbaren Wertebereich [lo,hi] klippen (t entlang i0→i1).
+  const dv = v1 - v0
+  let t0 = 0, t1 = 1
+  if (dv === 0) { if (v0 < lo || v0 > hi) return null }
+  else {
+    const tl = (lo - v0) / dv, th = (hi - v0) / dv
+    t0 = Math.max(t0, Math.min(tl, th))
+    t1 = Math.min(t1, Math.max(tl, th))
+  }
+  if (t0 >= t1) return null
+  const lerp = (t: number) => ({ i: i0 + t * (i1 - i0), v: v0 + t * dv })
+  const a = lerp(t0), b = lerp(t1)
+  const path = `<line class="recc-trend" x1="${xs(a.i).toFixed(1)}" y1="${ys(a.v).toFixed(1)}" ` +
+    `x2="${xs(b.i).toFixed(1)}" y2="${ys(b.v).toFixed(1)}"/>`
+  const per10 = fit.slope * 10
+  const mag = Math.abs(per10).toFixed(1).replace('.', ',')
+  const val = unit === '°' ? `${mag}°` : `${mag} ${unit}`
+  const legend = `<span class="recc-trend-i">╌ Trend ${per10 >= 0 ? '+' : '−'}${val}/Jahrzehnt</span>`
+  return { path, legend, fit }
+}
+
+// Gleitender 30-Jahres-Mittelwert (zentriert, Fenster [i-15 … i+14]). Zeigt den geglätteten
+// Verlauf/die Dekadenstruktur neben der linearen Trendlinie. Randpunkte brauchen ≥ 20 der 30
+// Jahre — der zentrierte Schnitt endet daher bewusst ~4 Jahre vor dem aktuellen Rand (ein
+// zentriertes Mittel am letzten Jahr gäbe es sonst nur als verzerrtes Trailing-Mittel).
+function movingAvgLayer(
+  key: string, years: number[], vals: (number | null)[],
+  xs: (i: number) => number, ys: (v: number) => number, lo: number, hi: number,
+): { path: string; legend: string; values: (number | null)[] } | null {
+  if (!REC_TREND.has(key)) return null
+  const before = 15, after = 14, minN = 20
+  const clamp = (v: number) => Math.max(lo, Math.min(hi, v))
+  const values: (number | null)[] = years.map(() => null)
+  const pts: { i: number; v: number }[] = []
+  for (let i = 0; i < years.length; i++) {
+    let s = 0, c = 0
+    for (let j = Math.max(0, i - before); j <= Math.min(years.length - 1, i + after); j++) {
+      const v = vals[j]; if (v == null) continue
+      s += v; c++
+    }
+    if (c >= minN) { values[i] = s / c; pts.push({ i, v: s / c }) }
+  }
+  if (pts.length < 2) return null
+  const d = pts.map((p, k) => `${k === 0 ? 'M' : 'L'}${xs(p.i).toFixed(1)},${ys(clamp(p.v)).toFixed(1)}`).join(' ')
+  return { path: `<path class="recc-avg" d="${d}"/>`, legend: `<span class="recc-avg-i">⎯ 30-J.-Mittel</span>`, values }
 }
 
 function recordChart(key: string, years: number[], m: TLMetric): { html: string; ctx: RecCtx } {
@@ -817,13 +924,17 @@ function recordChart(key: string, years: number[], m: TLMetric): { html: string;
     body = `<path class="recc-line" d="${d.trim()}"/>` + mk
     cap = `<div class="spark-legend">${meta.title} pro Jahr · bundesweit · Rekordjahr markiert · <span class="dim">Punkt für Details</span></div>`
   }
+  // Overlays: gleitendes Mittel zuerst (darunter), dann die Trendlinie darüber.
+  const avg = movingAvgLayer(key, years, vals, xs, ys, lo, hi)
+  const trend = trendLayer(key, years, vals, meta.unit, xs, ys, lo, hi)
+  for (const o of [avg, trend]) if (o) { body += o.path; cap = cap.replace('</div>', ` · ${o.legend}</div>`) }
   let months = ''
   years.forEach((y, i) => { if (y % 20 === 0) months += `<text class="spark-lbl" x="${xs(i).toFixed(1)}" y="${H - 6}" text-anchor="middle">${y}</text>` })
   const svg = `<svg class="recc" viewBox="0 0 ${W} ${H}">` +
     `<line class="spark-axis" x1="${padL}" y1="${padT}" x2="${padL}" y2="${H - padB}"/>` +
     `<line class="spark-axis" x1="${padL}" y1="${(H - padB).toFixed(1)}" x2="${W - padR}" y2="${(H - padB).toFixed(1)}"/>` +
     body + months + yl + `<g class="recc-guide"></g></svg>`
-  const ctx: RecCtx = { years, val: vals, st: m.st ?? null, dt: m.dt ?? null, unit: meta.unit, lo, hi, W, H, padL, padR, padT, padB }
+  const ctx: RecCtx = { years, val: vals, st: m.st ?? null, dt: m.dt ?? null, unit: meta.unit, lo, hi, W, H, padL, padR, padT, padB, trend: trend?.fit ?? null, avg: avg?.values ?? null }
   return { html: svg + cap, ctx }
 }
 
