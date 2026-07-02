@@ -2,12 +2,12 @@
   "date": "2026-07-01",
   "stations": {
     "10015": {
-      "max_c": 19.3,
-      "max_obs_utc": "2026-07-01T06:00:00Z",
-      "min_c": 18.1,
-      "min_obs_utc": "2026-07-01T04:00:00Z",
+      "max_c": 20.3,
+      "max_obs_utc": "2026-07-01T14:00:00Z",
+      "min_c": 17.8,
+      "min_obs_utc": "2026-07-01T22:00:00Z",
       "name": "HELGOLAND",
-      "samples": 7
+      "samples": 19
     },
     "10020": {
       "max_c": 21.9,
@@ -1634,5 +1634,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-07-02T03:07:51Z"
+  "updated_utc": "2026-07-02T13:03:57Z"
 }
