@@ -1,10 +1,10 @@
 {
-  "generated_utc": "2026-07-03T18:07:45Z",
+  "generated_utc": "2026-07-03T20:07:34Z",
   "periods": {
     "day": {
       "key": "2026-07-03",
-      "station_count": 202,
-      "hidden": 2,
+      "station_count": 201,
+      "hidden": 3,
       "stations": [
         {
           "id": "10776",
@@ -1159,14 +1159,6 @@
           "min_obs_utc": "2026-07-03T03:00:00Z"
         },
         {
-          "id": "10335",
-          "name": "BUECKEBURG",
-          "max_c": 19.6,
-          "max_obs_utc": "2026-07-03T10:00:00Z",
-          "min_c": 12.1,
-          "min_obs_utc": "2026-07-03T04:00:00Z"
-        },
-        {
           "id": "10433",
           "name": "LUEDGE",
           "max_c": 19.6,
@@ -1395,8 +1387,8 @@
           "name": "NORDERNEY",
           "max_c": 17.7,
           "max_obs_utc": "2026-07-03T14:00:00Z",
-          "min_c": 16.6,
-          "min_obs_utc": "2026-07-03T04:00:00Z"
+          "min_c": 16.4,
+          "min_obs_utc": "2026-07-03T19:00:00Z"
         },
         {
           "id": "10129",
@@ -1459,8 +1451,8 @@
           "name": "CUXHAVEN",
           "max_c": 17.5,
           "max_obs_utc": "2026-07-03T12:00:00Z",
-          "min_c": 15.8,
-          "min_obs_utc": "2026-07-03T00:00:00Z"
+          "min_c": 15.4,
+          "min_obs_utc": "2026-07-03T19:00:00Z"
         },
         {
           "id": "10015",
@@ -1619,8 +1611,8 @@
           "name": "ZUGSPITZE",
           "max_c": 3.1,
           "max_obs_utc": "2026-07-03T16:00:00Z",
-          "min_c": 2.1,
-          "min_obs_utc": "2026-07-03T12:00:00Z"
+          "min_c": 1.9,
+          "min_obs_utc": "2026-07-03T19:00:00Z"
         }
       ]
     },
@@ -2474,8 +2466,8 @@
           "name": "BUECKEBURG",
           "max_c": 26.9,
           "max_obs_utc": "2026-06-30T14:00:00Z",
-          "min_c": 12.1,
-          "min_obs_utc": "2026-07-03T04:00:00Z"
+          "min_c": 13.1,
+          "min_obs_utc": "2026-07-02T03:00:00Z"
         },
         {
           "id": "10818",
@@ -3194,8 +3186,8 @@
           "name": "NORDERNEY",
           "max_c": 21.7,
           "max_obs_utc": "2026-06-29T14:00:00Z",
-          "min_c": 16.6,
-          "min_obs_utc": "2026-07-03T04:00:00Z"
+          "min_c": 16.4,
+          "min_obs_utc": "2026-07-03T19:00:00Z"
         },
         {
           "id": "10552",
@@ -4065,8 +4057,8 @@
           "name": "BUECKEBURG",
           "max_c": 25.4,
           "max_obs_utc": "2026-07-01T14:00:00Z",
-          "min_c": 12.1,
-          "min_obs_utc": "2026-07-03T04:00:00Z"
+          "min_c": 13.1,
+          "min_obs_utc": "2026-07-02T03:00:00Z"
         },
         {
           "id": "10348",
@@ -4841,8 +4833,8 @@
           "name": "NORDERNEY",
           "max_c": 20.2,
           "max_obs_utc": "2026-07-01T12:00:00Z",
-          "min_c": 16.6,
-          "min_obs_utc": "2026-07-03T04:00:00Z"
+          "min_c": 16.4,
+          "min_obs_utc": "2026-07-03T19:00:00Z"
         },
         {
           "id": "10124",
