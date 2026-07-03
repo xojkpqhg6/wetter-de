@@ -178,12 +178,12 @@
       "samples": 24
     },
     "10139": {
-      "max_c": 11.9,
-      "max_obs_utc": "2026-07-02T00:00:00Z",
+      "max_c": 19.1,
+      "max_obs_utc": "2026-07-02T17:00:00Z",
       "min_c": 10.7,
       "min_obs_utc": "2026-07-02T02:00:00Z",
       "name": "BREMERVOERDE",
-      "samples": 3
+      "samples": 10
     },
     "10142": {
       "max_c": 21.8,
@@ -1634,5 +1634,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-07-03T03:07:48Z"
+  "updated_utc": "2026-07-03T05:07:35Z"
 }
