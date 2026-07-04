@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-07-04T19:07:35Z",
+  "generated_utc": "2026-07-04T20:07:35Z",
   "periods": {
     "day": {
       "key": "2026-07-04",
@@ -1575,20 +1575,20 @@
           "min_obs_utc": "2026-07-04T01:00:00Z"
         },
         {
+          "id": "10044",
+          "name": "LEUCHTTURM KIEL",
+          "max_c": 17.1,
+          "max_obs_utc": "2026-07-04T19:00:00Z",
+          "min_c": 14.1,
+          "min_obs_utc": "2026-07-04T02:00:00Z"
+        },
+        {
           "id": "10020",
           "name": "LIST/SYLT",
           "max_c": 17.0,
           "max_obs_utc": "2026-07-04T08:00:00Z",
           "min_c": 14.8,
           "min_obs_utc": "2026-07-04T00:00:00Z"
-        },
-        {
-          "id": "10044",
-          "name": "LEUCHTTURM KIEL",
-          "max_c": 17.0,
-          "max_obs_utc": "2026-07-04T09:00:00Z",
-          "min_c": 14.1,
-          "min_obs_utc": "2026-07-04T02:00:00Z"
         },
         {
           "id": "10908",
