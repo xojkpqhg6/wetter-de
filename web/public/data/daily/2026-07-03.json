@@ -178,12 +178,12 @@
       "samples": 24
     },
     "10139": {
-      "max_c": 14.4,
-      "max_obs_utc": "2026-07-03T00:00:00Z",
+      "max_c": 18.5,
+      "max_obs_utc": "2026-07-03T09:00:00Z",
       "min_c": 12.9,
       "min_obs_utc": "2026-07-03T04:00:00Z",
       "name": "BREMERVOERDE",
-      "samples": 7
+      "samples": 24
     },
     "10142": {
       "max_c": 17.8,
@@ -714,12 +714,12 @@
       "samples": 24
     },
     "10449": {
-      "max_c": 12.6,
-      "max_obs_utc": "2026-07-03T00:00:00Z",
+      "max_c": 19.3,
+      "max_obs_utc": "2026-07-03T17:00:00Z",
       "min_c": 11.2,
       "min_obs_utc": "2026-07-03T03:00:00Z",
       "name": "LEINEFELDE",
-      "samples": 4
+      "samples": 13
     },
     "10452": {
       "max_c": 16.5,
@@ -759,7 +759,7 @@
       "min_c": 11.6,
       "min_obs_utc": "2026-07-03T04:00:00Z",
       "name": "ARTERN",
-      "samples": 21
+      "samples": 24
     },
     "10469": {
       "max_c": 22.1,
@@ -1634,5 +1634,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-07-04T00:07:35Z"
+  "updated_utc": "2026-07-04T03:07:56Z"
 }
