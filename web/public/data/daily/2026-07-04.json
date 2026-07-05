@@ -1231,7 +1231,7 @@
       "min_c": 11.2,
       "min_obs_utc": "2026-07-04T04:00:00Z",
       "name": "SAARBRUECKEN",
-      "samples": 23
+      "samples": 24
     },
     "10724": {
       "max_c": 27.3,
@@ -1634,5 +1634,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-07-05T03:07:53Z"
+  "updated_utc": "2026-07-05T08:07:50Z"
 }
