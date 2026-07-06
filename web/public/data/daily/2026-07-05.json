@@ -703,7 +703,7 @@
       "min_c": 16.1,
       "min_obs_utc": "2026-07-05T03:00:00Z",
       "name": "GOETTINGEN",
-      "samples": 23
+      "samples": 24
     },
     "10449": {
       "max_c": 21.2,
@@ -1626,5 +1626,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-07-06T03:07:41Z"
+  "updated_utc": "2026-07-06T05:07:44Z"
 }
