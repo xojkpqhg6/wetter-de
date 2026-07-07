@@ -578,12 +578,12 @@
       "samples": 24
     },
     "10381": {
-      "max_c": 18.6,
-      "max_obs_utc": "2026-07-06T17:00:00Z",
+      "max_c": 18.7,
+      "max_obs_utc": "2026-07-06T18:00:00Z",
       "min_c": 14.3,
       "min_obs_utc": "2026-07-06T04:00:00Z",
       "name": "BERLIN-DAHLEM",
-      "samples": 18
+      "samples": 19
     },
     "10384": {
       "max_c": 19.1,
@@ -1634,5 +1634,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-07-07T03:07:54Z"
+  "updated_utc": "2026-07-07T13:07:40Z"
 }
