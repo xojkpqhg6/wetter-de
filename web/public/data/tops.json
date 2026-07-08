@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-07-08T19:07:36Z",
+  "generated_utc": "2026-07-08T20:07:46Z",
   "periods": {
     "day": {
       "key": "2026-07-08",
@@ -299,8 +299,8 @@
           "name": "CHIEMING",
           "max_c": 24.0,
           "max_obs_utc": "2026-07-08T00:00:00Z",
-          "min_c": 18.2,
-          "min_obs_utc": "2026-07-08T08:00:00Z"
+          "min_c": 18.1,
+          "min_obs_utc": "2026-07-08T19:00:00Z"
         },
         {
           "id": "10335",
