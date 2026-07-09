@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-07-09T21:07:35Z",
+  "generated_utc": "2026-07-09T22:07:48Z",
   "periods": {
     "day": {
       "key": "2026-07-09",
@@ -651,8 +651,8 @@
           "name": "BAD HERSFELD",
           "max_c": 24.1,
           "max_obs_utc": "2026-07-09T14:00:00Z",
-          "min_c": 16.1,
-          "min_obs_utc": "2026-07-09T00:00:00Z"
+          "min_c": 15.8,
+          "min_obs_utc": "2026-07-09T21:00:00Z"
         },
         {
           "id": "10688",
@@ -771,8 +771,8 @@
           "name": "AHAUS",
           "max_c": 23.2,
           "max_obs_utc": "2026-07-09T14:00:00Z",
-          "min_c": 16.4,
-          "min_obs_utc": "2026-07-09T00:00:00Z"
+          "min_c": 15.8,
+          "min_obs_utc": "2026-07-09T21:00:00Z"
         },
         {
           "id": "10282",
@@ -995,8 +995,8 @@
           "name": "BAD LIPPSPRINGE",
           "max_c": 22.4,
           "max_obs_utc": "2026-07-09T18:00:00Z",
-          "min_c": 15.6,
-          "min_obs_utc": "2026-07-09T07:00:00Z"
+          "min_c": 14.7,
+          "min_obs_utc": "2026-07-09T21:00:00Z"
         },
         {
           "id": "10224",
@@ -1235,8 +1235,8 @@
           "name": "WARBURG",
           "max_c": 20.9,
           "max_obs_utc": "2026-07-09T17:00:00Z",
-          "min_c": 15.6,
-          "min_obs_utc": "2026-07-09T05:00:00Z"
+          "min_c": 15.0,
+          "min_obs_utc": "2026-07-09T21:00:00Z"
         },
         {
           "id": "10564",
@@ -1339,8 +1339,8 @@
           "name": "SCHAUENBURG-ELGERSH.",
           "max_c": 19.8,
           "max_obs_utc": "2026-07-09T16:00:00Z",
-          "min_c": 14.7,
-          "min_obs_utc": "2026-07-09T20:00:00Z"
+          "min_c": 14.0,
+          "min_obs_utc": "2026-07-09T21:00:00Z"
         },
         {
           "id": "10540",
@@ -1515,8 +1515,8 @@
           "name": "LEINEFELDE",
           "max_c": 18.1,
           "max_obs_utc": "2026-07-09T17:00:00Z",
-          "min_c": 14.1,
-          "min_obs_utc": "2026-07-09T05:00:00Z"
+          "min_c": 13.4,
+          "min_obs_utc": "2026-07-09T21:00:00Z"
         },
         {
           "id": "10574",
@@ -1539,8 +1539,8 @@
           "name": "ST. PETER ORDING",
           "max_c": 17.8,
           "max_obs_utc": "2026-07-09T14:00:00Z",
-          "min_c": 16.0,
-          "min_obs_utc": "2026-07-09T00:00:00Z"
+          "min_c": 15.9,
+          "min_obs_utc": "2026-07-09T21:00:00Z"
         },
         {
           "id": "10458",
@@ -1617,8 +1617,8 @@
         {
           "id": "10453",
           "name": "BROCKEN",
-          "max_c": 11.4,
-          "max_obs_utc": "2026-07-09T19:00:00Z",
+          "max_c": 11.5,
+          "max_obs_utc": "2026-07-09T21:00:00Z",
           "min_c": 7.2,
           "min_obs_utc": "2026-07-09T04:00:00Z"
         },
@@ -2322,8 +2322,8 @@
           "name": "AHAUS",
           "max_c": 26.4,
           "max_obs_utc": "2026-07-07T12:00:00Z",
-          "min_c": 16.2,
-          "min_obs_utc": "2026-07-06T00:00:00Z"
+          "min_c": 15.8,
+          "min_obs_utc": "2026-07-09T21:00:00Z"
         },
         {
           "id": "10540",
@@ -2338,8 +2338,8 @@
           "name": "SCHAUENBURG-ELGERSH.",
           "max_c": 26.2,
           "max_obs_utc": "2026-07-07T13:00:00Z",
-          "min_c": 14.6,
-          "min_obs_utc": "2026-07-08T22:00:00Z"
+          "min_c": 14.0,
+          "min_obs_utc": "2026-07-09T21:00:00Z"
         },
         {
           "id": "10796",
@@ -2362,8 +2362,8 @@
           "name": "BAD LIPPSPRINGE",
           "max_c": 25.6,
           "max_obs_utc": "2026-07-07T13:00:00Z",
-          "min_c": 14.9,
-          "min_obs_utc": "2026-07-06T02:00:00Z"
+          "min_c": 14.7,
+          "min_obs_utc": "2026-07-09T21:00:00Z"
         },
         {
           "id": "10526",
