@@ -1,10 +1,10 @@
 {
-  "generated_utc": "2026-07-11T22:33:37Z",
+  "generated_utc": "2026-07-11T23:07:49Z",
   "periods": {
     "day": {
       "key": "2026-07-11",
       "station_count": 202,
-      "hidden": 0,
+      "hidden": 1,
       "stations": [
         {
           "id": "10803",
@@ -771,8 +771,8 @@
           "name": "MESSSTETTEN",
           "max_c": 28.0,
           "max_obs_utc": "2026-07-11T13:00:00Z",
-          "min_c": 12.9,
-          "min_obs_utc": "2026-07-11T21:00:00Z"
+          "min_c": 11.7,
+          "min_obs_utc": "2026-07-11T22:00:00Z"
         },
         {
           "id": "10035",
@@ -2206,6 +2206,14 @@
           "min_obs_utc": "2026-07-10T03:00:00Z"
         },
         {
+          "id": "10818",
+          "name": "KLIPPENECK",
+          "max_c": 28.7,
+          "max_obs_utc": "2026-07-11T14:00:00Z",
+          "min_c": 12.8,
+          "min_obs_utc": "2026-07-09T04:00:00Z"
+        },
+        {
           "id": "10895",
           "name": "FUERSTENZELL",
           "max_c": 28.7,
@@ -2468,14 +2476,6 @@
           "max_obs_utc": "2026-07-10T14:00:00Z",
           "min_c": 11.2,
           "min_obs_utc": "2026-07-11T04:00:00Z"
-        },
-        {
-          "id": "10818",
-          "name": "KLIPPENECK",
-          "max_c": 27.8,
-          "max_obs_utc": "2026-07-07T14:00:00Z",
-          "min_c": 12.8,
-          "min_obs_utc": "2026-07-09T04:00:00Z"
         },
         {
           "id": "10033",
@@ -3845,6 +3845,14 @@
           "min_obs_utc": "2026-07-03T04:00:00Z"
         },
         {
+          "id": "10818",
+          "name": "KLIPPENECK",
+          "max_c": 28.7,
+          "max_obs_utc": "2026-07-11T14:00:00Z",
+          "min_c": 11.5,
+          "min_obs_utc": "2026-07-04T04:00:00Z"
+        },
+        {
           "id": "10895",
           "name": "FUERSTENZELL",
           "max_c": 28.7,
@@ -4114,14 +4122,6 @@
           "max_c": 27.8,
           "max_obs_utc": "2026-07-11T15:00:00Z",
           "min_c": 10.4,
-          "min_obs_utc": "2026-07-04T04:00:00Z"
-        },
-        {
-          "id": "10818",
-          "name": "KLIPPENECK",
-          "max_c": 27.8,
-          "max_obs_utc": "2026-07-07T14:00:00Z",
-          "min_c": 11.5,
           "min_obs_utc": "2026-07-04T04:00:00Z"
         },
         {
