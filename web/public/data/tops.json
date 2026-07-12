@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-07-12T18:07:46Z",
+  "generated_utc": "2026-07-12T19:07:35Z",
   "periods": {
     "day": {
       "key": "2026-07-12",
@@ -1391,6 +1391,14 @@
           "min_obs_utc": "2026-07-12T03:00:00Z"
         },
         {
+          "id": "10044",
+          "name": "LEUCHTTURM KIEL",
+          "max_c": 24.3,
+          "max_obs_utc": "2026-07-12T18:00:00Z",
+          "min_c": 16.2,
+          "min_obs_utc": "2026-07-12T03:00:00Z"
+        },
+        {
           "id": "10557",
           "name": "NEUHAUS A.R.",
           "max_c": 24.3,
@@ -1429,14 +1437,6 @@
           "max_obs_utc": "2026-07-12T12:00:00Z",
           "min_c": 14.7,
           "min_obs_utc": "2026-07-12T04:00:00Z"
-        },
-        {
-          "id": "10044",
-          "name": "LEUCHTTURM KIEL",
-          "max_c": 23.4,
-          "max_obs_utc": "2026-07-12T14:00:00Z",
-          "min_c": 16.2,
-          "min_obs_utc": "2026-07-12T03:00:00Z"
         },
         {
           "id": "10427",
