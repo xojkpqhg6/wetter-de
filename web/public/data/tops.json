@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-07-13T21:07:39Z",
+  "generated_utc": "2026-07-13T22:07:56Z",
   "periods": {
     "day": {
       "key": "2026-07-13",
@@ -891,8 +891,8 @@
           "name": "DEUSELBACH",
           "max_c": 28.9,
           "max_obs_utc": "2026-07-13T15:00:00Z",
-          "min_c": 23.3,
-          "min_obs_utc": "2026-07-13T07:00:00Z"
+          "min_c": 22.6,
+          "min_obs_utc": "2026-07-13T21:00:00Z"
         },
         {
           "id": "10376",
@@ -2514,8 +2514,8 @@
           "name": "DEUSELBACH",
           "max_c": 28.9,
           "max_obs_utc": "2026-07-13T15:00:00Z",
-          "min_c": 23.3,
-          "min_obs_utc": "2026-07-13T07:00:00Z"
+          "min_c": 22.6,
+          "min_obs_utc": "2026-07-13T21:00:00Z"
         },
         {
           "id": "10376",
