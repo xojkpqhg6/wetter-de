@@ -1,180 +1,204 @@
 {
-  "generated_utc": "2026-07-13T15:07:42Z",
-  "station_count": 29,
+  "generated_utc": "2026-07-13T16:07:38Z",
+  "station_count": 33,
   "stations": [
-    {
-      "id": "10502",
-      "name": "NOERVENICH",
-      "temp_c": 31.5,
-      "obs_utc": "2026-07-13T14:00:00Z"
-    },
     {
       "id": "10743",
       "name": "NIEDERSTETTEN",
-      "temp_c": 31.3,
-      "obs_utc": "2026-07-13T14:00:00Z"
-    },
-    {
-      "id": "10439",
-      "name": "FRITZLAR",
-      "temp_c": 31.0,
-      "obs_utc": "2026-07-13T14:00:00Z"
+      "temp_c": 32.1,
+      "obs_utc": "2026-07-13T15:00:00Z"
     },
     {
       "id": "10500",
       "name": "GEILENKIRCHEN",
-      "temp_c": 30.9,
-      "obs_utc": "2026-07-13T14:00:00Z"
+      "temp_c": 31.0,
+      "obs_utc": "2026-07-13T15:00:00Z"
+    },
+    {
+      "id": "10502",
+      "name": "NOERVENICH",
+      "temp_c": 31.0,
+      "obs_utc": "2026-07-13T15:00:00Z"
     },
     {
       "id": "10853",
       "name": "NEUBURG/DONAU",
-      "temp_c": 30.9,
-      "obs_utc": "2026-07-13T14:00:00Z"
+      "temp_c": 31.0,
+      "obs_utc": "2026-07-13T15:00:00Z"
+    },
+    {
+      "id": "10439",
+      "name": "FRITZLAR",
+      "temp_c": 30.6,
+      "obs_utc": "2026-07-13T15:00:00Z"
     },
     {
       "id": "10860",
       "name": "INGOLSTADT",
       "temp_c": 30.6,
-      "obs_utc": "2026-07-13T14:00:00Z"
+      "obs_utc": "2026-07-13T15:00:00Z"
     },
     {
       "id": "10334",
       "name": "WUNSTORF",
       "temp_c": 30.5,
-      "obs_utc": "2026-07-13T14:00:00Z"
+      "obs_utc": "2026-07-13T15:00:00Z"
     },
     {
       "id": "10771",
       "name": "KUEMMERSBRUCK",
       "temp_c": 30.4,
-      "obs_utc": "2026-07-13T14:00:00Z"
-    },
-    {
-      "id": "10837",
-      "name": "LAUPHEIM",
-      "temp_c": 30.4,
-      "obs_utc": "2026-07-13T14:00:00Z"
-    },
-    {
-      "id": "10856",
-      "name": "LECHFELD",
-      "temp_c": 30.3,
-      "obs_utc": "2026-07-13T14:00:00Z"
+      "obs_utc": "2026-07-13T15:00:00Z"
     },
     {
       "id": "10618",
       "name": "IDAR-OBERSTEIN",
-      "temp_c": 30.1,
-      "obs_utc": "2026-07-13T14:00:00Z"
+      "temp_c": 30.3,
+      "obs_utc": "2026-07-13T15:00:00Z"
     },
     {
-      "id": "10476",
-      "name": "HOLZDORF",
-      "temp_c": 29.5,
-      "obs_utc": "2026-07-13T14:00:00Z"
-    },
-    {
-      "id": "10335",
-      "name": "BUECKEBURG",
-      "temp_c": 29.2,
-      "obs_utc": "2026-07-13T14:00:00Z"
-    },
-    {
-      "id": "10613",
-      "name": "BUECHEL",
-      "temp_c": 29.0,
-      "obs_utc": "2026-07-13T14:00:00Z"
-    },
-    {
-      "id": "10238",
-      "name": "BERGEN-HOHNE",
-      "temp_c": 28.6,
-      "obs_utc": "2026-07-13T14:00:00Z"
-    },
-    {
-      "id": "10343",
-      "name": "CELLE",
-      "temp_c": 28.6,
-      "obs_utc": "2026-07-13T14:00:00Z"
+      "id": "10856",
+      "name": "LECHFELD",
+      "temp_c": 29.8,
+      "obs_utc": "2026-07-13T15:00:00Z"
     },
     {
       "id": "10954",
       "name": "ALTENSTADT",
-      "temp_c": 28.5,
-      "obs_utc": "2026-07-13T14:00:00Z"
+      "temp_c": 29.8,
+      "obs_utc": "2026-07-13T15:00:00Z"
+    },
+    {
+      "id": "10837",
+      "name": "LAUPHEIM",
+      "temp_c": 29.6,
+      "obs_utc": "2026-07-13T15:00:00Z"
+    },
+    {
+      "id": "10343",
+      "name": "CELLE",
+      "temp_c": 29.4,
+      "obs_utc": "2026-07-13T15:00:00Z"
+    },
+    {
+      "id": "10238",
+      "name": "BERGEN-HOHNE",
+      "temp_c": 29.2,
+      "obs_utc": "2026-07-13T15:00:00Z"
+    },
+    {
+      "id": "10613",
+      "name": "BUECHEL",
+      "temp_c": 28.7,
+      "obs_utc": "2026-07-13T15:00:00Z"
+    },
+    {
+      "id": "10476",
+      "name": "HOLZDORF",
+      "temp_c": 28.3,
+      "obs_utc": "2026-07-13T15:00:00Z"
+    },
+    {
+      "id": "10335",
+      "name": "BUECKEBURG",
+      "temp_c": 28.1,
+      "obs_utc": "2026-07-13T15:00:00Z"
     },
     {
       "id": "10381",
       "name": "BERLIN-DAHLEM",
-      "temp_c": 28.2,
-      "obs_utc": "2026-07-13T14:00:00Z"
+      "temp_c": 28.0,
+      "obs_utc": "2026-07-13T15:00:00Z"
     },
     {
       "id": "10246",
       "name": "FASSBERG",
       "temp_c": 27.9,
-      "obs_utc": "2026-07-13T14:00:00Z"
+      "obs_utc": "2026-07-13T15:00:00Z"
     },
     {
-      "id": "10038",
-      "name": "HOHN",
-      "temp_c": 27.1,
-      "obs_utc": "2026-07-13T14:00:00Z"
-    },
-    {
-      "id": "10033",
-      "name": "FLENSBURG",
-      "temp_c": 26.5,
-      "obs_utc": "2026-07-13T14:00:00Z"
-    },
-    {
-      "id": "10037",
-      "name": "SCHLESWIG-JAGEL",
-      "temp_c": 26.3,
-      "obs_utc": "2026-07-13T14:00:00Z"
-    },
-    {
-      "id": "10172",
-      "name": "LAAGE",
-      "temp_c": 25.7,
-      "obs_utc": "2026-07-13T14:00:00Z"
+      "id": "10168",
+      "name": "GOLDBERG",
+      "temp_c": 26.0,
+      "obs_utc": "2026-07-13T15:00:00Z"
     },
     {
       "id": "10136",
       "name": "NORDHOLZ",
-      "temp_c": 25.6,
-      "obs_utc": "2026-07-13T14:00:00Z"
+      "temp_c": 25.8,
+      "obs_utc": "2026-07-13T15:00:00Z"
     },
     {
-      "id": "10170",
-      "name": "WARNEMUENDE",
-      "temp_c": 23.6,
-      "obs_utc": "2026-07-13T14:00:00Z"
+      "id": "10172",
+      "name": "LAAGE",
+      "temp_c": 25.3,
+      "obs_utc": "2026-07-13T15:00:00Z"
+    },
+    {
+      "id": "10033",
+      "name": "FLENSBURG",
+      "temp_c": 25.0,
+      "obs_utc": "2026-07-13T15:00:00Z"
+    },
+    {
+      "id": "10037",
+      "name": "SCHLESWIG-JAGEL",
+      "temp_c": 24.9,
+      "obs_utc": "2026-07-13T15:00:00Z"
     },
     {
       "id": "10126",
       "name": "WITTMUNDHAVEN",
-      "temp_c": 23.3,
-      "obs_utc": "2026-07-13T14:00:00Z"
+      "temp_c": 24.7,
+      "obs_utc": "2026-07-13T15:00:00Z"
+    },
+    {
+      "id": "10038",
+      "name": "HOHN",
+      "temp_c": 24.5,
+      "obs_utc": "2026-07-13T15:00:00Z"
     },
     {
       "id": "10180",
       "name": "BARTH",
-      "temp_c": 23.2,
-      "obs_utc": "2026-07-13T14:00:00Z"
+      "temp_c": 23.0,
+      "obs_utc": "2026-07-13T15:00:00Z"
+    },
+    {
+      "id": "10170",
+      "name": "WARNEMUENDE",
+      "temp_c": 22.6,
+      "obs_utc": "2026-07-13T15:00:00Z"
+    },
+    {
+      "id": "10152",
+      "name": "PELZERHAKEN",
+      "temp_c": 22.2,
+      "obs_utc": "2026-07-13T15:00:00Z"
+    },
+    {
+      "id": "10055",
+      "name": "WESTERMARKELSDORF",
+      "temp_c": 21.6,
+      "obs_utc": "2026-07-13T15:00:00Z"
+    },
+    {
+      "id": "10044",
+      "name": "LEUCHTTURM KIEL",
+      "temp_c": 20.9,
+      "obs_utc": "2026-07-13T15:00:00Z"
     },
     {
       "id": "10161",
       "name": "BOLTENHAGEN",
-      "temp_c": 20.3,
-      "obs_utc": "2026-07-13T14:00:00Z"
+      "temp_c": 20.9,
+      "obs_utc": "2026-07-13T15:00:00Z"
     },
     {
       "id": "10184",
       "name": "GREIFSWALD",
-      "temp_c": 20.3,
-      "obs_utc": "2026-07-13T14:00:00Z"
+      "temp_c": 20.7,
+      "obs_utc": "2026-07-13T15:00:00Z"
     }
   ]
 }
