@@ -306,12 +306,12 @@
       "samples": 24
     },
     "10210": {
-      "max_c": 26.9,
-      "max_obs_utc": "2026-07-13T13:00:00Z",
+      "max_c": 27.6,
+      "max_obs_utc": "2026-07-13T15:00:00Z",
       "min_c": 8.8,
       "min_obs_utc": "2026-07-13T04:00:00Z",
       "name": "FRIESOYTHE-ALTENOYTH",
-      "samples": 14
+      "samples": 23
     },
     "10224": {
       "max_c": 28.6,
@@ -1626,5 +1626,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-07-14T00:07:50Z"
+  "updated_utc": "2026-07-14T10:07:40Z"
 }
