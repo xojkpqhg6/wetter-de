@@ -1,10 +1,10 @@
 {
-  "generated_utc": "2026-07-15T22:07:38Z",
+  "generated_utc": "2026-07-15T23:07:43Z",
   "periods": {
     "day": {
       "key": "2026-07-15",
-      "station_count": 201,
-      "hidden": 1,
+      "station_count": 202,
+      "hidden": 0,
       "stations": [
         {
           "id": "10609",
@@ -611,8 +611,8 @@
           "name": "KAISERSBACH-CRONHUET",
           "max_c": 27.0,
           "max_obs_utc": "2026-07-15T15:00:00Z",
-          "min_c": 16.4,
-          "min_obs_utc": "2026-07-15T04:00:00Z"
+          "min_c": 15.4,
+          "min_obs_utc": "2026-07-15T22:00:00Z"
         },
         {
           "id": "10756",
@@ -651,8 +651,8 @@
           "name": "KEMPTEN",
           "max_c": 26.9,
           "max_obs_utc": "2026-07-15T12:00:00Z",
-          "min_c": 15.2,
-          "min_obs_utc": "2026-07-15T21:00:00Z"
+          "min_c": 14.6,
+          "min_obs_utc": "2026-07-15T22:00:00Z"
         },
         {
           "id": "10338",
@@ -1003,8 +1003,8 @@
           "name": "BARUTH",
           "max_c": 25.7,
           "max_obs_utc": "2026-07-15T14:00:00Z",
-          "min_c": 15.2,
-          "min_obs_utc": "2026-07-15T00:00:00Z"
+          "min_c": 15.0,
+          "min_obs_utc": "2026-07-15T22:00:00Z"
         },
         {
           "id": "10646",
@@ -1019,8 +1019,8 @@
           "name": "OBERSTDORF",
           "max_c": 25.7,
           "max_obs_utc": "2026-07-15T13:00:00Z",
-          "min_c": 15.5,
-          "min_obs_utc": "2026-07-15T05:00:00Z"
+          "min_c": 14.6,
+          "min_obs_utc": "2026-07-15T22:00:00Z"
         },
         {
           "id": "10136",
@@ -1363,8 +1363,8 @@
           "name": "FREUDENST.",
           "max_c": 23.6,
           "max_obs_utc": "2026-07-15T15:00:00Z",
-          "min_c": 16.8,
-          "min_obs_utc": "2026-07-15T21:00:00Z"
+          "min_c": 16.5,
+          "min_obs_utc": "2026-07-15T22:00:00Z"
         },
         {
           "id": "10055",
@@ -1548,6 +1548,14 @@
           "max_c": 21.2,
           "max_obs_utc": "2026-07-15T15:00:00Z",
           "min_c": 13.4,
+          "min_obs_utc": "2026-07-15T03:00:00Z"
+        },
+        {
+          "id": "10282",
+          "name": "FELDBERG/MECKLENBURG",
+          "max_c": 20.9,
+          "max_obs_utc": "2026-07-15T08:00:00Z",
+          "min_c": 13.6,
           "min_obs_utc": "2026-07-15T03:00:00Z"
         },
         {
@@ -3018,8 +3026,8 @@
           "name": "FELDBERG/MECKLENBURG",
           "max_c": 25.2,
           "max_obs_utc": "2026-07-13T13:00:00Z",
-          "min_c": 14.4,
-          "min_obs_utc": "2026-07-14T03:00:00Z"
+          "min_c": 13.6,
+          "min_obs_utc": "2026-07-15T03:00:00Z"
         },
         {
           "id": "10289",
