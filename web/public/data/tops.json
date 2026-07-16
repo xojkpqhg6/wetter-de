@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-07-16T19:07:38Z",
+  "generated_utc": "2026-07-16T19:49:21Z",
   "periods": {
     "day": {
       "key": "2026-07-16",
@@ -1543,6 +1543,14 @@
           "min_obs_utc": "2026-07-16T04:00:00Z"
         },
         {
+          "id": "10124",
+          "name": "LEUCHTTURM A. WESER",
+          "max_c": 21.8,
+          "max_obs_utc": "2026-07-16T19:00:00Z",
+          "min_c": 18.5,
+          "min_obs_utc": "2026-07-16T09:00:00Z"
+        },
+        {
           "id": "10161",
           "name": "BOLTENHAGEN",
           "max_c": 21.7,
@@ -1573,14 +1581,6 @@
           "max_obs_utc": "2026-07-16T17:00:00Z",
           "min_c": 18.4,
           "min_obs_utc": "2026-07-16T03:00:00Z"
-        },
-        {
-          "id": "10124",
-          "name": "LEUCHTTURM A. WESER",
-          "max_c": 21.1,
-          "max_obs_utc": "2026-07-16T18:00:00Z",
-          "min_c": 18.5,
-          "min_obs_utc": "2026-07-16T09:00:00Z"
         },
         {
           "id": "10453",
