@@ -1,10 +1,10 @@
 {
-  "generated_utc": "2026-07-16T22:07:42Z",
+  "generated_utc": "2026-07-16T23:07:36Z",
   "periods": {
     "day": {
       "key": "2026-07-16",
-      "station_count": 201,
-      "hidden": 2,
+      "station_count": 202,
+      "hidden": 1,
       "stations": [
         {
           "id": "10803",
@@ -19,8 +19,8 @@
           "name": "LAHR",
           "max_c": 32.6,
           "max_obs_utc": "2026-07-16T15:00:00Z",
-          "min_c": 19.3,
-          "min_obs_utc": "2026-07-16T04:00:00Z"
+          "min_c": 19.2,
+          "min_obs_utc": "2026-07-16T22:00:00Z"
         },
         {
           "id": "10609",
@@ -867,8 +867,8 @@
           "name": "WUNSTORF",
           "max_c": 27.9,
           "max_obs_utc": "2026-07-16T14:00:00Z",
-          "min_c": 18.3,
-          "min_obs_utc": "2026-07-16T04:00:00Z"
+          "min_c": 18.0,
+          "min_obs_utc": "2026-07-16T22:00:00Z"
         },
         {
           "id": "10458",
@@ -1139,8 +1139,8 @@
           "name": "BUECKEBURG",
           "max_c": 26.2,
           "max_obs_utc": "2026-07-16T13:00:00Z",
-          "min_c": 16.6,
-          "min_obs_utc": "2026-07-16T02:00:00Z"
+          "min_c": 16.5,
+          "min_obs_utc": "2026-07-16T22:00:00Z"
         },
         {
           "id": "10142",
@@ -1363,8 +1363,8 @@
           "name": "GREIFSWALD",
           "max_c": 24.4,
           "max_obs_utc": "2026-07-16T10:00:00Z",
-          "min_c": 17.4,
-          "min_obs_utc": "2026-07-16T02:00:00Z"
+          "min_c": 17.3,
+          "min_obs_utc": "2026-07-16T22:00:00Z"
         },
         {
           "id": "10020",
@@ -1565,6 +1565,14 @@
           "max_obs_utc": "2026-07-16T11:00:00Z",
           "min_c": 17.7,
           "min_obs_utc": "2026-07-16T02:00:00Z"
+        },
+        {
+          "id": "10579",
+          "name": "MARIENBERG",
+          "max_c": 21.5,
+          "max_obs_utc": "2026-07-16T10:00:00Z",
+          "min_c": 11.6,
+          "min_obs_utc": "2026-07-16T04:00:00Z"
         },
         {
           "id": "10908",
@@ -3026,8 +3034,8 @@
           "name": "MARIENBERG",
           "max_c": 25.3,
           "max_obs_utc": "2026-07-13T15:00:00Z",
-          "min_c": 12.3,
-          "min_obs_utc": "2026-07-13T04:00:00Z"
+          "min_c": 11.6,
+          "min_obs_utc": "2026-07-16T04:00:00Z"
         },
         {
           "id": "10282",
