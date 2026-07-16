@@ -1,10 +1,10 @@
 {
-  "generated_utc": "2026-07-16T20:07:40Z",
+  "generated_utc": "2026-07-16T21:07:39Z",
   "periods": {
     "day": {
       "key": "2026-07-16",
-      "station_count": 200,
-      "hidden": 3,
+      "station_count": 201,
+      "hidden": 2,
       "stations": [
         {
           "id": "10803",
@@ -199,12 +199,20 @@
           "min_obs_utc": "2026-07-16T04:00:00Z"
         },
         {
+          "id": "10460",
+          "name": "ARTERN",
+          "max_c": 30.5,
+          "max_obs_utc": "2026-07-16T15:00:00Z",
+          "min_c": 14.1,
+          "min_obs_utc": "2026-07-16T04:00:00Z"
+        },
+        {
           "id": "10724",
           "name": "WEINBIET",
           "max_c": 30.5,
           "max_obs_utc": "2026-07-16T12:00:00Z",
-          "min_c": 18.3,
-          "min_obs_utc": "2026-07-16T04:00:00Z"
+          "min_c": 17.1,
+          "min_obs_utc": "2026-07-16T20:00:00Z"
         },
         {
           "id": "10520",
@@ -389,14 +397,6 @@
           "max_obs_utc": "2026-07-16T16:00:00Z",
           "min_c": 16.4,
           "min_obs_utc": "2026-07-16T03:00:00Z"
-        },
-        {
-          "id": "10460",
-          "name": "ARTERN",
-          "max_c": 29.6,
-          "max_obs_utc": "2026-07-16T14:00:00Z",
-          "min_c": 14.1,
-          "min_obs_utc": "2026-07-16T04:00:00Z"
         },
         {
           "id": "10708",
@@ -1527,6 +1527,14 @@
           "min_obs_utc": "2026-07-16T00:00:00Z"
         },
         {
+          "id": "10097",
+          "name": "GREIFSWALDER OIE",
+          "max_c": 22.4,
+          "max_obs_utc": "2026-07-16T13:00:00Z",
+          "min_c": 19.6,
+          "min_obs_utc": "2026-07-16T20:00:00Z"
+        },
+        {
           "id": "10152",
           "name": "PELZERHAKEN",
           "max_c": 22.4,
@@ -1810,8 +1818,8 @@
           "name": "WEINBIET",
           "max_c": 31.8,
           "max_obs_utc": "2026-07-13T13:00:00Z",
-          "min_c": 17.7,
-          "min_obs_utc": "2026-07-15T05:00:00Z"
+          "min_c": 17.1,
+          "min_obs_utc": "2026-07-16T20:00:00Z"
         },
         {
           "id": "10776",
