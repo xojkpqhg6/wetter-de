@@ -705,6 +705,14 @@
       "name": "ALFELD",
       "samples": 24
     },
+    "10444": {
+      "max_c": 27.4,
+      "max_obs_utc": "2026-07-16T14:00:00Z",
+      "min_c": 14.9,
+      "min_obs_utc": "2026-07-16T23:00:00Z",
+      "name": "GOETTINGEN",
+      "samples": 12
+    },
     "10449": {
       "max_c": 27.5,
       "max_obs_utc": "2026-07-16T15:00:00Z",
@@ -1626,5 +1634,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-07-17T03:07:44Z"
+  "updated_utc": "2026-07-17T07:07:48Z"
 }
