@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-07-19T18:07:39Z",
+  "generated_utc": "2026-07-19T19:07:38Z",
   "periods": {
     "day": {
       "key": "2026-07-19",
@@ -291,8 +291,8 @@
           "name": "HOLZDORF",
           "max_c": 21.9,
           "max_obs_utc": "2026-07-19T12:00:00Z",
-          "min_c": 15.7,
-          "min_obs_utc": "2026-07-19T06:00:00Z"
+          "min_c": 13.5,
+          "min_obs_utc": "2026-07-19T18:00:00Z"
         },
         {
           "id": "10724",
@@ -539,8 +539,8 @@
           "name": "LINDENBERG",
           "max_c": 20.9,
           "max_obs_utc": "2026-07-19T14:00:00Z",
-          "min_c": 15.6,
-          "min_obs_utc": "2026-07-19T08:00:00Z"
+          "min_c": 15.0,
+          "min_obs_utc": "2026-07-19T18:00:00Z"
         },
         {
           "id": "10480",
@@ -1151,6 +1151,14 @@
           "min_obs_utc": "2026-07-19T04:00:00Z"
         },
         {
+          "id": "10444",
+          "name": "GOETTINGEN",
+          "max_c": 19.0,
+          "max_obs_utc": "2026-07-19T18:00:00Z",
+          "min_c": 12.7,
+          "min_obs_utc": "2026-07-19T04:00:00Z"
+        },
+        {
           "id": "10554",
           "name": "ERFURT",
           "max_c": 19.0,
@@ -1319,14 +1327,6 @@
           "min_obs_utc": "2026-07-19T01:00:00Z"
         },
         {
-          "id": "10444",
-          "name": "GOETTINGEN",
-          "max_c": 18.4,
-          "max_obs_utc": "2026-07-19T17:00:00Z",
-          "min_c": 12.7,
-          "min_obs_utc": "2026-07-19T04:00:00Z"
-        },
-        {
           "id": "10210",
           "name": "FRIESOYTHE-ALTENOYTH",
           "max_c": 18.3,
@@ -1435,8 +1435,8 @@
           "name": "EMDEN-FLUGPLATZ",
           "max_c": 17.7,
           "max_obs_utc": "2026-07-19T13:00:00Z",
-          "min_c": 14.1,
-          "min_obs_utc": "2026-07-19T01:00:00Z"
+          "min_c": 14.0,
+          "min_obs_utc": "2026-07-19T18:00:00Z"
         },
         {
           "id": "10126",
@@ -2226,8 +2226,8 @@
           "name": "LINDENBERG",
           "max_c": 30.0,
           "max_obs_utc": "2026-07-16T16:00:00Z",
-          "min_c": 15.6,
-          "min_obs_utc": "2026-07-18T23:00:00Z"
+          "min_c": 15.0,
+          "min_obs_utc": "2026-07-19T18:00:00Z"
         },
         {
           "id": "10474",
@@ -2994,8 +2994,8 @@
           "name": "EMDEN-FLUGPLATZ",
           "max_c": 26.5,
           "max_obs_utc": "2026-07-15T11:00:00Z",
-          "min_c": 14.1,
-          "min_obs_utc": "2026-07-19T01:00:00Z"
+          "min_c": 14.0,
+          "min_obs_utc": "2026-07-19T18:00:00Z"
         },
         {
           "id": "10037",
