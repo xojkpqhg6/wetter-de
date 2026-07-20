@@ -1,10 +1,10 @@
 {
-  "generated_utc": "2026-07-20T19:07:39Z",
+  "generated_utc": "2026-07-20T20:07:44Z",
   "periods": {
     "day": {
       "key": "2026-07-20",
-      "station_count": 203,
-      "hidden": 1,
+      "station_count": 202,
+      "hidden": 2,
       "stations": [
         {
           "id": "10776",
@@ -1399,6 +1399,14 @@
           "min_obs_utc": "2026-07-20T02:00:00Z"
         },
         {
+          "id": "10097",
+          "name": "GREIFSWALDER OIE",
+          "max_c": 17.1,
+          "max_obs_utc": "2026-07-20T19:00:00Z",
+          "min_c": 14.5,
+          "min_obs_utc": "2026-07-20T04:00:00Z"
+        },
+        {
           "id": "10281",
           "name": "TROLLENHAGEN",
           "max_c": 17.1,
@@ -1437,14 +1445,6 @@
           "max_obs_utc": "2026-07-20T18:00:00Z",
           "min_c": 14.3,
           "min_obs_utc": "2026-07-20T00:00:00Z"
-        },
-        {
-          "id": "10097",
-          "name": "GREIFSWALDER OIE",
-          "max_c": 17.0,
-          "max_obs_utc": "2026-07-20T10:00:00Z",
-          "min_c": 14.5,
-          "min_obs_utc": "2026-07-20T04:00:00Z"
         },
         {
           "id": "10449",
@@ -1509,14 +1509,6 @@
           "max_obs_utc": "2026-07-20T16:00:00Z",
           "min_c": 8.8,
           "min_obs_utc": "2026-07-20T04:00:00Z"
-        },
-        {
-          "id": "10282",
-          "name": "FELDBERG/MECKLENBURG",
-          "max_c": 15.0,
-          "max_obs_utc": "2026-07-20T10:00:00Z",
-          "min_c": 10.6,
-          "min_obs_utc": "2026-07-20T02:00:00Z"
         },
         {
           "id": "10452",
@@ -3030,6 +3022,14 @@
           "min_obs_utc": "2026-07-20T02:00:00Z"
         },
         {
+          "id": "10097",
+          "name": "GREIFSWALDER OIE",
+          "max_c": 17.1,
+          "max_obs_utc": "2026-07-20T19:00:00Z",
+          "min_c": 14.5,
+          "min_obs_utc": "2026-07-20T04:00:00Z"
+        },
+        {
           "id": "10281",
           "name": "TROLLENHAGEN",
           "max_c": 17.1,
@@ -3068,14 +3068,6 @@
           "max_obs_utc": "2026-07-20T18:00:00Z",
           "min_c": 14.3,
           "min_obs_utc": "2026-07-20T00:00:00Z"
-        },
-        {
-          "id": "10097",
-          "name": "GREIFSWALDER OIE",
-          "max_c": 17.0,
-          "max_obs_utc": "2026-07-20T10:00:00Z",
-          "min_c": 14.5,
-          "min_obs_utc": "2026-07-20T04:00:00Z"
         },
         {
           "id": "10449",
@@ -3154,8 +3146,8 @@
           "name": "FELDBERG/MECKLENBURG",
           "max_c": 15.0,
           "max_obs_utc": "2026-07-20T10:00:00Z",
-          "min_c": 10.6,
-          "min_obs_utc": "2026-07-20T02:00:00Z"
+          "min_c": null,
+          "min_obs_utc": ""
         },
         {
           "id": "10452",
