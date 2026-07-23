@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-07-23T18:07:35Z",
+  "generated_utc": "2026-07-23T18:47:15Z",
   "periods": {
     "day": {
       "key": "2026-07-23",
@@ -1537,8 +1537,8 @@
         {
           "id": "10686",
           "name": "WUNSIEDEL-SCHOENBRUN",
-          "max_c": 14.9,
-          "max_obs_utc": "2026-07-23T14:00:00Z",
+          "max_c": 15.0,
+          "max_obs_utc": "2026-07-23T18:00:00Z",
           "min_c": 11.5,
           "min_obs_utc": "2026-07-23T04:00:00Z"
         },
@@ -1585,8 +1585,8 @@
         {
           "id": "10579",
           "name": "MARIENBERG",
-          "max_c": 12.2,
-          "max_obs_utc": "2026-07-23T17:00:00Z",
+          "max_c": 12.3,
+          "max_obs_utc": "2026-07-23T18:00:00Z",
           "min_c": 9.8,
           "min_obs_utc": "2026-07-23T07:00:00Z"
         },
