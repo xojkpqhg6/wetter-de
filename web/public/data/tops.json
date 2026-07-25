@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-07-25T19:07:41Z",
+  "generated_utc": "2026-07-25T20:07:33Z",
   "periods": {
     "day": {
       "key": "2026-07-25",
@@ -567,6 +567,14 @@
           "min_obs_utc": "2026-07-25T04:00:00Z"
         },
         {
+          "id": "10747",
+          "name": "KAISERSBACH-CRONHUET",
+          "max_c": 29.1,
+          "max_obs_utc": "2026-07-25T15:00:00Z",
+          "min_c": 8.5,
+          "min_obs_utc": "2026-07-25T04:00:00Z"
+        },
+        {
           "id": "10385",
           "name": "BERLIN-BRANDENBURG",
           "max_c": 29.0,
@@ -597,14 +605,6 @@
           "max_obs_utc": "2026-07-25T15:00:00Z",
           "min_c": 10.6,
           "min_obs_utc": "2026-07-25T05:00:00Z"
-        },
-        {
-          "id": "10747",
-          "name": "KAISERSBACH-CRONHUET",
-          "max_c": 29.0,
-          "max_obs_utc": "2026-07-25T14:00:00Z",
-          "min_c": 8.5,
-          "min_obs_utc": "2026-07-25T04:00:00Z"
         },
         {
           "id": "10393",
@@ -2198,6 +2198,14 @@
           "min_obs_utc": "2026-07-24T04:00:00Z"
         },
         {
+          "id": "10747",
+          "name": "KAISERSBACH-CRONHUET",
+          "max_c": 29.1,
+          "max_obs_utc": "2026-07-25T15:00:00Z",
+          "min_c": 5.9,
+          "min_obs_utc": "2026-07-22T04:00:00Z"
+        },
+        {
           "id": "10385",
           "name": "BERLIN-BRANDENBURG",
           "max_c": 29.0,
@@ -2228,14 +2236,6 @@
           "max_obs_utc": "2026-07-25T15:00:00Z",
           "min_c": 8.0,
           "min_obs_utc": "2026-07-21T04:00:00Z"
-        },
-        {
-          "id": "10747",
-          "name": "KAISERSBACH-CRONHUET",
-          "max_c": 29.0,
-          "max_obs_utc": "2026-07-25T14:00:00Z",
-          "min_c": 5.9,
-          "min_obs_utc": "2026-07-22T04:00:00Z"
         },
         {
           "id": "10393",
