@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-07-25T17:07:36Z",
+  "generated_utc": "2026-07-25T18:07:50Z",
   "periods": {
     "day": {
       "key": "2026-07-25",
@@ -545,8 +545,8 @@
         {
           "id": "10396",
           "name": "MANSCHNOW",
-          "max_c": 29.2,
-          "max_obs_utc": "2026-07-25T16:00:00Z",
+          "max_c": 29.3,
+          "max_obs_utc": "2026-07-25T17:00:00Z",
           "min_c": 10.3,
           "min_obs_utc": "2026-07-25T02:00:00Z"
         },
@@ -759,6 +759,14 @@
           "min_obs_utc": "2026-07-25T04:00:00Z"
         },
         {
+          "id": "10782",
+          "name": "WALDMUENCHEN",
+          "max_c": 28.3,
+          "max_obs_utc": "2026-07-25T17:00:00Z",
+          "min_c": 6.7,
+          "min_obs_utc": "2026-07-25T04:00:00Z"
+        },
+        {
           "id": "10818",
           "name": "KLIPPENECK",
           "max_c": 28.3,
@@ -788,14 +796,6 @@
           "max_c": 28.2,
           "max_obs_utc": "2026-07-25T15:00:00Z",
           "min_c": 7.9,
-          "min_obs_utc": "2026-07-25T04:00:00Z"
-        },
-        {
-          "id": "10782",
-          "name": "WALDMUENCHEN",
-          "max_c": 28.1,
-          "max_obs_utc": "2026-07-25T16:00:00Z",
-          "min_c": 6.7,
           "min_obs_utc": "2026-07-25T04:00:00Z"
         },
         {
@@ -1199,6 +1199,14 @@
           "min_obs_utc": "2026-07-25T03:00:00Z"
         },
         {
+          "id": "10193",
+          "name": "UECKERMUENDE",
+          "max_c": 26.4,
+          "max_obs_utc": "2026-07-25T17:00:00Z",
+          "min_c": 10.9,
+          "min_obs_utc": "2026-07-25T03:00:00Z"
+        },
+        {
           "id": "10210",
           "name": "FRIESOYTHE-ALTENOYTH",
           "max_c": 26.4,
@@ -1228,14 +1236,6 @@
           "max_c": 26.2,
           "max_obs_utc": "2026-07-25T16:00:00Z",
           "min_c": 12.7,
-          "min_obs_utc": "2026-07-25T03:00:00Z"
-        },
-        {
-          "id": "10193",
-          "name": "UECKERMUENDE",
-          "max_c": 26.1,
-          "max_obs_utc": "2026-07-25T16:00:00Z",
-          "min_c": 10.9,
           "min_obs_utc": "2026-07-25T03:00:00Z"
         },
         {
@@ -2176,8 +2176,8 @@
         {
           "id": "10396",
           "name": "MANSCHNOW",
-          "max_c": 29.2,
-          "max_obs_utc": "2026-07-25T16:00:00Z",
+          "max_c": 29.3,
+          "max_obs_utc": "2026-07-25T17:00:00Z",
           "min_c": 9.6,
           "min_obs_utc": "2026-07-22T03:00:00Z"
         },
@@ -2390,6 +2390,14 @@
           "min_obs_utc": "2026-07-24T04:00:00Z"
         },
         {
+          "id": "10782",
+          "name": "WALDMUENCHEN",
+          "max_c": 28.3,
+          "max_obs_utc": "2026-07-25T17:00:00Z",
+          "min_c": 4.2,
+          "min_obs_utc": "2026-07-24T04:00:00Z"
+        },
+        {
           "id": "10818",
           "name": "KLIPPENECK",
           "max_c": 28.3,
@@ -2420,14 +2428,6 @@
           "max_obs_utc": "2026-07-25T15:00:00Z",
           "min_c": 7.9,
           "min_obs_utc": "2026-07-25T04:00:00Z"
-        },
-        {
-          "id": "10782",
-          "name": "WALDMUENCHEN",
-          "max_c": 28.1,
-          "max_obs_utc": "2026-07-25T16:00:00Z",
-          "min_c": 4.2,
-          "min_obs_utc": "2026-07-24T04:00:00Z"
         },
         {
           "id": "10315",
@@ -2830,6 +2830,14 @@
           "min_obs_utc": "2026-07-21T03:00:00Z"
         },
         {
+          "id": "10193",
+          "name": "UECKERMUENDE",
+          "max_c": 26.4,
+          "max_obs_utc": "2026-07-25T17:00:00Z",
+          "min_c": 10.9,
+          "min_obs_utc": "2026-07-25T03:00:00Z"
+        },
+        {
           "id": "10210",
           "name": "FRIESOYTHE-ALTENOYTH",
           "max_c": 26.4,
@@ -2860,14 +2868,6 @@
           "max_obs_utc": "2026-07-25T16:00:00Z",
           "min_c": 12.1,
           "min_obs_utc": "2026-07-22T03:00:00Z"
-        },
-        {
-          "id": "10193",
-          "name": "UECKERMUENDE",
-          "max_c": 26.1,
-          "max_obs_utc": "2026-07-25T16:00:00Z",
-          "min_c": 10.9,
-          "min_obs_utc": "2026-07-25T03:00:00Z"
         },
         {
           "id": "10161",
@@ -4695,8 +4695,8 @@
         {
           "id": "10193",
           "name": "UECKERMUENDE",
-          "max_c": 26.1,
-          "max_obs_utc": "2026-07-25T16:00:00Z",
+          "max_c": 26.4,
+          "max_obs_utc": "2026-07-25T17:00:00Z",
           "min_c": 10.4,
           "min_obs_utc": "2026-07-06T04:00:00Z"
         },
