@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-07-26T20:16:51Z",
+  "generated_utc": "2026-07-26T21:07:47Z",
   "periods": {
     "day": {
       "key": "2026-07-26",
@@ -627,8 +627,8 @@
           "name": "WIESENBURG",
           "max_c": 25.7,
           "max_obs_utc": "2026-07-26T12:00:00Z",
-          "min_c": 16.9,
-          "min_obs_utc": "2026-07-26T05:00:00Z"
+          "min_c": 16.6,
+          "min_obs_utc": "2026-07-26T20:00:00Z"
         },
         {
           "id": "10724",
@@ -907,8 +907,8 @@
           "name": "HOHERODSKOPF (VOGELS",
           "max_c": 23.5,
           "max_obs_utc": "2026-07-26T13:00:00Z",
-          "min_c": 16.7,
-          "min_obs_utc": "2026-07-26T05:00:00Z"
+          "min_c": 15.9,
+          "min_obs_utc": "2026-07-26T20:00:00Z"
         },
         {
           "id": "10574",
@@ -963,8 +963,8 @@
           "name": "GARMISCH",
           "max_c": 23.3,
           "max_obs_utc": "2026-07-26T17:00:00Z",
-          "min_c": 17.5,
-          "min_obs_utc": "2026-07-26T08:00:00Z"
+          "min_c": 16.9,
+          "min_obs_utc": "2026-07-26T20:00:00Z"
         },
         {
           "id": "10982",
@@ -1115,8 +1115,8 @@
           "name": "LUEDENSCHEID",
           "max_c": 21.4,
           "max_obs_utc": "2026-07-26T11:00:00Z",
-          "min_c": 16.3,
-          "min_obs_utc": "2026-07-26T03:00:00Z"
+          "min_c": 15.6,
+          "min_obs_utc": "2026-07-26T20:00:00Z"
         },
         {
           "id": "10315",
@@ -1195,8 +1195,8 @@
           "name": "EMDEN-FLUGPLATZ",
           "max_c": 20.5,
           "max_obs_utc": "2026-07-26T15:00:00Z",
-          "min_c": 16.4,
-          "min_obs_utc": "2026-07-26T04:00:00Z"
+          "min_c": 16.3,
+          "min_obs_utc": "2026-07-26T20:00:00Z"
         },
         {
           "id": "10309",
@@ -1387,8 +1387,8 @@
           "name": "K.ASTEN",
           "max_c": 19.1,
           "max_obs_utc": "2026-07-26T14:00:00Z",
-          "min_c": 13.8,
-          "min_obs_utc": "2026-07-26T16:00:00Z"
+          "min_c": 13.0,
+          "min_obs_utc": "2026-07-26T20:00:00Z"
         },
         {
           "id": "10037",
