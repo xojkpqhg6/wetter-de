@@ -1311,7 +1311,7 @@
       "min_c": 14.6,
       "min_obs_utc": "2026-07-31T04:00:00Z",
       "name": "KAISERSBACH-CRONHUET",
-      "samples": 21
+      "samples": 24
     },
     "10756": {
       "max_c": 33.5,
@@ -1634,5 +1634,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-08-01T04:31:49Z"
+  "updated_utc": "2026-08-01T20:14:25Z"
 }
