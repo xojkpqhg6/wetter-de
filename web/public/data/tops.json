@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-08-02T21:07:40Z",
+  "generated_utc": "2026-08-02T22:07:34Z",
   "periods": {
     "day": {
       "key": "2026-08-02",
@@ -1523,8 +1523,8 @@
           "name": "ST. PETER ORDING",
           "max_c": 21.1,
           "max_obs_utc": "2026-08-02T15:00:00Z",
-          "min_c": 15.8,
-          "min_obs_utc": "2026-08-02T20:00:00Z"
+          "min_c": 15.2,
+          "min_obs_utc": "2026-08-02T21:00:00Z"
         },
         {
           "id": "10091",
@@ -1563,8 +1563,8 @@
           "name": "WESTERMARKELSDORF",
           "max_c": 20.9,
           "max_obs_utc": "2026-08-02T15:00:00Z",
-          "min_c": 16.3,
-          "min_obs_utc": "2026-08-02T04:00:00Z"
+          "min_c": 16.2,
+          "min_obs_utc": "2026-08-02T21:00:00Z"
         },
         {
           "id": "10582",
