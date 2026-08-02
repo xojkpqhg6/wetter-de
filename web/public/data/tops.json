@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-08-02T22:07:34Z",
+  "generated_utc": "2026-08-02T23:07:25Z",
   "periods": {
     "day": {
       "key": "2026-08-02",
@@ -347,8 +347,8 @@
           "name": "CHIEMING",
           "max_c": 29.2,
           "max_obs_utc": "2026-08-02T15:00:00Z",
-          "min_c": 18.4,
-          "min_obs_utc": "2026-08-02T05:00:00Z"
+          "min_c": 18.3,
+          "min_obs_utc": "2026-08-02T22:00:00Z"
         },
         {
           "id": "10837",
@@ -1475,8 +1475,8 @@
           "name": "FLENSBURG",
           "max_c": 21.8,
           "max_obs_utc": "2026-08-02T13:00:00Z",
-          "min_c": 13.8,
-          "min_obs_utc": "2026-08-02T03:00:00Z"
+          "min_c": 13.1,
+          "min_obs_utc": "2026-08-02T22:00:00Z"
         },
         {
           "id": "10113",
@@ -1523,8 +1523,8 @@
           "name": "ST. PETER ORDING",
           "max_c": 21.1,
           "max_obs_utc": "2026-08-02T15:00:00Z",
-          "min_c": 15.2,
-          "min_obs_utc": "2026-08-02T21:00:00Z"
+          "min_c": 14.6,
+          "min_obs_utc": "2026-08-02T22:00:00Z"
         },
         {
           "id": "10091",
@@ -1563,8 +1563,8 @@
           "name": "WESTERMARKELSDORF",
           "max_c": 20.9,
           "max_obs_utc": "2026-08-02T15:00:00Z",
-          "min_c": 16.2,
-          "min_obs_utc": "2026-08-02T21:00:00Z"
+          "min_c": 15.2,
+          "min_obs_utc": "2026-08-02T22:00:00Z"
         },
         {
           "id": "10582",
@@ -4833,8 +4833,8 @@
           "name": "WESTERMARKELSDORF",
           "max_c": 20.9,
           "max_obs_utc": "2026-08-02T15:00:00Z",
-          "min_c": 15.7,
-          "min_obs_utc": "2026-08-01T04:00:00Z"
+          "min_c": 15.2,
+          "min_obs_utc": "2026-08-02T22:00:00Z"
         },
         {
           "id": "10582",
