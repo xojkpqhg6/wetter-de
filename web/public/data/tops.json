@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-08-03T21:18:00Z",
+  "generated_utc": "2026-08-03T22:07:37Z",
   "periods": {
     "day": {
       "key": "2026-08-03",
@@ -667,8 +667,8 @@
           "name": "OBERSTDORF",
           "max_c": 32.6,
           "max_obs_utc": "2026-08-03T14:00:00Z",
-          "min_c": 14.6,
-          "min_obs_utc": "2026-08-03T05:00:00Z"
+          "min_c": 14.2,
+          "min_obs_utc": "2026-08-03T21:00:00Z"
         },
         {
           "id": "10441",
@@ -2290,8 +2290,8 @@
           "name": "OBERSTDORF",
           "max_c": 32.6,
           "max_obs_utc": "2026-08-03T14:00:00Z",
-          "min_c": 14.6,
-          "min_obs_utc": "2026-08-03T05:00:00Z"
+          "min_c": 14.2,
+          "min_obs_utc": "2026-08-03T21:00:00Z"
         },
         {
           "id": "10441",
