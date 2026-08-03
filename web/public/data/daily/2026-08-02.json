@@ -1431,7 +1431,7 @@
       "min_c": 15.3,
       "min_obs_utc": "2026-08-02T05:00:00Z",
       "name": "MESSSTETTEN",
-      "samples": 16
+      "samples": 24
     },
     "10836": {
       "max_c": 27.9,
@@ -1626,5 +1626,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-08-03T03:07:44Z"
+  "updated_utc": "2026-08-03T10:07:54Z"
 }
