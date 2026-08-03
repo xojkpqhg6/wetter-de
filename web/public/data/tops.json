@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-08-03T18:07:50Z",
+  "generated_utc": "2026-08-03T19:07:47Z",
   "periods": {
     "day": {
       "key": "2026-08-03",
@@ -1553,8 +1553,8 @@
         {
           "id": "10124",
           "name": "LEUCHTTURM A. WESER",
-          "max_c": 24.0,
-          "max_obs_utc": "2026-08-03T17:00:00Z",
+          "max_c": 24.5,
+          "max_obs_utc": "2026-08-03T18:00:00Z",
           "min_c": 18.0,
           "min_obs_utc": "2026-08-03T06:00:00Z"
         },
@@ -3176,8 +3176,8 @@
         {
           "id": "10124",
           "name": "LEUCHTTURM A. WESER",
-          "max_c": 24.0,
-          "max_obs_utc": "2026-08-03T17:00:00Z",
+          "max_c": 24.5,
+          "max_obs_utc": "2026-08-03T18:00:00Z",
           "min_c": 18.0,
           "min_obs_utc": "2026-08-03T06:00:00Z"
         },
@@ -4807,8 +4807,8 @@
         {
           "id": "10124",
           "name": "LEUCHTTURM A. WESER",
-          "max_c": 24.0,
-          "max_obs_utc": "2026-08-03T17:00:00Z",
+          "max_c": 24.5,
+          "max_obs_utc": "2026-08-03T18:00:00Z",
           "min_c": 16.2,
           "min_obs_utc": "2026-08-01T03:00:00Z"
         },
