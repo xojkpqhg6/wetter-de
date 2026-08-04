@@ -954,12 +954,12 @@
       "samples": 24
     },
     "10552": {
-      "max_c": 23.6,
-      "max_obs_utc": "2026-08-03T23:00:00Z",
+      "max_c": 28.3,
+      "max_obs_utc": "2026-08-03T15:00:00Z",
       "min_c": 14.3,
       "min_obs_utc": "2026-08-03T00:00:00Z",
       "name": "SCHMUECKE",
-      "samples": 12
+      "samples": 24
     },
     "10554": {
       "max_c": 30.8,
@@ -1626,5 +1626,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-08-04T07:07:45Z"
+  "updated_utc": "2026-08-04T08:07:52Z"
 }
