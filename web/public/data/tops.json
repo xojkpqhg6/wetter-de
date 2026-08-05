@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-08-05T18:07:52Z",
+  "generated_utc": "2026-08-05T19:07:45Z",
   "periods": {
     "day": {
       "key": "2026-08-05",
@@ -1603,16 +1603,16 @@
           "name": "LIST/SYLT",
           "max_c": 22.2,
           "max_obs_utc": "2026-08-05T11:00:00Z",
-          "min_c": 20.2,
-          "min_obs_utc": "2026-08-05T01:00:00Z"
+          "min_c": 19.8,
+          "min_obs_utc": "2026-08-05T18:00:00Z"
         },
         {
           "id": "10015",
           "name": "HELGOLAND",
           "max_c": 21.9,
           "max_obs_utc": "2026-08-05T10:00:00Z",
-          "min_c": 20.7,
-          "min_obs_utc": "2026-08-05T04:00:00Z"
+          "min_c": 20.5,
+          "min_obs_utc": "2026-08-05T18:00:00Z"
         },
         {
           "id": "10908",
