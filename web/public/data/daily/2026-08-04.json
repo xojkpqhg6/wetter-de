@@ -943,7 +943,7 @@
       "min_c": 18.2,
       "min_obs_utc": "2026-08-04T04:00:00Z",
       "name": "WASSERKUPPE",
-      "samples": 23
+      "samples": 24
     },
     "10548": {
       "max_c": 34.4,
@@ -1626,5 +1626,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-08-05T03:07:39Z"
+  "updated_utc": "2026-08-05T05:07:48Z"
 }
