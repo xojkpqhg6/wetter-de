@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-08-05T17:07:39Z",
+  "generated_utc": "2026-08-05T17:51:27Z",
   "periods": {
     "day": {
       "key": "2026-08-05",
@@ -207,6 +207,14 @@
           "min_obs_utc": "2026-08-05T04:00:00Z"
         },
         {
+          "id": "10803",
+          "name": "FREIBURG",
+          "max_c": 32.7,
+          "max_obs_utc": "2026-08-05T17:00:00Z",
+          "min_c": 22.1,
+          "min_obs_utc": "2026-08-05T05:00:00Z"
+        },
+        {
           "id": "10439",
           "name": "FRITZLAR",
           "max_c": 32.6,
@@ -303,14 +311,6 @@
           "min_obs_utc": "2026-08-05T05:00:00Z"
         },
         {
-          "id": "10803",
-          "name": "FREIBURG",
-          "max_c": 32.3,
-          "max_obs_utc": "2026-08-05T15:00:00Z",
-          "min_c": 22.1,
-          "min_obs_utc": "2026-08-05T05:00:00Z"
-        },
-        {
           "id": "10852",
           "name": "AUGSBURG",
           "max_c": 32.3,
@@ -375,12 +375,28 @@
           "min_obs_utc": "2026-08-05T04:00:00Z"
         },
         {
+          "id": "10565",
+          "name": "OSTERFELD",
+          "max_c": 31.9,
+          "max_obs_utc": "2026-08-05T17:00:00Z",
+          "min_c": 23.3,
+          "min_obs_utc": "2026-08-05T05:00:00Z"
+        },
+        {
           "id": "10569",
           "name": "PLAUEN",
           "max_c": 31.9,
           "max_obs_utc": "2026-08-05T16:00:00Z",
           "min_c": 18.7,
           "min_obs_utc": "2026-08-05T03:00:00Z"
+        },
+        {
+          "id": "10376",
+          "name": "BARUTH",
+          "max_c": 31.8,
+          "max_obs_utc": "2026-08-05T17:00:00Z",
+          "min_c": 18.6,
+          "min_obs_utc": "2026-08-05T02:00:00Z"
         },
         {
           "id": "10476",
@@ -429,14 +445,6 @@
           "max_obs_utc": "2026-08-05T14:00:00Z",
           "min_c": 19.7,
           "min_obs_utc": "2026-08-05T05:00:00Z"
-        },
-        {
-          "id": "10376",
-          "name": "BARUTH",
-          "max_c": 31.7,
-          "max_obs_utc": "2026-08-05T15:00:00Z",
-          "min_c": 18.6,
-          "min_obs_utc": "2026-08-05T02:00:00Z"
         },
         {
           "id": "10384",
@@ -583,11 +591,11 @@
           "min_obs_utc": "2026-08-05T03:00:00Z"
         },
         {
-          "id": "10565",
-          "name": "OSTERFELD",
+          "id": "10480",
+          "name": "OSCHATZ",
           "max_c": 31.2,
-          "max_obs_utc": "2026-08-05T12:00:00Z",
-          "min_c": 23.3,
+          "max_obs_utc": "2026-08-05T17:00:00Z",
+          "min_c": 21.0,
           "min_obs_utc": "2026-08-05T05:00:00Z"
         },
         {
@@ -653,14 +661,6 @@
           "max_obs_utc": "2026-08-05T16:00:00Z",
           "min_c": 20.8,
           "min_obs_utc": "2026-08-05T02:00:00Z"
-        },
-        {
-          "id": "10480",
-          "name": "OSCHATZ",
-          "max_c": 30.8,
-          "max_obs_utc": "2026-08-05T15:00:00Z",
-          "min_c": 21.0,
-          "min_obs_utc": "2026-08-05T05:00:00Z"
         },
         {
           "id": "10954",
@@ -911,6 +911,14 @@
           "min_obs_utc": "2026-08-05T03:00:00Z"
         },
         {
+          "id": "10291",
+          "name": "ANGERMUENDE",
+          "max_c": 29.9,
+          "max_obs_utc": "2026-08-05T17:00:00Z",
+          "min_c": 18.4,
+          "min_obs_utc": "2026-08-05T04:00:00Z"
+        },
+        {
           "id": "10519",
           "name": "BONN-ROLEBER",
           "max_c": 29.9,
@@ -925,14 +933,6 @@
           "max_obs_utc": "2026-08-05T16:00:00Z",
           "min_c": 21.6,
           "min_obs_utc": "2026-08-05T03:00:00Z"
-        },
-        {
-          "id": "10291",
-          "name": "ANGERMUENDE",
-          "max_c": 29.8,
-          "max_obs_utc": "2026-08-05T16:00:00Z",
-          "min_c": 18.4,
-          "min_obs_utc": "2026-08-05T04:00:00Z"
         },
         {
           "id": "10343",
@@ -1007,6 +1007,14 @@
           "min_obs_utc": "2026-08-05T04:00:00Z"
         },
         {
+          "id": "10747",
+          "name": "KAISERSBACH-CRONHUET",
+          "max_c": 29.4,
+          "max_obs_utc": "2026-08-05T17:00:00Z",
+          "min_c": 18.2,
+          "min_obs_utc": "2026-08-05T04:00:00Z"
+        },
+        {
           "id": "10146",
           "name": "QUICKBORN",
           "max_c": 29.3,
@@ -1061,14 +1069,6 @@
           "max_obs_utc": "2026-08-05T14:00:00Z",
           "min_c": 21.8,
           "min_obs_utc": "2026-08-05T01:00:00Z"
-        },
-        {
-          "id": "10747",
-          "name": "KAISERSBACH-CRONHUET",
-          "max_c": 29.2,
-          "max_obs_utc": "2026-08-05T16:00:00Z",
-          "min_c": 18.2,
-          "min_obs_utc": "2026-08-05T04:00:00Z"
         },
         {
           "id": "10836",
@@ -2582,20 +2582,20 @@
           "min_obs_utc": "2026-08-03T04:00:00Z"
         },
         {
+          "id": "10376",
+          "name": "BARUTH",
+          "max_c": 31.8,
+          "max_obs_utc": "2026-08-05T17:00:00Z",
+          "min_c": 11.1,
+          "min_obs_utc": "2026-08-03T04:00:00Z"
+        },
+        {
           "id": "10271",
           "name": "NEURUPPIN-ALT RUPPIN",
           "max_c": 31.7,
           "max_obs_utc": "2026-08-05T15:00:00Z",
           "min_c": 12.1,
           "min_obs_utc": "2026-08-03T03:00:00Z"
-        },
-        {
-          "id": "10376",
-          "name": "BARUTH",
-          "max_c": 31.7,
-          "max_obs_utc": "2026-08-05T15:00:00Z",
-          "min_c": 11.1,
-          "min_obs_utc": "2026-08-03T04:00:00Z"
         },
         {
           "id": "10348",
@@ -2960,8 +2960,8 @@
         {
           "id": "10291",
           "name": "ANGERMUENDE",
-          "max_c": 29.8,
-          "max_obs_utc": "2026-08-05T16:00:00Z",
+          "max_c": 29.9,
+          "max_obs_utc": "2026-08-05T17:00:00Z",
           "min_c": 10.4,
           "min_obs_utc": "2026-08-03T03:00:00Z"
         },
@@ -4213,19 +4213,19 @@
           "min_obs_utc": "2026-08-02T03:00:00Z"
         },
         {
+          "id": "10376",
+          "name": "BARUTH",
+          "max_c": 31.8,
+          "max_obs_utc": "2026-08-05T17:00:00Z",
+          "min_c": 10.0,
+          "min_obs_utc": "2026-08-02T04:00:00Z"
+        },
+        {
           "id": "10271",
           "name": "NEURUPPIN-ALT RUPPIN",
           "max_c": 31.7,
           "max_obs_utc": "2026-08-05T15:00:00Z",
           "min_c": 8.3,
-          "min_obs_utc": "2026-08-02T04:00:00Z"
-        },
-        {
-          "id": "10376",
-          "name": "BARUTH",
-          "max_c": 31.7,
-          "max_obs_utc": "2026-08-05T15:00:00Z",
-          "min_c": 10.0,
           "min_obs_utc": "2026-08-02T04:00:00Z"
         },
         {
@@ -4591,8 +4591,8 @@
         {
           "id": "10291",
           "name": "ANGERMUENDE",
-          "max_c": 29.8,
-          "max_obs_utc": "2026-08-05T16:00:00Z",
+          "max_c": 29.9,
+          "max_obs_utc": "2026-08-05T17:00:00Z",
           "min_c": 9.6,
           "min_obs_utc": "2026-08-02T03:00:00Z"
         },
