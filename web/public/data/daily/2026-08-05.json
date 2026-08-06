@@ -34,12 +34,12 @@
       "samples": 24
     },
     "10028": {
-      "max_c": 23.3,
-      "max_obs_utc": "2026-08-05T11:00:00Z",
+      "max_c": 23.4,
+      "max_obs_utc": "2026-08-05T10:00:00Z",
       "min_c": 19.4,
       "min_obs_utc": "2026-08-05T23:00:00Z",
       "name": "ST. PETER ORDING",
-      "samples": 22
+      "samples": 23
     },
     "10033": {
       "max_c": 24.7,
@@ -1634,5 +1634,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-08-06T03:07:53Z"
+  "updated_utc": "2026-08-06T09:48:09Z"
 }
