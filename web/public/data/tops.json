@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-08-11T17:07:45Z",
+  "generated_utc": "2026-08-11T18:07:44Z",
   "periods": {
     "day": {
       "key": "2026-08-11",
@@ -831,6 +831,14 @@
           "min_obs_utc": "2026-08-11T05:00:00Z"
         },
         {
+          "id": "10335",
+          "name": "BUECKEBURG",
+          "max_c": 22.6,
+          "max_obs_utc": "2026-08-11T17:00:00Z",
+          "min_c": 9.3,
+          "min_obs_utc": "2026-08-11T03:00:00Z"
+        },
+        {
           "id": "10469",
           "name": "LEIPZIG/SCHKEUDITZ",
           "max_c": 22.6,
@@ -853,14 +861,6 @@
           "max_obs_utc": "2026-08-11T15:00:00Z",
           "min_c": 11.2,
           "min_obs_utc": "2026-08-11T04:00:00Z"
-        },
-        {
-          "id": "10335",
-          "name": "BUECKEBURG",
-          "max_c": 22.5,
-          "max_obs_utc": "2026-08-11T15:00:00Z",
-          "min_c": 9.3,
-          "min_obs_utc": "2026-08-11T03:00:00Z"
         },
         {
           "id": "10564",
