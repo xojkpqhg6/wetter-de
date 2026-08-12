@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-08-12T22:07:48Z",
+  "generated_utc": "2026-08-12T22:57:02Z",
   "periods": {
     "day": {
       "key": "2026-08-12",
@@ -283,8 +283,8 @@
           "name": "MUENCHEN-FL.",
           "max_c": 29.8,
           "max_obs_utc": "2026-08-12T15:00:00Z",
-          "min_c": 14.8,
-          "min_obs_utc": "2026-08-12T04:00:00Z"
+          "min_c": 13.9,
+          "min_obs_utc": "2026-08-12T22:00:00Z"
         },
         {
           "id": "10675",
@@ -339,8 +339,8 @@
           "name": "MUEHLDORF",
           "max_c": 29.6,
           "max_obs_utc": "2026-08-12T15:00:00Z",
-          "min_c": 16.3,
-          "min_obs_utc": "2026-08-12T04:00:00Z"
+          "min_c": 15.9,
+          "min_obs_utc": "2026-08-12T22:00:00Z"
         },
         {
           "id": "10818",
@@ -1559,6 +1559,14 @@
           "min_obs_utc": "2026-08-12T04:00:00Z"
         },
         {
+          "id": "10015",
+          "name": "HELGOLAND",
+          "max_c": 19.1,
+          "max_obs_utc": "2026-08-12T22:00:00Z",
+          "min_c": 13.6,
+          "min_obs_utc": "2026-08-12T04:00:00Z"
+        },
+        {
           "id": "10161",
           "name": "BOLTENHAGEN",
           "max_c": 19.1,
@@ -1575,14 +1583,6 @@
           "min_obs_utc": "2026-08-12T04:00:00Z"
         },
         {
-          "id": "10015",
-          "name": "HELGOLAND",
-          "max_c": 18.9,
-          "max_obs_utc": "2026-08-12T21:00:00Z",
-          "min_c": 13.6,
-          "min_obs_utc": "2026-08-12T04:00:00Z"
-        },
-        {
           "id": "10170",
           "name": "WARNEMUENDE",
           "max_c": 18.7,
@@ -1595,8 +1595,8 @@
           "name": "WESTERMARKELSDORF",
           "max_c": 18.4,
           "max_obs_utc": "2026-08-12T16:00:00Z",
-          "min_c": 13.8,
-          "min_obs_utc": "2026-08-12T20:00:00Z"
+          "min_c": 13.4,
+          "min_obs_utc": "2026-08-12T22:00:00Z"
         },
         {
           "id": "10042",
@@ -1619,8 +1619,8 @@
           "name": "ARKONA",
           "max_c": 17.8,
           "max_obs_utc": "2026-08-12T13:00:00Z",
-          "min_c": 14.4,
-          "min_obs_utc": "2026-08-12T19:00:00Z"
+          "min_c": 14.1,
+          "min_obs_utc": "2026-08-12T22:00:00Z"
         },
         {
           "id": "10961",
@@ -1738,8 +1738,8 @@
           "name": "MUENCHEN-FL.",
           "max_c": 34.1,
           "max_obs_utc": "2026-08-10T14:00:00Z",
-          "min_c": 14.8,
-          "min_obs_utc": "2026-08-12T04:00:00Z"
+          "min_c": 13.9,
+          "min_obs_utc": "2026-08-12T22:00:00Z"
         },
         {
           "id": "10788",
@@ -1786,8 +1786,8 @@
           "name": "MUEHLDORF",
           "max_c": 33.7,
           "max_obs_utc": "2026-08-10T16:00:00Z",
-          "min_c": 16.3,
-          "min_obs_utc": "2026-08-12T04:00:00Z"
+          "min_c": 15.9,
+          "min_obs_utc": "2026-08-12T22:00:00Z"
         },
         {
           "id": "10761",
@@ -3226,8 +3226,8 @@
           "name": "WESTERMARKELSDORF",
           "max_c": 19.6,
           "max_obs_utc": "2026-08-10T16:00:00Z",
-          "min_c": 13.8,
-          "min_obs_utc": "2026-08-12T20:00:00Z"
+          "min_c": 13.4,
+          "min_obs_utc": "2026-08-12T22:00:00Z"
         },
         {
           "id": "10170",
@@ -3242,8 +3242,8 @@
           "name": "ARKONA",
           "max_c": 19.5,
           "max_obs_utc": "2026-08-10T08:00:00Z",
-          "min_c": 14.4,
-          "min_obs_utc": "2026-08-12T19:00:00Z"
+          "min_c": 14.1,
+          "min_obs_utc": "2026-08-12T22:00:00Z"
         },
         {
           "id": "10124",
@@ -4849,8 +4849,8 @@
           "name": "WESTERMARKELSDORF",
           "max_c": 25.8,
           "max_obs_utc": "2026-08-05T10:00:00Z",
-          "min_c": 13.8,
-          "min_obs_utc": "2026-08-12T20:00:00Z"
+          "min_c": 13.4,
+          "min_obs_utc": "2026-08-12T22:00:00Z"
         },
         {
           "id": "10020",
