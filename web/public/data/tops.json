@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-08-12T23:07:50Z",
+  "generated_utc": "2026-08-12T23:54:49Z",
   "periods": {
     "day": {
       "key": "2026-08-12",
@@ -51,8 +51,8 @@
           "name": "KONSTANZ",
           "max_c": 32.9,
           "max_obs_utc": "2026-08-12T16:00:00Z",
-          "min_c": 19.5,
-          "min_obs_utc": "2026-08-12T05:00:00Z"
+          "min_c": 19.0,
+          "min_obs_utc": "2026-08-12T23:00:00Z"
         },
         {
           "id": "10739",
@@ -371,8 +371,8 @@
           "name": "LEUTKIRCH-HERLAZHFN.",
           "max_c": 29.4,
           "max_obs_utc": "2026-08-12T15:00:00Z",
-          "min_c": 15.1,
-          "min_obs_utc": "2026-08-12T05:00:00Z"
+          "min_c": 13.8,
+          "min_obs_utc": "2026-08-12T23:00:00Z"
         },
         {
           "id": "10506",
@@ -1595,8 +1595,8 @@
           "name": "WESTERMARKELSDORF",
           "max_c": 18.4,
           "max_obs_utc": "2026-08-12T16:00:00Z",
-          "min_c": 13.4,
-          "min_obs_utc": "2026-08-12T22:00:00Z"
+          "min_c": 12.7,
+          "min_obs_utc": "2026-08-12T23:00:00Z"
         },
         {
           "id": "10042",
@@ -1619,8 +1619,8 @@
           "name": "ARKONA",
           "max_c": 17.8,
           "max_obs_utc": "2026-08-12T13:00:00Z",
-          "min_c": 14.1,
-          "min_obs_utc": "2026-08-12T22:00:00Z"
+          "min_c": 13.9,
+          "min_obs_utc": "2026-08-12T23:00:00Z"
         },
         {
           "id": "10961",
@@ -2274,8 +2274,8 @@
           "name": "LEUTKIRCH-HERLAZHFN.",
           "max_c": 31.0,
           "max_obs_utc": "2026-08-10T13:00:00Z",
-          "min_c": 14.1,
-          "min_obs_utc": "2026-08-11T05:00:00Z"
+          "min_c": 13.8,
+          "min_obs_utc": "2026-08-12T23:00:00Z"
         },
         {
           "id": "10379",
@@ -3226,8 +3226,8 @@
           "name": "WESTERMARKELSDORF",
           "max_c": 19.6,
           "max_obs_utc": "2026-08-10T16:00:00Z",
-          "min_c": 13.4,
-          "min_obs_utc": "2026-08-12T22:00:00Z"
+          "min_c": 12.7,
+          "min_obs_utc": "2026-08-12T23:00:00Z"
         },
         {
           "id": "10170",
@@ -3242,8 +3242,8 @@
           "name": "ARKONA",
           "max_c": 19.5,
           "max_obs_utc": "2026-08-10T08:00:00Z",
-          "min_c": 14.1,
-          "min_obs_utc": "2026-08-12T22:00:00Z"
+          "min_c": 13.9,
+          "min_obs_utc": "2026-08-12T23:00:00Z"
         },
         {
           "id": "10124",
@@ -3849,8 +3849,8 @@
           "name": "LEUTKIRCH-HERLAZHFN.",
           "max_c": 34.3,
           "max_obs_utc": "2026-08-04T15:00:00Z",
-          "min_c": 14.1,
-          "min_obs_utc": "2026-08-11T05:00:00Z"
+          "min_c": 13.8,
+          "min_obs_utc": "2026-08-12T23:00:00Z"
         },
         {
           "id": "10410",
@@ -4849,8 +4849,8 @@
           "name": "WESTERMARKELSDORF",
           "max_c": 25.8,
           "max_obs_utc": "2026-08-05T10:00:00Z",
-          "min_c": 13.4,
-          "min_obs_utc": "2026-08-12T22:00:00Z"
+          "min_c": 12.7,
+          "min_obs_utc": "2026-08-12T23:00:00Z"
         },
         {
           "id": "10020",
