@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-08-12T19:16:19Z",
+  "generated_utc": "2026-08-12T20:07:41Z",
   "periods": {
     "day": {
       "key": "2026-08-12",
@@ -1483,8 +1483,8 @@
           "name": "GREIFSWALDER OIE",
           "max_c": 20.2,
           "max_obs_utc": "2026-08-12T12:00:00Z",
-          "min_c": 16.0,
-          "min_obs_utc": "2026-08-12T03:00:00Z"
+          "min_c": 15.9,
+          "min_obs_utc": "2026-08-12T19:00:00Z"
         },
         {
           "id": "10131",
@@ -1551,6 +1551,14 @@
           "min_obs_utc": "2026-08-12T04:00:00Z"
         },
         {
+          "id": "10124",
+          "name": "LEUCHTTURM A. WESER",
+          "max_c": 19.1,
+          "max_obs_utc": "2026-08-12T19:00:00Z",
+          "min_c": 14.9,
+          "min_obs_utc": "2026-08-12T07:00:00Z"
+        },
+        {
           "id": "10161",
           "name": "BOLTENHAGEN",
           "max_c": 19.1,
@@ -1573,14 +1581,6 @@
           "max_obs_utc": "2026-08-12T15:00:00Z",
           "min_c": 13.6,
           "min_obs_utc": "2026-08-12T04:00:00Z"
-        },
-        {
-          "id": "10124",
-          "name": "LEUCHTTURM A. WESER",
-          "max_c": 18.7,
-          "max_obs_utc": "2026-08-12T18:00:00Z",
-          "min_c": 14.9,
-          "min_obs_utc": "2026-08-12T07:00:00Z"
         },
         {
           "id": "10170",
@@ -1619,8 +1619,8 @@
           "name": "ARKONA",
           "max_c": 17.8,
           "max_obs_utc": "2026-08-12T13:00:00Z",
-          "min_c": 14.8,
-          "min_obs_utc": "2026-08-12T04:00:00Z"
+          "min_c": 14.4,
+          "min_obs_utc": "2026-08-12T19:00:00Z"
         },
         {
           "id": "10961",
@@ -3242,14 +3242,14 @@
           "name": "ARKONA",
           "max_c": 19.5,
           "max_obs_utc": "2026-08-10T08:00:00Z",
-          "min_c": 14.5,
-          "min_obs_utc": "2026-08-11T05:00:00Z"
+          "min_c": 14.4,
+          "min_obs_utc": "2026-08-12T19:00:00Z"
         },
         {
           "id": "10124",
           "name": "LEUCHTTURM A. WESER",
-          "max_c": 18.7,
-          "max_obs_utc": "2026-08-12T18:00:00Z",
+          "max_c": 19.1,
+          "max_obs_utc": "2026-08-12T19:00:00Z",
           "min_c": 14.9,
           "min_obs_utc": "2026-08-12T07:00:00Z"
         },
