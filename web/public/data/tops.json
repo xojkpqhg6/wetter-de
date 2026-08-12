@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-08-12T17:07:38Z",
+  "generated_utc": "2026-08-12T18:07:52Z",
   "periods": {
     "day": {
       "key": "2026-08-12",
@@ -143,6 +143,14 @@
           "min_obs_utc": "2026-08-12T04:00:00Z"
         },
         {
+          "id": "10637",
+          "name": "FRANKFURT/M",
+          "max_c": 31.3,
+          "max_obs_utc": "2026-08-12T17:00:00Z",
+          "min_c": 17.4,
+          "min_obs_utc": "2026-08-12T05:00:00Z"
+        },
+        {
           "id": "10641",
           "name": "OFFENBACH-WETTERPARK",
           "max_c": 31.2,
@@ -157,14 +165,6 @@
           "max_obs_utc": "2026-08-12T16:00:00Z",
           "min_c": 10.8,
           "min_obs_utc": "2026-08-12T04:00:00Z"
-        },
-        {
-          "id": "10637",
-          "name": "FRANKFURT/M",
-          "max_c": 31.1,
-          "max_obs_utc": "2026-08-12T16:00:00Z",
-          "min_c": 17.4,
-          "min_obs_utc": "2026-08-12T05:00:00Z"
         },
         {
           "id": "10500",
@@ -1111,6 +1111,14 @@
           "min_obs_utc": "2026-08-12T04:00:00Z"
         },
         {
+          "id": "10396",
+          "name": "MANSCHNOW",
+          "max_c": 24.6,
+          "max_obs_utc": "2026-08-12T17:00:00Z",
+          "min_c": 7.9,
+          "min_obs_utc": "2026-08-12T04:00:00Z"
+        },
+        {
           "id": "10488",
           "name": "DRESDEN/FLUGHAFEN",
           "max_c": 24.6,
@@ -1125,14 +1133,6 @@
           "max_obs_utc": "2026-08-12T15:00:00Z",
           "min_c": 11.2,
           "min_obs_utc": "2026-08-12T03:00:00Z"
-        },
-        {
-          "id": "10396",
-          "name": "MANSCHNOW",
-          "max_c": 24.5,
-          "max_obs_utc": "2026-08-12T14:00:00Z",
-          "min_c": 7.9,
-          "min_obs_utc": "2026-08-12T04:00:00Z"
         },
         {
           "id": "10544",
@@ -1281,9 +1281,17 @@
         {
           "id": "10268",
           "name": "WAREN",
-          "max_c": 23.2,
-          "max_obs_utc": "2026-08-12T16:00:00Z",
+          "max_c": 23.3,
+          "max_obs_utc": "2026-08-12T17:00:00Z",
           "min_c": 9.4,
+          "min_obs_utc": "2026-08-12T04:00:00Z"
+        },
+        {
+          "id": "10129",
+          "name": "BREMERHAVEN",
+          "max_c": 23.1,
+          "max_obs_utc": "2026-08-12T17:00:00Z",
+          "min_c": 11.2,
           "min_obs_utc": "2026-08-12T04:00:00Z"
         },
         {
@@ -1292,14 +1300,6 @@
           "max_c": 22.8,
           "max_obs_utc": "2026-08-12T15:00:00Z",
           "min_c": 6.0,
-          "min_obs_utc": "2026-08-12T04:00:00Z"
-        },
-        {
-          "id": "10129",
-          "name": "BREMERHAVEN",
-          "max_c": 22.8,
-          "max_obs_utc": "2026-08-12T15:00:00Z",
-          "min_c": 11.2,
           "min_obs_utc": "2026-08-12T04:00:00Z"
         },
         {
@@ -1593,8 +1593,8 @@
         {
           "id": "10124",
           "name": "LEUCHTTURM A. WESER",
-          "max_c": 18.3,
-          "max_obs_utc": "2026-08-12T16:00:00Z",
+          "max_c": 18.4,
+          "max_obs_utc": "2026-08-12T17:00:00Z",
           "min_c": 14.9,
           "min_obs_utc": "2026-08-12T07:00:00Z"
         },
@@ -2982,6 +2982,14 @@
           "min_obs_utc": "2026-08-12T04:00:00Z"
         },
         {
+          "id": "10129",
+          "name": "BREMERHAVEN",
+          "max_c": 23.1,
+          "max_obs_utc": "2026-08-12T17:00:00Z",
+          "min_c": 11.2,
+          "min_obs_utc": "2026-08-12T04:00:00Z"
+        },
+        {
           "id": "10791",
           "name": "GR.ARBER",
           "max_c": 23.1,
@@ -2995,14 +3003,6 @@
           "max_c": 22.8,
           "max_obs_utc": "2026-08-12T15:00:00Z",
           "min_c": 6.0,
-          "min_obs_utc": "2026-08-12T04:00:00Z"
-        },
-        {
-          "id": "10129",
-          "name": "BREMERHAVEN",
-          "max_c": 22.8,
-          "max_obs_utc": "2026-08-12T15:00:00Z",
-          "min_c": 11.2,
           "min_obs_utc": "2026-08-12T04:00:00Z"
         },
         {
@@ -3248,8 +3248,8 @@
         {
           "id": "10124",
           "name": "LEUCHTTURM A. WESER",
-          "max_c": 18.3,
-          "max_obs_utc": "2026-08-12T16:00:00Z",
+          "max_c": 18.4,
+          "max_obs_utc": "2026-08-12T17:00:00Z",
           "min_c": 14.9,
           "min_obs_utc": "2026-08-12T07:00:00Z"
         },
