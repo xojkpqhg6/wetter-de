@@ -1,6 +1,6 @@
 {
-  "generated_utc": "2026-08-14T23:07:45Z",
-  "station_count": 198,
+  "generated_utc": "2026-08-14T23:33:20Z",
+  "station_count": 196,
   "stations": [
     {
       "id": "10704",
@@ -180,12 +180,6 @@
       "id": "10962",
       "name": "HOHENPEISS.BG",
       "temp_c": 23.9,
-      "obs_utc": "2026-08-14T22:00:00Z"
-    },
-    {
-      "id": "10335",
-      "name": "BUECKEBURG",
-      "temp_c": 23.8,
       "obs_utc": "2026-08-14T22:00:00Z"
     },
     {
@@ -510,12 +504,6 @@
       "id": "10895",
       "name": "FUERSTENZELL",
       "temp_c": 21.4,
-      "obs_utc": "2026-08-14T22:00:00Z"
-    },
-    {
-      "id": "10315",
-      "name": "MUENSTER/OSNABR.",
-      "temp_c": 21.3,
       "obs_utc": "2026-08-14T22:00:00Z"
     },
     {
