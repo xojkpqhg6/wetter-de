@@ -1234,12 +1234,12 @@
       "samples": 24
     },
     "10729": {
-      "max_c": 25.1,
-      "max_obs_utc": "2026-08-13T08:00:00Z",
+      "max_c": 31.6,
+      "max_obs_utc": "2026-08-13T11:00:00Z",
       "min_c": 14.3,
       "min_obs_utc": "2026-08-13T05:00:00Z",
       "name": "MANNHEIM",
-      "samples": 9
+      "samples": 10
     },
     "10731": {
       "max_c": 35.6,
@@ -1626,5 +1626,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-08-14T06:07:41Z"
+  "updated_utc": "2026-08-14T10:07:38Z"
 }
