@@ -127,7 +127,7 @@
       "min_c": 17.5,
       "min_obs_utc": "2026-08-13T06:00:00Z",
       "name": "LEUCHTTURM A. WESER",
-      "samples": 22
+      "samples": 24
     },
     "10126": {
       "max_c": 30.1,
@@ -1626,5 +1626,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-08-13T23:54:29Z"
+  "updated_utc": "2026-08-14T01:07:44Z"
 }
