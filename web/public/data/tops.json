@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-08-14T21:36:52Z",
+  "generated_utc": "2026-08-14T22:07:38Z",
   "periods": {
     "day": {
       "key": "2026-08-14",
@@ -139,8 +139,8 @@
           "name": "BAD LIPPSPRINGE",
           "max_c": 36.0,
           "max_obs_utc": "2026-08-14T15:00:00Z",
-          "min_c": 20.8,
-          "min_obs_utc": "2026-08-14T02:00:00Z"
+          "min_c": 20.1,
+          "min_obs_utc": "2026-08-14T21:00:00Z"
         },
         {
           "id": "10641",
