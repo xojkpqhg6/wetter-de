@@ -1239,7 +1239,7 @@
       "min_c": 14.3,
       "min_obs_utc": "2026-08-13T05:00:00Z",
       "name": "MANNHEIM",
-      "samples": 10
+      "samples": 11
     },
     "10731": {
       "max_c": 35.6,
@@ -1626,5 +1626,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-08-14T10:07:38Z"
+  "updated_utc": "2026-08-14T11:07:38Z"
 }
