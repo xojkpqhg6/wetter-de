@@ -1,6 +1,6 @@
 {
-  "generated_utc": "2026-08-14T20:41:55Z",
-  "station_count": 196,
+  "generated_utc": "2026-08-14T21:07:36Z",
+  "station_count": 197,
   "stations": [
     {
       "id": "10609",
@@ -426,6 +426,12 @@
       "id": "10743",
       "name": "NIEDERSTETTEN",
       "temp_c": 24.3,
+      "obs_utc": "2026-08-14T20:00:00Z"
+    },
+    {
+      "id": "10147",
+      "name": "HAMBURG-FU.",
+      "temp_c": 24.2,
       "obs_utc": "2026-08-14T20:00:00Z"
     },
     {

@@ -199,7 +199,7 @@
       "min_c": 15.0,
       "min_obs_utc": "2026-08-14T04:00:00Z",
       "name": "HAMBURG-FU.",
-      "samples": 20
+      "samples": 21
     },
     "10150": {
       "max_c": 32.0,
@@ -1626,5 +1626,5 @@
       "samples": 21
     }
   },
-  "updated_utc": "2026-08-14T20:41:55Z"
+  "updated_utc": "2026-08-14T21:07:36Z"
 }
