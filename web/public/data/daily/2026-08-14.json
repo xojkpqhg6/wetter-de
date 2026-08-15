@@ -458,12 +458,12 @@
       "samples": 24
     },
     "10321": {
-      "max_c": 18.5,
-      "max_obs_utc": "2026-08-14T01:00:00Z",
+      "max_c": 23.0,
+      "max_obs_utc": "2026-08-14T23:00:00Z",
       "min_c": 15.6,
       "min_obs_utc": "2026-08-14T05:00:00Z",
       "name": "DIEPHOLZ",
-      "samples": 7
+      "samples": 8
     },
     "10325": {
       "max_c": 35.8,
@@ -1626,5 +1626,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-08-15T03:01:34Z"
+  "updated_utc": "2026-08-15T04:43:21Z"
 }
