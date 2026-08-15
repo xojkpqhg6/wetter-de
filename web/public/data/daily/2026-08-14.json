@@ -1535,7 +1535,7 @@
       "min_c": 8.4,
       "min_obs_utc": "2026-08-14T04:00:00Z",
       "name": "MUEHLDORF",
-      "samples": 21
+      "samples": 24
     },
     "10895": {
       "max_c": 31.0,
@@ -1626,5 +1626,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-08-15T00:07:38Z"
+  "updated_utc": "2026-08-15T03:01:34Z"
 }
