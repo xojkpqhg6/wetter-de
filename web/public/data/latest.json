@@ -1,6 +1,6 @@
 {
-  "generated_utc": "2026-08-17T20:38:59Z",
-  "station_count": 199,
+  "generated_utc": "2026-08-17T21:07:44Z",
+  "station_count": 201,
   "stations": [
     {
       "id": "10805",
@@ -747,6 +747,12 @@
       "obs_utc": "2026-08-17T20:00:00Z"
     },
     {
+      "id": "10335",
+      "name": "BUECKEBURG",
+      "temp_c": 15.5,
+      "obs_utc": "2026-08-17T20:00:00Z"
+    },
+    {
       "id": "10385",
       "name": "BERLIN-BRANDENBURG",
       "temp_c": 15.5,
@@ -833,6 +839,12 @@
     {
       "id": "10126",
       "name": "WITTMUNDHAVEN",
+      "temp_c": 15.2,
+      "obs_utc": "2026-08-17T20:00:00Z"
+    },
+    {
+      "id": "10338",
+      "name": "HANNOVER",
       "temp_c": 15.2,
       "obs_utc": "2026-08-17T20:00:00Z"
     },

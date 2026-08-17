@@ -471,7 +471,7 @@
       "min_c": 14.2,
       "min_obs_utc": "2026-08-17T03:00:00Z",
       "name": "BUECKEBURG",
-      "samples": 20
+      "samples": 21
     },
     "10338": {
       "max_c": 18.3,
@@ -479,7 +479,7 @@
       "min_c": 13.7,
       "min_obs_utc": "2026-08-17T04:00:00Z",
       "name": "HANNOVER",
-      "samples": 20
+      "samples": 21
     },
     "10343": {
       "max_c": 17.7,
@@ -1610,5 +1610,5 @@
       "samples": 21
     }
   },
-  "updated_utc": "2026-08-17T20:38:59Z"
+  "updated_utc": "2026-08-17T21:07:44Z"
 }
