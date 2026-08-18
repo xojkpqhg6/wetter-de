@@ -1583,7 +1583,7 @@
       "min_c": 2.0,
       "min_obs_utc": "2026-08-17T13:00:00Z",
       "name": "ZUGSPITZE",
-      "samples": 21
+      "samples": 24
     },
     "10962": {
       "max_c": 21.1,
@@ -1610,5 +1610,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-08-18T05:41:20Z"
+  "updated_utc": "2026-08-18T08:51:23Z"
 }
