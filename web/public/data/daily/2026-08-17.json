@@ -1407,7 +1407,7 @@
       "min_c": 14.5,
       "min_obs_utc": "2026-08-17T10:00:00Z",
       "name": "KLIPPENECK",
-      "samples": 21
+      "samples": 24
     },
     "10827": {
       "max_c": 20.2,
@@ -1610,5 +1610,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-08-18T00:07:49Z"
+  "updated_utc": "2026-08-18T01:47:33Z"
 }
