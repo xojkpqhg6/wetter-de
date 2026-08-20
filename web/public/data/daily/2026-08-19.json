@@ -1039,7 +1039,7 @@
       "min_c": 15.2,
       "min_obs_utc": "2026-08-19T00:00:00Z",
       "name": "LICHTENHAIN",
-      "samples": 23
+      "samples": 24
     },
     "10609": {
       "max_c": 27.9,
@@ -1610,5 +1610,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-08-20T00:07:38Z"
+  "updated_utc": "2026-08-20T01:48:27Z"
 }
