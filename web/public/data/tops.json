@@ -1,10 +1,10 @@
 {
-  "generated_utc": "2026-08-23T18:07:39Z",
+  "generated_utc": "2026-08-23T18:45:24Z",
   "periods": {
     "day": {
       "key": "2026-08-23",
-      "station_count": 200,
-      "hidden": 1,
+      "station_count": 199,
+      "hidden": 2,
       "stations": [
         {
           "id": "10805",
@@ -1263,14 +1263,6 @@
           "min_obs_utc": "2026-08-23T04:00:00Z"
         },
         {
-          "id": "10803",
-          "name": "FREIBURG",
-          "max_c": 17.7,
-          "max_obs_utc": "2026-08-23T09:00:00Z",
-          "min_c": 9.0,
-          "min_obs_utc": "2026-08-23T05:00:00Z"
-        },
-        {
           "id": "10035",
           "name": "SCHLESWIG",
           "max_c": 17.5,
@@ -1626,8 +1618,8 @@
           "name": "FREIBURG",
           "max_c": 32.8,
           "max_obs_utc": "2026-08-19T15:00:00Z",
-          "min_c": 9.0,
-          "min_obs_utc": "2026-08-23T05:00:00Z"
+          "min_c": 10.7,
+          "min_obs_utc": "2026-08-22T04:00:00Z"
         },
         {
           "id": "10731",
@@ -3273,8 +3265,8 @@
           "name": "FREIBURG",
           "max_c": 37.4,
           "max_obs_utc": "2026-08-14T14:00:00Z",
-          "min_c": 9.0,
-          "min_obs_utc": "2026-08-23T05:00:00Z"
+          "min_c": 10.7,
+          "min_obs_utc": "2026-08-22T04:00:00Z"
         },
         {
           "id": "10729",
