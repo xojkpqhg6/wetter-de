@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-08-23T17:32:08Z",
+  "generated_utc": "2026-08-23T18:07:39Z",
   "periods": {
     "day": {
       "key": "2026-08-23",
@@ -391,12 +391,28 @@
           "min_obs_utc": "2026-08-23T05:00:00Z"
         },
         {
+          "id": "10747",
+          "name": "KAISERSBACH-CRONHUET",
+          "max_c": 20.7,
+          "max_obs_utc": "2026-08-23T17:00:00Z",
+          "min_c": 5.6,
+          "min_obs_utc": "2026-08-23T05:00:00Z"
+        },
+        {
           "id": "10321",
           "name": "DIEPHOLZ",
           "max_c": 20.5,
           "max_obs_utc": "2026-08-23T15:00:00Z",
           "min_c": 12.4,
           "min_obs_utc": "2026-08-23T04:00:00Z"
+        },
+        {
+          "id": "10400",
+          "name": "DUESSELDORF",
+          "max_c": 20.5,
+          "max_obs_utc": "2026-08-23T17:00:00Z",
+          "min_c": 9.3,
+          "min_obs_utc": "2026-08-23T03:00:00Z"
         },
         {
           "id": "10648",
@@ -420,14 +436,6 @@
           "max_c": 20.5,
           "max_obs_utc": "2026-08-23T13:00:00Z",
           "min_c": 8.1,
-          "min_obs_utc": "2026-08-23T05:00:00Z"
-        },
-        {
-          "id": "10747",
-          "name": "KAISERSBACH-CRONHUET",
-          "max_c": 20.5,
-          "max_obs_utc": "2026-08-23T14:00:00Z",
-          "min_c": 5.6,
           "min_obs_utc": "2026-08-23T05:00:00Z"
         },
         {
@@ -564,14 +572,6 @@
           "max_c": 20.0,
           "max_obs_utc": "2026-08-23T14:00:00Z",
           "min_c": 12.5,
-          "min_obs_utc": "2026-08-23T03:00:00Z"
-        },
-        {
-          "id": "10400",
-          "name": "DUESSELDORF",
-          "max_c": 20.0,
-          "max_obs_utc": "2026-08-23T13:00:00Z",
-          "min_c": 9.3,
           "min_obs_utc": "2026-08-23T03:00:00Z"
         },
         {
@@ -775,6 +775,14 @@
           "min_obs_utc": "2026-08-23T03:00:00Z"
         },
         {
+          "id": "10348",
+          "name": "BRAUNSCHWG.",
+          "max_c": 19.3,
+          "max_obs_utc": "2026-08-23T17:00:00Z",
+          "min_c": 11.6,
+          "min_obs_utc": "2026-08-23T02:00:00Z"
+        },
+        {
           "id": "10430",
           "name": "BAD LIPPSPRINGE",
           "max_c": 19.3,
@@ -805,14 +813,6 @@
           "max_obs_utc": "2026-08-23T13:00:00Z",
           "min_c": 11.7,
           "min_obs_utc": "2026-08-23T04:00:00Z"
-        },
-        {
-          "id": "10348",
-          "name": "BRAUNSCHWG.",
-          "max_c": 19.2,
-          "max_obs_utc": "2026-08-23T15:00:00Z",
-          "min_c": 11.6,
-          "min_obs_utc": "2026-08-23T02:00:00Z"
         },
         {
           "id": "10381",
@@ -893,6 +893,14 @@
           "max_obs_utc": "2026-08-23T14:00:00Z",
           "min_c": 11.8,
           "min_obs_utc": "2026-08-23T03:00:00Z"
+        },
+        {
+          "id": "10338",
+          "name": "HANNOVER",
+          "max_c": 19.0,
+          "max_obs_utc": "2026-08-23T17:00:00Z",
+          "min_c": 11.4,
+          "min_obs_utc": "2026-08-23T02:00:00Z"
         },
         {
           "id": "10393",
@@ -1005,14 +1013,6 @@
           "max_obs_utc": "2026-08-23T13:00:00Z",
           "min_c": 11.5,
           "min_obs_utc": "2026-08-23T03:00:00Z"
-        },
-        {
-          "id": "10338",
-          "name": "HANNOVER",
-          "max_c": 18.7,
-          "max_obs_utc": "2026-08-23T15:00:00Z",
-          "min_c": 11.4,
-          "min_obs_utc": "2026-08-23T02:00:00Z"
         },
         {
           "id": "10469",
