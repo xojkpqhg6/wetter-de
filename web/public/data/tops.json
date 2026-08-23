@@ -1,11 +1,19 @@
 {
-  "generated_utc": "2026-08-23T21:33:02Z",
+  "generated_utc": "2026-08-23T22:07:45Z",
   "periods": {
     "day": {
       "key": "2026-08-23",
-      "station_count": 199,
-      "hidden": 2,
+      "station_count": 200,
+      "hidden": 1,
       "stations": [
+        {
+          "id": "10803",
+          "name": "FREIBURG",
+          "max_c": 24.9,
+          "max_obs_utc": "2026-08-23T15:00:00Z",
+          "min_c": 9.0,
+          "min_obs_utc": "2026-08-23T05:00:00Z"
+        },
         {
           "id": "10805",
           "name": "LAHR",
@@ -763,8 +771,8 @@
           "name": "LINGEN-BACCUM",
           "max_c": 19.3,
           "max_obs_utc": "2026-08-23T14:00:00Z",
-          "min_c": 12.1,
-          "min_obs_utc": "2026-08-23T04:00:00Z"
+          "min_c": 11.3,
+          "min_obs_utc": "2026-08-23T21:00:00Z"
         },
         {
           "id": "10343",
@@ -1051,8 +1059,8 @@
           "name": "LUECHOW",
           "max_c": 18.6,
           "max_obs_utc": "2026-08-23T12:00:00Z",
-          "min_c": 11.7,
-          "min_obs_utc": "2026-08-23T04:00:00Z"
+          "min_c": 11.2,
+          "min_obs_utc": "2026-08-23T21:00:00Z"
         },
         {
           "id": "10268",
@@ -1107,8 +1115,8 @@
           "name": "GOERLITZ",
           "max_c": 18.4,
           "max_obs_utc": "2026-08-23T14:00:00Z",
-          "min_c": 11.5,
-          "min_obs_utc": "2026-08-23T04:00:00Z"
+          "min_c": 11.1,
+          "min_obs_utc": "2026-08-23T21:00:00Z"
         },
         {
           "id": "10537",
@@ -1259,8 +1267,8 @@
           "name": "DOERNICK",
           "max_c": 17.7,
           "max_obs_utc": "2026-08-23T15:00:00Z",
-          "min_c": 12.5,
-          "min_obs_utc": "2026-08-23T04:00:00Z"
+          "min_c": 12.0,
+          "min_obs_utc": "2026-08-23T21:00:00Z"
         },
         {
           "id": "10035",
@@ -1371,8 +1379,8 @@
           "name": "LUEDGE",
           "max_c": 17.2,
           "max_obs_utc": "2026-08-23T16:00:00Z",
-          "min_c": 10.5,
-          "min_obs_utc": "2026-08-23T00:00:00Z"
+          "min_c": 9.5,
+          "min_obs_utc": "2026-08-23T21:00:00Z"
         },
         {
           "id": "10091",
@@ -1618,8 +1626,8 @@
           "name": "FREIBURG",
           "max_c": 32.8,
           "max_obs_utc": "2026-08-19T15:00:00Z",
-          "min_c": 10.7,
-          "min_obs_utc": "2026-08-22T04:00:00Z"
+          "min_c": 9.0,
+          "min_obs_utc": "2026-08-23T05:00:00Z"
         },
         {
           "id": "10731",
@@ -2178,8 +2186,8 @@
           "name": "GOERLITZ",
           "max_c": 25.3,
           "max_obs_utc": "2026-08-20T14:00:00Z",
-          "min_c": 11.5,
-          "min_obs_utc": "2026-08-23T04:00:00Z"
+          "min_c": 11.1,
+          "min_obs_utc": "2026-08-23T21:00:00Z"
         },
         {
           "id": "10193",
@@ -2898,8 +2906,8 @@
           "name": "LUEDGE",
           "max_c": 21.8,
           "max_obs_utc": "2026-08-20T15:00:00Z",
-          "min_c": 10.5,
-          "min_obs_utc": "2026-08-23T00:00:00Z"
+          "min_c": 9.5,
+          "min_obs_utc": "2026-08-23T21:00:00Z"
         },
         {
           "id": "10055",
@@ -3265,8 +3273,8 @@
           "name": "FREIBURG",
           "max_c": 37.4,
           "max_obs_utc": "2026-08-14T14:00:00Z",
-          "min_c": 10.7,
-          "min_obs_utc": "2026-08-22T04:00:00Z"
+          "min_c": 9.0,
+          "min_obs_utc": "2026-08-23T05:00:00Z"
         },
         {
           "id": "10729",
