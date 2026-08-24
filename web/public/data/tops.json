@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-08-24T17:07:56Z",
+  "generated_utc": "2026-08-24T17:42:26Z",
   "periods": {
     "day": {
       "key": "2026-08-24",
@@ -487,6 +487,14 @@
           "min_obs_utc": "2026-08-24T05:00:00Z"
         },
         {
+          "id": "10261",
+          "name": "SEEHAUSEN",
+          "max_c": 21.4,
+          "max_obs_utc": "2026-08-24T17:00:00Z",
+          "min_c": 10.4,
+          "min_obs_utc": "2026-08-24T04:00:00Z"
+        },
+        {
           "id": "10271",
           "name": "NEURUPPIN-ALT RUPPIN",
           "max_c": 21.4,
@@ -533,14 +541,6 @@
           "max_obs_utc": "2026-08-24T15:00:00Z",
           "min_c": 6.9,
           "min_obs_utc": "2026-08-24T05:00:00Z"
-        },
-        {
-          "id": "10261",
-          "name": "SEEHAUSEN",
-          "max_c": 21.3,
-          "max_obs_utc": "2026-08-24T15:00:00Z",
-          "min_c": 10.4,
-          "min_obs_utc": "2026-08-24T04:00:00Z"
         },
         {
           "id": "10282",
@@ -605,6 +605,22 @@
           "max_obs_utc": "2026-08-24T14:00:00Z",
           "min_c": 12.4,
           "min_obs_utc": "2026-08-24T05:00:00Z"
+        },
+        {
+          "id": "10384",
+          "name": "BERLIN-TEMPELHOF",
+          "max_c": 21.1,
+          "max_obs_utc": "2026-08-24T17:00:00Z",
+          "min_c": 11.2,
+          "min_obs_utc": "2026-08-24T04:00:00Z"
+        },
+        {
+          "id": "10291",
+          "name": "ANGERMUENDE",
+          "max_c": 21.0,
+          "max_obs_utc": "2026-08-24T17:00:00Z",
+          "min_c": 11.5,
+          "min_obs_utc": "2026-08-24T04:00:00Z"
         },
         {
           "id": "10361",
@@ -695,12 +711,12 @@
           "min_obs_utc": "2026-08-24T04:00:00Z"
         },
         {
-          "id": "10384",
-          "name": "BERLIN-TEMPELHOF",
+          "id": "10476",
+          "name": "HOLZDORF",
           "max_c": 20.8,
-          "max_obs_utc": "2026-08-24T14:00:00Z",
-          "min_c": 11.2,
-          "min_obs_utc": "2026-08-24T04:00:00Z"
+          "max_obs_utc": "2026-08-24T17:00:00Z",
+          "min_c": 8.4,
+          "min_obs_utc": "2026-08-24T00:00:00Z"
         },
         {
           "id": "10827",
@@ -767,14 +783,6 @@
           "min_obs_utc": "2026-08-24T05:00:00Z"
         },
         {
-          "id": "10291",
-          "name": "ANGERMUENDE",
-          "max_c": 20.6,
-          "max_obs_utc": "2026-08-24T14:00:00Z",
-          "min_c": 11.5,
-          "min_obs_utc": "2026-08-24T04:00:00Z"
-        },
-        {
           "id": "10962",
           "name": "HOHENPEISS.BG",
           "max_c": 20.6,
@@ -829,14 +837,6 @@
           "max_obs_utc": "2026-08-24T16:00:00Z",
           "min_c": 10.2,
           "min_obs_utc": "2026-08-24T04:00:00Z"
-        },
-        {
-          "id": "10476",
-          "name": "HOLZDORF",
-          "max_c": 20.5,
-          "max_obs_utc": "2026-08-24T15:00:00Z",
-          "min_c": 8.4,
-          "min_obs_utc": "2026-08-24T00:00:00Z"
         },
         {
           "id": "10495",
@@ -1255,6 +1255,14 @@
           "min_obs_utc": "2026-08-24T05:00:00Z"
         },
         {
+          "id": "10129",
+          "name": "BREMERHAVEN",
+          "max_c": 19.2,
+          "max_obs_utc": "2026-08-24T17:00:00Z",
+          "min_c": 14.9,
+          "min_obs_utc": "2026-08-24T04:00:00Z"
+        },
+        {
           "id": "10172",
           "name": "LAAGE",
           "max_c": 19.2,
@@ -1309,14 +1317,6 @@
           "max_obs_utc": "2026-08-24T15:00:00Z",
           "min_c": 16.1,
           "min_obs_utc": "2026-08-24T05:00:00Z"
-        },
-        {
-          "id": "10129",
-          "name": "BREMERHAVEN",
-          "max_c": 19.0,
-          "max_obs_utc": "2026-08-24T15:00:00Z",
-          "min_c": 14.9,
-          "min_obs_utc": "2026-08-24T04:00:00Z"
         },
         {
           "id": "10554",
@@ -2102,6 +2102,14 @@
           "min_obs_utc": "2026-08-24T05:00:00Z"
         },
         {
+          "id": "10261",
+          "name": "SEEHAUSEN",
+          "max_c": 21.4,
+          "max_obs_utc": "2026-08-24T17:00:00Z",
+          "min_c": 10.4,
+          "min_obs_utc": "2026-08-24T04:00:00Z"
+        },
+        {
           "id": "10271",
           "name": "NEURUPPIN-ALT RUPPIN",
           "max_c": 21.4,
@@ -2148,14 +2156,6 @@
           "max_obs_utc": "2026-08-24T15:00:00Z",
           "min_c": 6.9,
           "min_obs_utc": "2026-08-24T05:00:00Z"
-        },
-        {
-          "id": "10261",
-          "name": "SEEHAUSEN",
-          "max_c": 21.3,
-          "max_obs_utc": "2026-08-24T15:00:00Z",
-          "min_c": 10.4,
-          "min_obs_utc": "2026-08-24T04:00:00Z"
         },
         {
           "id": "10282",
@@ -2220,6 +2220,22 @@
           "max_obs_utc": "2026-08-24T14:00:00Z",
           "min_c": 12.4,
           "min_obs_utc": "2026-08-24T05:00:00Z"
+        },
+        {
+          "id": "10384",
+          "name": "BERLIN-TEMPELHOF",
+          "max_c": 21.1,
+          "max_obs_utc": "2026-08-24T17:00:00Z",
+          "min_c": 11.2,
+          "min_obs_utc": "2026-08-24T04:00:00Z"
+        },
+        {
+          "id": "10291",
+          "name": "ANGERMUENDE",
+          "max_c": 21.0,
+          "max_obs_utc": "2026-08-24T17:00:00Z",
+          "min_c": 11.5,
+          "min_obs_utc": "2026-08-24T04:00:00Z"
         },
         {
           "id": "10361",
@@ -2310,12 +2326,12 @@
           "min_obs_utc": "2026-08-24T04:00:00Z"
         },
         {
-          "id": "10384",
-          "name": "BERLIN-TEMPELHOF",
+          "id": "10476",
+          "name": "HOLZDORF",
           "max_c": 20.8,
-          "max_obs_utc": "2026-08-24T14:00:00Z",
-          "min_c": 11.2,
-          "min_obs_utc": "2026-08-24T04:00:00Z"
+          "max_obs_utc": "2026-08-24T17:00:00Z",
+          "min_c": 8.4,
+          "min_obs_utc": "2026-08-24T00:00:00Z"
         },
         {
           "id": "10827",
@@ -2382,14 +2398,6 @@
           "min_obs_utc": "2026-08-24T05:00:00Z"
         },
         {
-          "id": "10291",
-          "name": "ANGERMUENDE",
-          "max_c": 20.6,
-          "max_obs_utc": "2026-08-24T14:00:00Z",
-          "min_c": 11.5,
-          "min_obs_utc": "2026-08-24T04:00:00Z"
-        },
-        {
           "id": "10962",
           "name": "HOHENPEISS.BG",
           "max_c": 20.6,
@@ -2444,14 +2452,6 @@
           "max_obs_utc": "2026-08-24T16:00:00Z",
           "min_c": 10.2,
           "min_obs_utc": "2026-08-24T04:00:00Z"
-        },
-        {
-          "id": "10476",
-          "name": "HOLZDORF",
-          "max_c": 20.5,
-          "max_obs_utc": "2026-08-24T15:00:00Z",
-          "min_c": 8.4,
-          "min_obs_utc": "2026-08-24T00:00:00Z"
         },
         {
           "id": "10495",
@@ -2870,6 +2870,14 @@
           "min_obs_utc": "2026-08-24T05:00:00Z"
         },
         {
+          "id": "10129",
+          "name": "BREMERHAVEN",
+          "max_c": 19.2,
+          "max_obs_utc": "2026-08-24T17:00:00Z",
+          "min_c": 14.9,
+          "min_obs_utc": "2026-08-24T04:00:00Z"
+        },
+        {
           "id": "10172",
           "name": "LAAGE",
           "max_c": 19.2,
@@ -2924,14 +2932,6 @@
           "max_obs_utc": "2026-08-24T15:00:00Z",
           "min_c": 16.1,
           "min_obs_utc": "2026-08-24T05:00:00Z"
-        },
-        {
-          "id": "10129",
-          "name": "BREMERHAVEN",
-          "max_c": 19.0,
-          "max_obs_utc": "2026-08-24T15:00:00Z",
-          "min_c": 14.9,
-          "min_obs_utc": "2026-08-24T04:00:00Z"
         },
         {
           "id": "10554",
