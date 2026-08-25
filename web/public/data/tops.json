@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-08-25T17:08:03Z",
+  "generated_utc": "2026-08-25T17:42:48Z",
   "periods": {
     "day": {
       "key": "2026-08-25",
@@ -823,6 +823,14 @@
           "min_obs_utc": "2026-08-25T05:00:00Z"
         },
         {
+          "id": "10170",
+          "name": "WARNEMUENDE",
+          "max_c": 21.7,
+          "max_obs_utc": "2026-08-25T17:00:00Z",
+          "min_c": 11.2,
+          "min_obs_utc": "2026-08-25T04:00:00Z"
+        },
+        {
           "id": "10513",
           "name": "KOELN/BONN",
           "max_c": 21.6,
@@ -853,14 +861,6 @@
           "max_obs_utc": "2026-08-25T11:00:00Z",
           "min_c": 14.8,
           "min_obs_utc": "2026-08-25T05:00:00Z"
-        },
-        {
-          "id": "10170",
-          "name": "WARNEMUENDE",
-          "max_c": 21.4,
-          "max_obs_utc": "2026-08-25T13:00:00Z",
-          "min_c": 11.2,
-          "min_obs_utc": "2026-08-25T04:00:00Z"
         },
         {
           "id": "10577",
@@ -967,6 +967,22 @@
           "min_obs_utc": "2026-08-25T03:00:00Z"
         },
         {
+          "id": "10945",
+          "name": "LEUTKIRCH-HERLAZHFN.",
+          "max_c": 20.5,
+          "max_obs_utc": "2026-08-25T17:00:00Z",
+          "min_c": 11.6,
+          "min_obs_utc": "2026-08-25T04:00:00Z"
+        },
+        {
+          "id": "10946",
+          "name": "KEMPTEN",
+          "max_c": 20.3,
+          "max_obs_utc": "2026-08-25T17:00:00Z",
+          "min_c": 11.9,
+          "min_obs_utc": "2026-08-25T02:00:00Z"
+        },
+        {
           "id": "10042",
           "name": "OLPENITZ",
           "max_c": 20.2,
@@ -1063,14 +1079,6 @@
           "min_obs_utc": "2026-08-25T01:00:00Z"
         },
         {
-          "id": "10945",
-          "name": "LEUTKIRCH-HERLAZHFN.",
-          "max_c": 19.7,
-          "max_obs_utc": "2026-08-25T16:00:00Z",
-          "min_c": 11.6,
-          "min_obs_utc": "2026-08-25T04:00:00Z"
-        },
-        {
           "id": "10739",
           "name": "STUTTGART-SCHN.",
           "max_c": 19.6,
@@ -1141,14 +1149,6 @@
           "max_obs_utc": "2026-08-25T15:00:00Z",
           "min_c": 13.2,
           "min_obs_utc": "2026-08-25T04:00:00Z"
-        },
-        {
-          "id": "10946",
-          "name": "KEMPTEN",
-          "max_c": 19.2,
-          "max_obs_utc": "2026-08-25T16:00:00Z",
-          "min_c": 11.9,
-          "min_obs_utc": "2026-08-25T02:00:00Z"
         },
         {
           "id": "10818",
@@ -1603,8 +1603,8 @@
           "name": "KL.FELDBG./TS.",
           "max_c": 13.5,
           "max_obs_utc": "2026-08-25T09:00:00Z",
-          "min_c": 11.7,
-          "min_obs_utc": "2026-08-25T01:00:00Z"
+          "min_c": 11.6,
+          "min_obs_utc": "2026-08-25T17:00:00Z"
         },
         {
           "id": "10961",
@@ -2790,6 +2790,14 @@
           "min_obs_utc": "2026-08-24T04:00:00Z"
         },
         {
+          "id": "10170",
+          "name": "WARNEMUENDE",
+          "max_c": 21.7,
+          "max_obs_utc": "2026-08-25T17:00:00Z",
+          "min_c": 11.2,
+          "min_obs_utc": "2026-08-25T04:00:00Z"
+        },
+        {
           "id": "10688",
           "name": "WEIDEN",
           "max_c": 21.7,
@@ -2812,14 +2820,6 @@
           "max_obs_utc": "2026-08-24T14:00:00Z",
           "min_c": 9.7,
           "min_obs_utc": "2026-08-24T05:00:00Z"
-        },
-        {
-          "id": "10170",
-          "name": "WARNEMUENDE",
-          "max_c": 21.4,
-          "max_obs_utc": "2026-08-25T13:00:00Z",
-          "min_c": 11.2,
-          "min_obs_utc": "2026-08-25T04:00:00Z"
         },
         {
           "id": "10577",
