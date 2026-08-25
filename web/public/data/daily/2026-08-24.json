@@ -1215,7 +1215,7 @@
       "min_c": 11.5,
       "min_obs_utc": "2026-08-24T05:00:00Z",
       "name": "WEINBIET",
-      "samples": 23
+      "samples": 24
     },
     "10729": {
       "max_c": 24.7,
@@ -1610,5 +1610,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-08-25T00:07:46Z"
+  "updated_utc": "2026-08-25T07:56:18Z"
 }
