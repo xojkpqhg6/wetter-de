@@ -103,7 +103,7 @@
       "min_c": 9.6,
       "min_obs_utc": "2026-08-25T04:00:00Z",
       "name": "PUTBUS",
-      "samples": 23
+      "samples": 24
     },
     "10097": {
       "max_c": 20.1,
@@ -1610,5 +1610,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-08-26T00:07:38Z"
+  "updated_utc": "2026-08-26T01:07:50Z"
 }
