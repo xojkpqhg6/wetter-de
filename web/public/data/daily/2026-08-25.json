@@ -999,7 +999,7 @@
       "min_c": 10.7,
       "min_obs_utc": "2026-08-25T06:00:00Z",
       "name": "CARLSFELD",
-      "samples": 23
+      "samples": 24
     },
     "10577": {
       "max_c": 21.4,
@@ -1610,5 +1610,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-08-26T01:07:50Z"
+  "updated_utc": "2026-08-26T07:05:01Z"
 }
