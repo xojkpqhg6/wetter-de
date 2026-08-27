@@ -1,10 +1,10 @@
 {
-  "generated_utc": "2026-08-27T17:07:45Z",
+  "generated_utc": "2026-08-27T18:07:48Z",
   "periods": {
     "day": {
       "key": "2026-08-27",
-      "station_count": 202,
-      "hidden": 1,
+      "station_count": 203,
+      "hidden": 0,
       "stations": [
         {
           "id": "10742",
@@ -1095,6 +1095,14 @@
           "min_obs_utc": "2026-08-27T05:00:00Z"
         },
         {
+          "id": "10126",
+          "name": "WITTMUNDHAVEN",
+          "max_c": 27.1,
+          "max_obs_utc": "2026-08-27T17:00:00Z",
+          "min_c": 15.6,
+          "min_obs_utc": "2026-08-27T04:00:00Z"
+        },
+        {
           "id": "10146",
           "name": "QUICKBORN",
           "max_c": 27.1,
@@ -1157,14 +1165,6 @@
           "max_obs_utc": "2026-08-27T15:00:00Z",
           "min_c": 13.3,
           "min_obs_utc": "2026-08-27T05:00:00Z"
-        },
-        {
-          "id": "10126",
-          "name": "WITTMUNDHAVEN",
-          "max_c": 26.6,
-          "max_obs_utc": "2026-08-27T16:00:00Z",
-          "min_c": 15.6,
-          "min_obs_utc": "2026-08-27T04:00:00Z"
         },
         {
           "id": "10488",
@@ -1525,6 +1525,14 @@
           "max_obs_utc": "2026-08-27T13:00:00Z",
           "min_c": 16.4,
           "min_obs_utc": "2026-08-27T02:00:00Z"
+        },
+        {
+          "id": "10152",
+          "name": "PELZERHAKEN",
+          "max_c": 22.5,
+          "max_obs_utc": "2026-08-27T13:00:00Z",
+          "min_c": 17.1,
+          "min_obs_utc": "2026-08-27T04:00:00Z"
         },
         {
           "id": "10015",
@@ -2718,6 +2726,14 @@
           "min_obs_utc": "2026-08-24T05:00:00Z"
         },
         {
+          "id": "10126",
+          "name": "WITTMUNDHAVEN",
+          "max_c": 27.1,
+          "max_obs_utc": "2026-08-27T17:00:00Z",
+          "min_c": 10.8,
+          "min_obs_utc": "2026-08-24T03:00:00Z"
+        },
+        {
           "id": "10146",
           "name": "QUICKBORN",
           "max_c": 27.1,
@@ -2780,14 +2796,6 @@
           "max_obs_utc": "2026-08-27T15:00:00Z",
           "min_c": 5.7,
           "min_obs_utc": "2026-08-24T04:00:00Z"
-        },
-        {
-          "id": "10126",
-          "name": "WITTMUNDHAVEN",
-          "max_c": 26.6,
-          "max_obs_utc": "2026-08-27T16:00:00Z",
-          "min_c": 10.8,
-          "min_obs_utc": "2026-08-24T03:00:00Z"
         },
         {
           "id": "10488",
@@ -3142,6 +3150,14 @@
           "min_obs_utc": "2026-08-24T04:00:00Z"
         },
         {
+          "id": "10152",
+          "name": "PELZERHAKEN",
+          "max_c": 22.5,
+          "max_obs_utc": "2026-08-27T13:00:00Z",
+          "min_c": 8.3,
+          "min_obs_utc": "2026-08-25T04:00:00Z"
+        },
+        {
           "id": "10015",
           "name": "HELGOLAND",
           "max_c": 22.3,
@@ -3180,14 +3196,6 @@
           "max_obs_utc": "2026-08-27T14:00:00Z",
           "min_c": 6.9,
           "min_obs_utc": "2026-08-24T05:00:00Z"
-        },
-        {
-          "id": "10152",
-          "name": "PELZERHAKEN",
-          "max_c": 21.2,
-          "max_obs_utc": "2026-08-26T14:00:00Z",
-          "min_c": 8.3,
-          "min_obs_utc": "2026-08-25T04:00:00Z"
         },
         {
           "id": "10042",
