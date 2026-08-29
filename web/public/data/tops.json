@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-08-29T22:07:51Z",
+  "generated_utc": "2026-08-29T23:07:47Z",
   "periods": {
     "day": {
       "key": "2026-08-29",
@@ -707,8 +707,8 @@
           "name": "FUERSTENZELL",
           "max_c": 23.6,
           "max_obs_utc": "2026-08-29T15:00:00Z",
-          "min_c": 17.0,
-          "min_obs_utc": "2026-08-29T21:00:00Z"
+          "min_c": 15.7,
+          "min_obs_utc": "2026-08-29T22:00:00Z"
         },
         {
           "id": "10210",
@@ -1043,8 +1043,8 @@
           "name": "WALDMUENCHEN",
           "max_c": 22.2,
           "max_obs_utc": "2026-08-29T16:00:00Z",
-          "min_c": 14.1,
-          "min_obs_utc": "2026-08-29T21:00:00Z"
+          "min_c": 13.6,
+          "min_obs_utc": "2026-08-29T22:00:00Z"
         },
         {
           "id": "10836",
@@ -1067,8 +1067,8 @@
           "name": "ZWIESEL",
           "max_c": 22.1,
           "max_obs_utc": "2026-08-29T15:00:00Z",
-          "min_c": 12.9,
-          "min_obs_utc": "2026-08-29T21:00:00Z"
+          "min_c": 12.2,
+          "min_obs_utc": "2026-08-29T22:00:00Z"
         },
         {
           "id": "10097",
