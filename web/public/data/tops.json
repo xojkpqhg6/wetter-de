@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-08-29T17:07:42Z",
+  "generated_utc": "2026-08-29T18:07:50Z",
   "periods": {
     "day": {
       "key": "2026-08-29",
@@ -1127,20 +1127,28 @@
           "min_obs_utc": "2026-08-29T04:00:00Z"
         },
         {
+          "id": "10139",
+          "name": "BREMERVOERDE",
+          "max_c": 21.7,
+          "max_obs_utc": "2026-08-29T17:00:00Z",
+          "min_c": 14.6,
+          "min_obs_utc": "2026-08-29T03:00:00Z"
+        },
+        {
+          "id": "10168",
+          "name": "GOLDBERG",
+          "max_c": 21.7,
+          "max_obs_utc": "2026-08-29T17:00:00Z",
+          "min_c": 14.6,
+          "min_obs_utc": "2026-08-29T04:00:00Z"
+        },
+        {
           "id": "10200",
           "name": "EMDEN-FLUGPLATZ",
           "max_c": 21.7,
           "max_obs_utc": "2026-08-29T16:00:00Z",
           "min_c": 15.8,
           "min_obs_utc": "2026-08-29T05:00:00Z"
-        },
-        {
-          "id": "10168",
-          "name": "GOLDBERG",
-          "max_c": 21.6,
-          "max_obs_utc": "2026-08-29T16:00:00Z",
-          "min_c": 14.6,
-          "min_obs_utc": "2026-08-29T04:00:00Z"
         },
         {
           "id": "10113",
@@ -1237,14 +1245,6 @@
           "max_obs_utc": "2026-08-29T15:00:00Z",
           "min_c": 15.4,
           "min_obs_utc": "2026-08-29T01:00:00Z"
-        },
-        {
-          "id": "10139",
-          "name": "BREMERVOERDE",
-          "max_c": 21.2,
-          "max_obs_utc": "2026-08-29T16:00:00Z",
-          "min_c": 14.6,
-          "min_obs_utc": "2026-08-29T03:00:00Z"
         },
         {
           "id": "10156",
