@@ -1,10 +1,10 @@
 {
-  "generated_utc": "2026-08-29T20:07:47Z",
+  "generated_utc": "2026-08-29T21:07:47Z",
   "periods": {
     "day": {
       "key": "2026-08-29",
-      "station_count": 202,
-      "hidden": 1,
+      "station_count": 203,
+      "hidden": 0,
       "stations": [
         {
           "id": "10805",
@@ -701,6 +701,14 @@
           "max_obs_utc": "2026-08-29T16:00:00Z",
           "min_c": 11.7,
           "min_obs_utc": "2026-08-29T05:00:00Z"
+        },
+        {
+          "id": "10895",
+          "name": "FUERSTENZELL",
+          "max_c": 23.6,
+          "max_obs_utc": "2026-08-29T15:00:00Z",
+          "min_c": 18.5,
+          "min_obs_utc": "2026-08-29T09:00:00Z"
         },
         {
           "id": "10210",
