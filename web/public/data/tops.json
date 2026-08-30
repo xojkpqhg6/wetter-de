@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-08-30T17:25:14Z",
+  "generated_utc": "2026-08-30T18:07:40Z",
   "periods": {
     "day": {
       "key": "2026-08-30",
@@ -39,6 +39,14 @@
           "min_obs_utc": "2026-08-30T02:00:00Z"
         },
         {
+          "id": "10729",
+          "name": "MANNHEIM",
+          "max_c": 27.4,
+          "max_obs_utc": "2026-08-30T17:00:00Z",
+          "min_c": 20.5,
+          "min_obs_utc": "2026-08-30T05:00:00Z"
+        },
+        {
           "id": "10776",
           "name": "REGENSBURG",
           "max_c": 27.4,
@@ -61,14 +69,6 @@
           "max_obs_utc": "2026-08-30T14:00:00Z",
           "min_c": 12.9,
           "min_obs_utc": "2026-08-30T00:00:00Z"
-        },
-        {
-          "id": "10729",
-          "name": "MANNHEIM",
-          "max_c": 27.1,
-          "max_obs_utc": "2026-08-30T13:00:00Z",
-          "min_c": 20.5,
-          "min_obs_utc": "2026-08-30T05:00:00Z"
         },
         {
           "id": "10860",
@@ -125,6 +125,14 @@
           "max_obs_utc": "2026-08-30T14:00:00Z",
           "min_c": 19.0,
           "min_obs_utc": "2026-08-30T05:00:00Z"
+        },
+        {
+          "id": "10731",
+          "name": "RHEINSTETTEN",
+          "max_c": 26.6,
+          "max_obs_utc": "2026-08-30T17:00:00Z",
+          "min_c": 19.7,
+          "min_obs_utc": "2026-08-30T03:00:00Z"
         },
         {
           "id": "10982",
@@ -309,14 +317,6 @@
           "max_obs_utc": "2026-08-30T16:00:00Z",
           "min_c": 17.9,
           "min_obs_utc": "2026-08-30T00:00:00Z"
-        },
-        {
-          "id": "10731",
-          "name": "RHEINSTETTEN",
-          "max_c": 25.9,
-          "max_obs_utc": "2026-08-30T16:00:00Z",
-          "min_c": 19.7,
-          "min_obs_utc": "2026-08-30T03:00:00Z"
         },
         {
           "id": "10471",
@@ -807,6 +807,14 @@
           "min_obs_utc": "2026-08-30T05:00:00Z"
         },
         {
+          "id": "10747",
+          "name": "KAISERSBACH-CRONHUET",
+          "max_c": 23.3,
+          "max_obs_utc": "2026-08-30T17:00:00Z",
+          "min_c": 16.9,
+          "min_obs_utc": "2026-08-30T05:00:00Z"
+        },
+        {
           "id": "10281",
           "name": "TROLLENHAGEN",
           "max_c": 23.2,
@@ -868,14 +876,6 @@
           "max_c": 23.1,
           "max_obs_utc": "2026-08-30T16:00:00Z",
           "min_c": 16.3,
-          "min_obs_utc": "2026-08-30T05:00:00Z"
-        },
-        {
-          "id": "10747",
-          "name": "KAISERSBACH-CRONHUET",
-          "max_c": 23.1,
-          "max_obs_utc": "2026-08-30T14:00:00Z",
-          "min_c": 16.9,
           "min_obs_utc": "2026-08-30T05:00:00Z"
         },
         {
@@ -1295,6 +1295,14 @@
           "min_obs_utc": "2026-08-30T06:00:00Z"
         },
         {
+          "id": "10325",
+          "name": "BAD SALZUFLEN",
+          "max_c": 20.6,
+          "max_obs_utc": "2026-08-30T17:00:00Z",
+          "min_c": 16.8,
+          "min_obs_utc": "2026-08-30T09:00:00Z"
+        },
+        {
           "id": "10038",
           "name": "HOHN",
           "max_c": 20.5,
@@ -1317,14 +1325,6 @@
           "max_obs_utc": "2026-08-30T12:00:00Z",
           "min_c": 17.5,
           "min_obs_utc": "2026-08-30T06:00:00Z"
-        },
-        {
-          "id": "10325",
-          "name": "BAD SALZUFLEN",
-          "max_c": 20.4,
-          "max_obs_utc": "2026-08-30T16:00:00Z",
-          "min_c": 16.8,
-          "min_obs_utc": "2026-08-30T09:00:00Z"
         },
         {
           "id": "10574",
