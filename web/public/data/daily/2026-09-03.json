@@ -151,7 +151,7 @@
       "min_c": 15.7,
       "min_obs_utc": "2026-09-03T04:00:00Z",
       "name": "ELPERSBUETTEL",
-      "samples": 17
+      "samples": 24
     },
     "10131": {
       "max_c": 21.0,
@@ -1626,5 +1626,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-09-04T00:07:59Z"
+  "updated_utc": "2026-09-04T05:49:36Z"
 }
