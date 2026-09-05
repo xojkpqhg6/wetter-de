@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-05T17:07:42Z",
+  "generated_utc": "2026-09-05T18:07:59Z",
   "periods": {
     "day": {
       "key": "2026-09-05",
@@ -255,20 +255,20 @@
           "min_obs_utc": "2026-09-05T06:00:00Z"
         },
         {
+          "id": "10870",
+          "name": "MUENCHEN-FL.",
+          "max_c": 23.3,
+          "max_obs_utc": "2026-09-05T17:00:00Z",
+          "min_c": 14.9,
+          "min_obs_utc": "2026-09-05T06:00:00Z"
+        },
+        {
           "id": "10520",
           "name": "ANDERNACH",
           "max_c": 23.1,
           "max_obs_utc": "2026-09-05T13:00:00Z",
           "min_c": 14.7,
           "min_obs_utc": "2026-09-05T05:00:00Z"
-        },
-        {
-          "id": "10870",
-          "name": "MUENCHEN-FL.",
-          "max_c": 23.1,
-          "max_obs_utc": "2026-09-05T15:00:00Z",
-          "min_c": 14.9,
-          "min_obs_utc": "2026-09-05T06:00:00Z"
         },
         {
           "id": "10840",
@@ -1275,8 +1275,8 @@
           "name": "LEUCHTTURM A. WESER",
           "max_c": 18.1,
           "max_obs_utc": "2026-09-05T00:00:00Z",
-          "min_c": 16.8,
-          "min_obs_utc": "2026-09-05T05:00:00Z"
+          "min_c": 16.3,
+          "min_obs_utc": "2026-09-05T17:00:00Z"
         },
         {
           "id": "10126",
