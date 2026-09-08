@@ -1274,12 +1274,12 @@
       "samples": 24
     },
     "10739": {
-      "max_c": 20.9,
-      "max_obs_utc": "2026-09-07T09:00:00Z",
+      "max_c": 30.2,
+      "max_obs_utc": "2026-09-07T14:00:00Z",
       "min_c": 15.2,
       "min_obs_utc": "2026-09-07T04:00:00Z",
       "name": "STUTTGART-SCHN.",
-      "samples": 9
+      "samples": 10
     },
     "10742": {
       "max_c": 30.2,
@@ -1626,5 +1626,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-09-08T00:07:48Z"
+  "updated_utc": "2026-09-08T07:07:45Z"
 }
