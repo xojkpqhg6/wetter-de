@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-08T18:35:22Z",
+  "generated_utc": "2026-09-08T19:07:40Z",
   "periods": {
     "day": {
       "key": "2026-09-08",
@@ -1195,8 +1195,8 @@
           "name": "AHAUS",
           "max_c": 23.9,
           "max_obs_utc": "2026-09-08T14:00:00Z",
-          "min_c": 18.2,
-          "min_obs_utc": "2026-09-08T01:00:00Z"
+          "min_c": 17.5,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10249",
@@ -1299,8 +1299,8 @@
           "name": "LINGEN-BACCUM",
           "max_c": 23.0,
           "max_obs_utc": "2026-09-08T15:00:00Z",
-          "min_c": 17.3,
-          "min_obs_utc": "2026-09-08T04:00:00Z"
+          "min_c": 17.1,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10156",
@@ -1331,8 +1331,8 @@
           "name": "BREMERVOERDE",
           "max_c": 22.7,
           "max_obs_utc": "2026-09-08T13:00:00Z",
-          "min_c": 16.8,
-          "min_obs_utc": "2026-09-08T00:00:00Z"
+          "min_c": 16.7,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10147",
@@ -1387,8 +1387,8 @@
           "name": "FRIESOYTHE-ALTENOYTH",
           "max_c": 21.9,
           "max_obs_utc": "2026-09-08T13:00:00Z",
-          "min_c": 17.0,
-          "min_obs_utc": "2026-09-08T17:00:00Z"
+          "min_c": 15.7,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10097",
@@ -1427,8 +1427,8 @@
           "name": "DOERNICK",
           "max_c": 21.3,
           "max_obs_utc": "2026-09-08T12:00:00Z",
-          "min_c": 16.7,
-          "min_obs_utc": "2026-09-08T03:00:00Z"
+          "min_c": 16.0,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10427",
@@ -1459,32 +1459,32 @@
           "name": "BREMERHAVEN",
           "max_c": 20.4,
           "max_obs_utc": "2026-09-08T11:00:00Z",
-          "min_c": 16.9,
-          "min_obs_utc": "2026-09-08T17:00:00Z"
+          "min_c": 16.3,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10042",
           "name": "OLPENITZ",
           "max_c": 20.3,
           "max_obs_utc": "2026-09-08T11:00:00Z",
-          "min_c": 14.6,
-          "min_obs_utc": "2026-09-08T17:00:00Z"
+          "min_c": 14.4,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10046",
           "name": "KIEL-H.",
           "max_c": 20.1,
           "max_obs_utc": "2026-09-08T11:00:00Z",
-          "min_c": 15.8,
-          "min_obs_utc": "2026-09-08T17:00:00Z"
+          "min_c": 15.4,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10142",
           "name": "ITZEHOE",
           "max_c": 20.1,
           "max_obs_utc": "2026-09-08T12:00:00Z",
-          "min_c": 16.5,
-          "min_obs_utc": "2026-09-08T02:00:00Z"
+          "min_c": 15.8,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10038",
@@ -1499,24 +1499,24 @@
           "name": "EMDEN-FLUGPLATZ",
           "max_c": 19.7,
           "max_obs_utc": "2026-09-08T10:00:00Z",
-          "min_c": 15.6,
-          "min_obs_utc": "2026-09-08T16:00:00Z"
+          "min_c": 14.9,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10037",
           "name": "SCHLESWIG-JAGEL",
           "max_c": 19.6,
           "max_obs_utc": "2026-09-08T11:00:00Z",
-          "min_c": 14.4,
-          "min_obs_utc": "2026-09-08T17:00:00Z"
+          "min_c": 14.3,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10131",
           "name": "CUXHAVEN",
           "max_c": 19.6,
           "max_obs_utc": "2026-09-08T12:00:00Z",
-          "min_c": 15.9,
-          "min_obs_utc": "2026-09-08T16:00:00Z"
+          "min_c": 15.7,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10033",
@@ -1531,24 +1531,24 @@
           "name": "WITTMUNDHAVEN",
           "max_c": 19.2,
           "max_obs_utc": "2026-09-08T11:00:00Z",
-          "min_c": 15.1,
-          "min_obs_utc": "2026-09-08T17:00:00Z"
+          "min_c": 14.7,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10136",
           "name": "NORDHOLZ",
           "max_c": 19.1,
           "max_obs_utc": "2026-09-08T12:00:00Z",
-          "min_c": 15.1,
-          "min_obs_utc": "2026-09-08T17:00:00Z"
+          "min_c": 14.6,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10035",
           "name": "SCHLESWIG",
           "max_c": 19.0,
           "max_obs_utc": "2026-09-08T11:00:00Z",
-          "min_c": 14.3,
-          "min_obs_utc": "2026-09-08T17:00:00Z"
+          "min_c": 14.2,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10124",
@@ -1571,8 +1571,8 @@
           "name": "ST. PETER ORDING",
           "max_c": 18.9,
           "max_obs_utc": "2026-09-08T11:00:00Z",
-          "min_c": 15.5,
-          "min_obs_utc": "2026-09-08T14:00:00Z"
+          "min_c": 15.3,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10113",
@@ -1587,16 +1587,16 @@
           "name": "HELGOLAND",
           "max_c": 18.8,
           "max_obs_utc": "2026-09-08T01:00:00Z",
-          "min_c": 15.9,
-          "min_obs_utc": "2026-09-08T15:00:00Z"
+          "min_c": 15.4,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10020",
           "name": "LIST/SYLT",
           "max_c": 18.0,
           "max_obs_utc": "2026-09-08T03:00:00Z",
-          "min_c": 14.8,
-          "min_obs_utc": "2026-09-08T16:00:00Z"
+          "min_c": 14.4,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10453",
@@ -3210,16 +3210,16 @@
           "name": "HELGOLAND",
           "max_c": 21.0,
           "max_obs_utc": "2026-09-07T15:00:00Z",
-          "min_c": 15.9,
-          "min_obs_utc": "2026-09-08T15:00:00Z"
+          "min_c": 15.4,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10020",
           "name": "LIST/SYLT",
           "max_c": 20.7,
           "max_obs_utc": "2026-09-07T14:00:00Z",
-          "min_c": 14.8,
-          "min_obs_utc": "2026-09-08T16:00:00Z"
+          "min_c": 14.4,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10453",
@@ -4833,16 +4833,16 @@
           "name": "HELGOLAND",
           "max_c": 21.0,
           "max_obs_utc": "2026-09-07T15:00:00Z",
-          "min_c": 15.9,
-          "min_obs_utc": "2026-09-05T20:00:00Z"
+          "min_c": 15.4,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10020",
           "name": "LIST/SYLT",
           "max_c": 20.7,
           "max_obs_utc": "2026-09-07T14:00:00Z",
-          "min_c": 14.8,
-          "min_obs_utc": "2026-09-05T10:00:00Z"
+          "min_c": 14.4,
+          "min_obs_utc": "2026-09-08T18:00:00Z"
         },
         {
           "id": "10130",
