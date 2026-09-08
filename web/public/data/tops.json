@@ -1,10 +1,10 @@
 {
-  "generated_utc": "2026-09-08T19:07:40Z",
+  "generated_utc": "2026-09-08T20:07:46Z",
   "periods": {
     "day": {
       "key": "2026-09-08",
-      "station_count": 201,
-      "hidden": 1,
+      "station_count": 200,
+      "hidden": 2,
       "stations": [
         {
           "id": "10805",
@@ -468,14 +468,6 @@
           "max_c": 28.9,
           "max_obs_utc": "2026-09-08T15:00:00Z",
           "min_c": 15.0,
-          "min_obs_utc": "2026-09-08T05:00:00Z"
-        },
-        {
-          "id": "10803",
-          "name": "FREIBURG",
-          "max_c": 28.9,
-          "max_obs_utc": "2026-09-08T10:00:00Z",
-          "min_c": 16.3,
           "min_obs_utc": "2026-09-08T05:00:00Z"
         },
         {
@@ -1083,8 +1075,8 @@
           "name": "MUENSTER/OSNABR.",
           "max_c": 24.5,
           "max_obs_utc": "2026-09-08T16:00:00Z",
-          "min_c": 18.9,
-          "min_obs_utc": "2026-09-08T03:00:00Z"
+          "min_c": 18.3,
+          "min_obs_utc": "2026-09-08T19:00:00Z"
         },
         {
           "id": "10238",
@@ -1195,8 +1187,8 @@
           "name": "AHAUS",
           "max_c": 23.9,
           "max_obs_utc": "2026-09-08T14:00:00Z",
-          "min_c": 17.5,
-          "min_obs_utc": "2026-09-08T18:00:00Z"
+          "min_c": 16.6,
+          "min_obs_utc": "2026-09-08T19:00:00Z"
         },
         {
           "id": "10249",
@@ -1299,8 +1291,8 @@
           "name": "LINGEN-BACCUM",
           "max_c": 23.0,
           "max_obs_utc": "2026-09-08T15:00:00Z",
-          "min_c": 17.1,
-          "min_obs_utc": "2026-09-08T18:00:00Z"
+          "min_c": 15.8,
+          "min_obs_utc": "2026-09-08T19:00:00Z"
         },
         {
           "id": "10156",
@@ -1331,8 +1323,8 @@
           "name": "BREMERVOERDE",
           "max_c": 22.7,
           "max_obs_utc": "2026-09-08T13:00:00Z",
-          "min_c": 16.7,
-          "min_obs_utc": "2026-09-08T18:00:00Z"
+          "min_c": 16.0,
+          "min_obs_utc": "2026-09-08T19:00:00Z"
         },
         {
           "id": "10147",
@@ -1347,8 +1339,8 @@
           "name": "BREMEN",
           "max_c": 22.7,
           "max_obs_utc": "2026-09-08T16:00:00Z",
-          "min_c": 17.6,
-          "min_obs_utc": "2026-09-08T01:00:00Z"
+          "min_c": 16.8,
+          "min_obs_utc": "2026-09-08T19:00:00Z"
         },
         {
           "id": "10170",
@@ -1387,8 +1379,8 @@
           "name": "FRIESOYTHE-ALTENOYTH",
           "max_c": 21.9,
           "max_obs_utc": "2026-09-08T13:00:00Z",
-          "min_c": 15.7,
-          "min_obs_utc": "2026-09-08T18:00:00Z"
+          "min_c": 15.2,
+          "min_obs_utc": "2026-09-08T19:00:00Z"
         },
         {
           "id": "10097",
@@ -1403,8 +1395,8 @@
           "name": "PELZERHAKEN",
           "max_c": 21.8,
           "max_obs_utc": "2026-09-08T15:00:00Z",
-          "min_c": 17.4,
-          "min_obs_utc": "2026-09-08T03:00:00Z"
+          "min_c": 16.1,
+          "min_obs_utc": "2026-09-08T19:00:00Z"
         },
         {
           "id": "10908",
@@ -1427,8 +1419,8 @@
           "name": "DOERNICK",
           "max_c": 21.3,
           "max_obs_utc": "2026-09-08T12:00:00Z",
-          "min_c": 16.0,
-          "min_obs_utc": "2026-09-08T18:00:00Z"
+          "min_c": 15.6,
+          "min_obs_utc": "2026-09-08T19:00:00Z"
         },
         {
           "id": "10427",
@@ -1459,8 +1451,8 @@
           "name": "BREMERHAVEN",
           "max_c": 20.4,
           "max_obs_utc": "2026-09-08T11:00:00Z",
-          "min_c": 16.3,
-          "min_obs_utc": "2026-09-08T18:00:00Z"
+          "min_c": 15.6,
+          "min_obs_utc": "2026-09-08T19:00:00Z"
         },
         {
           "id": "10042",
@@ -1483,8 +1475,8 @@
           "name": "ITZEHOE",
           "max_c": 20.1,
           "max_obs_utc": "2026-09-08T12:00:00Z",
-          "min_c": 15.8,
-          "min_obs_utc": "2026-09-08T18:00:00Z"
+          "min_c": 15.4,
+          "min_obs_utc": "2026-09-08T19:00:00Z"
         },
         {
           "id": "10038",
@@ -1515,8 +1507,8 @@
           "name": "CUXHAVEN",
           "max_c": 19.6,
           "max_obs_utc": "2026-09-08T12:00:00Z",
-          "min_c": 15.7,
-          "min_obs_utc": "2026-09-08T18:00:00Z"
+          "min_c": 15.2,
+          "min_obs_utc": "2026-09-08T19:00:00Z"
         },
         {
           "id": "10033",
@@ -1531,16 +1523,16 @@
           "name": "WITTMUNDHAVEN",
           "max_c": 19.2,
           "max_obs_utc": "2026-09-08T11:00:00Z",
-          "min_c": 14.7,
-          "min_obs_utc": "2026-09-08T18:00:00Z"
+          "min_c": 14.6,
+          "min_obs_utc": "2026-09-08T19:00:00Z"
         },
         {
           "id": "10136",
           "name": "NORDHOLZ",
           "max_c": 19.1,
           "max_obs_utc": "2026-09-08T12:00:00Z",
-          "min_c": 14.6,
-          "min_obs_utc": "2026-09-08T18:00:00Z"
+          "min_c": 14.3,
+          "min_obs_utc": "2026-09-08T19:00:00Z"
         },
         {
           "id": "10035",
@@ -1555,16 +1547,16 @@
           "name": "LEUCHTTURM A. WESER",
           "max_c": 19.0,
           "max_obs_utc": "2026-09-08T11:00:00Z",
-          "min_c": 15.3,
-          "min_obs_utc": "2026-09-08T15:00:00Z"
+          "min_c": 15.2,
+          "min_obs_utc": "2026-09-08T19:00:00Z"
         },
         {
           "id": "10022",
           "name": "LECK",
           "max_c": 18.9,
           "max_obs_utc": "2026-09-08T08:00:00Z",
-          "min_c": 15.1,
-          "min_obs_utc": "2026-09-08T15:00:00Z"
+          "min_c": 14.5,
+          "min_obs_utc": "2026-09-08T19:00:00Z"
         },
         {
           "id": "10028",
@@ -1922,8 +1914,8 @@
           "name": "FREIBURG",
           "max_c": 30.6,
           "max_obs_utc": "2026-09-07T16:00:00Z",
-          "min_c": 16.3,
-          "min_obs_utc": "2026-09-08T05:00:00Z"
+          "min_c": null,
+          "min_obs_utc": ""
         },
         {
           "id": "10840",
@@ -2882,8 +2874,8 @@
           "name": "LEUCHTTURM A. WESER",
           "max_c": 25.6,
           "max_obs_utc": "2026-09-07T16:00:00Z",
-          "min_c": 15.3,
-          "min_obs_utc": "2026-09-08T15:00:00Z"
+          "min_c": 15.2,
+          "min_obs_utc": "2026-09-08T19:00:00Z"
         },
         {
           "id": "10042",
@@ -4505,8 +4497,8 @@
           "name": "LEUCHTTURM A. WESER",
           "max_c": 25.6,
           "max_obs_utc": "2026-09-07T16:00:00Z",
-          "min_c": 15.3,
-          "min_obs_utc": "2026-09-08T15:00:00Z"
+          "min_c": 15.2,
+          "min_obs_utc": "2026-09-08T19:00:00Z"
         },
         {
           "id": "10042",
