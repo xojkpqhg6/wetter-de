@@ -839,7 +839,7 @@
       "min_c": 10.9,
       "min_obs_utc": "2026-09-10T05:00:00Z",
       "name": "GEILENKIRCHEN",
-      "samples": 23
+      "samples": 24
     },
     "10502": {
       "max_c": 20.0,
@@ -1626,5 +1626,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-09-11T00:07:42Z"
+  "updated_utc": "2026-09-11T01:00:35Z"
 }
