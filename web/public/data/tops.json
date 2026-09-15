@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-15T21:07:53Z",
+  "generated_utc": "2026-09-15T22:07:52Z",
   "periods": {
     "day": {
       "key": "2026-09-15",
@@ -747,8 +747,8 @@
           "name": "EMDEN-FLUGPLATZ",
           "max_c": 25.1,
           "max_obs_utc": "2026-09-15T13:00:00Z",
-          "min_c": 18.0,
-          "min_obs_utc": "2026-09-15T20:00:00Z"
+          "min_c": 17.2,
+          "min_obs_utc": "2026-09-15T21:00:00Z"
         },
         {
           "id": "10271",
@@ -1331,16 +1331,16 @@
           "name": "NORDERNEY",
           "max_c": 22.8,
           "max_obs_utc": "2026-09-15T13:00:00Z",
-          "min_c": 17.5,
-          "min_obs_utc": "2026-09-15T20:00:00Z"
+          "min_c": 17.2,
+          "min_obs_utc": "2026-09-15T21:00:00Z"
         },
         {
           "id": "10124",
           "name": "LEUCHTTURM A. WESER",
           "max_c": 22.8,
           "max_obs_utc": "2026-09-15T14:00:00Z",
-          "min_c": 17.5,
-          "min_obs_utc": "2026-09-15T03:00:00Z"
+          "min_c": 17.4,
+          "min_obs_utc": "2026-09-15T21:00:00Z"
         },
         {
           "id": "10055",
