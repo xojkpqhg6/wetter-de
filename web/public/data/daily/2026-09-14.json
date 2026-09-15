@@ -1386,12 +1386,12 @@
       "samples": 24
     },
     "10803": {
-      "max_c": 21.7,
-      "max_obs_utc": "2026-09-14T18:00:00Z",
+      "max_c": 25.2,
+      "max_obs_utc": "2026-09-14T14:00:00Z",
       "min_c": 14.5,
       "min_obs_utc": "2026-09-14T23:00:00Z",
       "name": "FREIBURG",
-      "samples": 17
+      "samples": 24
     },
     "10805": {
       "max_c": 26.7,
@@ -1618,5 +1618,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-09-15T00:07:52Z"
+  "updated_utc": "2026-09-15T06:07:41Z"
 }
