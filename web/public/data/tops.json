@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-15T22:07:52Z",
+  "generated_utc": "2026-09-15T23:07:47Z",
   "periods": {
     "day": {
       "key": "2026-09-15",
@@ -347,8 +347,8 @@
           "name": "FRIESOYTHE-ALTENOYTH",
           "max_c": 26.6,
           "max_obs_utc": "2026-09-15T14:00:00Z",
-          "min_c": 17.4,
-          "min_obs_utc": "2026-09-15T00:00:00Z"
+          "min_c": 17.3,
+          "min_obs_utc": "2026-09-15T22:00:00Z"
         },
         {
           "id": "10343",
@@ -747,8 +747,8 @@
           "name": "EMDEN-FLUGPLATZ",
           "max_c": 25.1,
           "max_obs_utc": "2026-09-15T13:00:00Z",
-          "min_c": 17.2,
-          "min_obs_utc": "2026-09-15T21:00:00Z"
+          "min_c": 16.8,
+          "min_obs_utc": "2026-09-15T22:00:00Z"
         },
         {
           "id": "10271",
@@ -803,8 +803,8 @@
           "name": "WITTMUNDHAVEN",
           "max_c": 24.9,
           "max_obs_utc": "2026-09-15T13:00:00Z",
-          "min_c": 17.0,
-          "min_obs_utc": "2026-09-15T00:00:00Z"
+          "min_c": 16.8,
+          "min_obs_utc": "2026-09-15T22:00:00Z"
         },
         {
           "id": "10381",
