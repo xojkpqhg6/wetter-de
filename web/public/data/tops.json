@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-19T19:07:52Z",
+  "generated_utc": "2026-09-19T20:07:42Z",
   "periods": {
     "day": {
       "key": "2026-09-19",
@@ -1231,6 +1231,14 @@
           "min_obs_utc": "2026-09-19T01:00:00Z"
         },
         {
+          "id": "10168",
+          "name": "GOLDBERG",
+          "max_c": 18.9,
+          "max_obs_utc": "2026-09-19T19:00:00Z",
+          "min_c": 13.6,
+          "min_obs_utc": "2026-09-19T01:00:00Z"
+        },
+        {
           "id": "10200",
           "name": "EMDEN-FLUGPLATZ",
           "max_c": 18.9,
@@ -1269,14 +1277,6 @@
           "max_obs_utc": "2026-09-19T12:00:00Z",
           "min_c": 14.2,
           "min_obs_utc": "2026-09-19T03:00:00Z"
-        },
-        {
-          "id": "10168",
-          "name": "GOLDBERG",
-          "max_c": 18.7,
-          "max_obs_utc": "2026-09-19T13:00:00Z",
-          "min_c": 13.6,
-          "min_obs_utc": "2026-09-19T01:00:00Z"
         },
         {
           "id": "10577",
@@ -1431,6 +1431,22 @@
           "min_obs_utc": "2026-09-19T01:00:00Z"
         },
         {
+          "id": "10113",
+          "name": "NORDERNEY",
+          "max_c": 17.9,
+          "max_obs_utc": "2026-09-19T19:00:00Z",
+          "min_c": 15.1,
+          "min_obs_utc": "2026-09-19T06:00:00Z"
+        },
+        {
+          "id": "10124",
+          "name": "LEUCHTTURM A. WESER",
+          "max_c": 17.8,
+          "max_obs_utc": "2026-09-19T19:00:00Z",
+          "min_c": 15.0,
+          "min_obs_utc": "2026-09-19T04:00:00Z"
+        },
+        {
           "id": "10150",
           "name": "DOERNICK",
           "max_c": 17.8,
@@ -1455,19 +1471,19 @@
           "min_obs_utc": "2026-09-19T04:00:00Z"
         },
         {
-          "id": "10113",
-          "name": "NORDERNEY",
-          "max_c": 17.7,
-          "max_obs_utc": "2026-09-19T18:00:00Z",
-          "min_c": 15.1,
-          "min_obs_utc": "2026-09-19T06:00:00Z"
-        },
-        {
           "id": "10136",
           "name": "NORDHOLZ",
           "max_c": 17.7,
           "max_obs_utc": "2026-09-19T14:00:00Z",
           "min_c": 13.7,
+          "min_obs_utc": "2026-09-19T01:00:00Z"
+        },
+        {
+          "id": "10037",
+          "name": "SCHLESWIG-JAGEL",
+          "max_c": 17.6,
+          "max_obs_utc": "2026-09-19T19:00:00Z",
+          "min_c": 13.6,
           "min_obs_utc": "2026-09-19T01:00:00Z"
         },
         {
@@ -1479,28 +1495,12 @@
           "min_obs_utc": "2026-09-19T04:00:00Z"
         },
         {
-          "id": "10037",
-          "name": "SCHLESWIG-JAGEL",
-          "max_c": 17.5,
-          "max_obs_utc": "2026-09-19T12:00:00Z",
-          "min_c": 13.6,
-          "min_obs_utc": "2026-09-19T01:00:00Z"
-        },
-        {
           "id": "10038",
           "name": "HOHN",
           "max_c": 17.5,
           "max_obs_utc": "2026-09-19T12:00:00Z",
           "min_c": 13.8,
           "min_obs_utc": "2026-09-19T00:00:00Z"
-        },
-        {
-          "id": "10124",
-          "name": "LEUCHTTURM A. WESER",
-          "max_c": 17.5,
-          "max_obs_utc": "2026-09-19T12:00:00Z",
-          "min_c": 15.0,
-          "min_obs_utc": "2026-09-19T04:00:00Z"
         },
         {
           "id": "10033",
@@ -1519,20 +1519,20 @@
           "min_obs_utc": "2026-09-19T05:00:00Z"
         },
         {
+          "id": "10035",
+          "name": "SCHLESWIG",
+          "max_c": 17.1,
+          "max_obs_utc": "2026-09-19T19:00:00Z",
+          "min_c": 13.5,
+          "min_obs_utc": "2026-09-19T00:00:00Z"
+        },
+        {
           "id": "10544",
           "name": "WASSERKUPPE",
           "max_c": 17.1,
           "max_obs_utc": "2026-09-19T14:00:00Z",
           "min_c": 7.8,
           "min_obs_utc": "2026-09-19T02:00:00Z"
-        },
-        {
-          "id": "10035",
-          "name": "SCHLESWIG",
-          "max_c": 17.0,
-          "max_obs_utc": "2026-09-19T18:00:00Z",
-          "min_c": 13.5,
-          "min_obs_utc": "2026-09-19T00:00:00Z"
         },
         {
           "id": "10534",
