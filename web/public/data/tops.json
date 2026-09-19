@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-19T20:34:38Z",
+  "generated_utc": "2026-09-19T21:07:55Z",
   "periods": {
     "day": {
       "key": "2026-09-19",
@@ -1335,20 +1335,20 @@
           "min_obs_utc": "2026-09-19T01:00:00Z"
         },
         {
+          "id": "10180",
+          "name": "BARTH",
+          "max_c": 18.5,
+          "max_obs_utc": "2026-09-19T20:00:00Z",
+          "min_c": 13.0,
+          "min_obs_utc": "2026-09-19T04:00:00Z"
+        },
+        {
           "id": "10962",
           "name": "HOHENPEISS.BG",
           "max_c": 18.5,
           "max_obs_utc": "2026-09-19T13:00:00Z",
           "min_c": 10.3,
           "min_obs_utc": "2026-09-19T05:00:00Z"
-        },
-        {
-          "id": "10180",
-          "name": "BARTH",
-          "max_c": 18.4,
-          "max_obs_utc": "2026-09-19T16:00:00Z",
-          "min_c": 13.0,
-          "min_obs_utc": "2026-09-19T04:00:00Z"
         },
         {
           "id": "10015",
@@ -1423,6 +1423,14 @@
           "min_obs_utc": "2026-09-19T01:00:00Z"
         },
         {
+          "id": "10028",
+          "name": "ST. PETER ORDING",
+          "max_c": 17.9,
+          "max_obs_utc": "2026-09-19T20:00:00Z",
+          "min_c": 15.5,
+          "min_obs_utc": "2026-09-19T04:00:00Z"
+        },
+        {
           "id": "10046",
           "name": "KIEL-H.",
           "max_c": 17.9,
@@ -1441,10 +1449,18 @@
         {
           "id": "10124",
           "name": "LEUCHTTURM A. WESER",
-          "max_c": 17.8,
-          "max_obs_utc": "2026-09-19T19:00:00Z",
+          "max_c": 17.9,
+          "max_obs_utc": "2026-09-19T20:00:00Z",
           "min_c": 15.0,
           "min_obs_utc": "2026-09-19T04:00:00Z"
+        },
+        {
+          "id": "10037",
+          "name": "SCHLESWIG-JAGEL",
+          "max_c": 17.8,
+          "max_obs_utc": "2026-09-19T20:00:00Z",
+          "min_c": 13.6,
+          "min_obs_utc": "2026-09-19T01:00:00Z"
         },
         {
           "id": "10150",
@@ -1459,16 +1475,8 @@
           "name": "LECK",
           "max_c": 17.7,
           "max_obs_utc": "2026-09-19T17:00:00Z",
-          "min_c": 15.0,
-          "min_obs_utc": "2026-09-19T01:00:00Z"
-        },
-        {
-          "id": "10028",
-          "name": "ST. PETER ORDING",
-          "max_c": 17.7,
-          "max_obs_utc": "2026-09-19T18:00:00Z",
-          "min_c": 15.5,
-          "min_obs_utc": "2026-09-19T04:00:00Z"
+          "min_c": 14.8,
+          "min_obs_utc": "2026-09-19T20:00:00Z"
         },
         {
           "id": "10136",
@@ -1476,14 +1484,6 @@
           "max_c": 17.7,
           "max_obs_utc": "2026-09-19T14:00:00Z",
           "min_c": 13.7,
-          "min_obs_utc": "2026-09-19T01:00:00Z"
-        },
-        {
-          "id": "10037",
-          "name": "SCHLESWIG-JAGEL",
-          "max_c": 17.6,
-          "max_obs_utc": "2026-09-19T19:00:00Z",
-          "min_c": 13.6,
           "min_obs_utc": "2026-09-19T01:00:00Z"
         },
         {
@@ -1521,8 +1521,8 @@
         {
           "id": "10035",
           "name": "SCHLESWIG",
-          "max_c": 17.1,
-          "max_obs_utc": "2026-09-19T19:00:00Z",
+          "max_c": 17.2,
+          "max_obs_utc": "2026-09-19T20:00:00Z",
           "min_c": 13.5,
           "min_obs_utc": "2026-09-19T00:00:00Z"
         },
