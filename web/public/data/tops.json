@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-19T22:07:47Z",
+  "generated_utc": "2026-09-19T22:57:50Z",
   "periods": {
     "day": {
       "key": "2026-09-19",
@@ -1451,8 +1451,8 @@
           "name": "LEUCHTTURM A. WESER",
           "max_c": 17.9,
           "max_obs_utc": "2026-09-19T20:00:00Z",
-          "min_c": 15.0,
-          "min_obs_utc": "2026-09-19T04:00:00Z"
+          "min_c": 14.8,
+          "min_obs_utc": "2026-09-19T22:00:00Z"
         },
         {
           "id": "10037",
