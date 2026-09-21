@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-21T15:07:57Z",
+  "generated_utc": "2026-09-21T16:07:50Z",
   "periods": {
     "day": {
       "key": "2026-09-21",
@@ -23,6 +23,22 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
+          "id": "10805",
+          "name": "LAHR",
+          "max_c": 20.5,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.5,
+          "min_obs_utc": "2026-09-21T03:00:00Z"
+        },
+        {
+          "id": "10609",
+          "name": "TRIER",
+          "max_c": 20.4,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 8.0,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
+        },
+        {
           "id": "10803",
           "name": "FREIBURG",
           "max_c": 20.4,
@@ -31,20 +47,20 @@
           "min_obs_utc": "2026-09-21T06:00:00Z"
         },
         {
-          "id": "10805",
-          "name": "LAHR",
-          "max_c": 20.4,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 11.5,
-          "min_obs_utc": "2026-09-21T03:00:00Z"
-        },
-        {
           "id": "10315",
           "name": "MUENSTER/OSNABR.",
           "max_c": 20.3,
           "max_obs_utc": "2026-09-21T12:00:00Z",
           "min_c": 12.2,
           "min_obs_utc": "2026-09-21T03:00:00Z"
+        },
+        {
+          "id": "10400",
+          "name": "DUESSELDORF",
+          "max_c": 20.2,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.1,
+          "min_obs_utc": "2026-09-21T01:00:00Z"
         },
         {
           "id": "10520",
@@ -95,28 +111,20 @@
           "min_obs_utc": "2026-09-21T02:00:00Z"
         },
         {
-          "id": "10609",
-          "name": "TRIER",
-          "max_c": 19.6,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 8.0,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
-        },
-        {
-          "id": "10400",
-          "name": "DUESSELDORF",
-          "max_c": 19.5,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.1,
-          "min_obs_utc": "2026-09-21T01:00:00Z"
-        },
-        {
           "id": "10637",
           "name": "FRANKFURT/M",
           "max_c": 19.4,
           "max_obs_utc": "2026-09-21T13:00:00Z",
           "min_c": 9.4,
           "min_obs_utc": "2026-09-21T06:00:00Z"
+        },
+        {
+          "id": "10641",
+          "name": "OFFENBACH-WETTERPARK",
+          "max_c": 19.4,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.4,
+          "min_obs_utc": "2026-09-21T02:00:00Z"
         },
         {
           "id": "10929",
@@ -127,12 +135,28 @@
           "min_obs_utc": "2026-09-21T06:00:00Z"
         },
         {
+          "id": "10410",
+          "name": "ESSEN",
+          "max_c": 19.3,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 10.5,
+          "min_obs_utc": "2026-09-21T03:00:00Z"
+        },
+        {
           "id": "10655",
           "name": "WUERZBURG",
           "max_c": 19.1,
           "max_obs_utc": "2026-09-21T13:00:00Z",
           "min_c": 9.8,
           "min_obs_utc": "2026-09-21T04:00:00Z"
+        },
+        {
+          "id": "10704",
+          "name": "BERUS",
+          "max_c": 19.1,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.2,
+          "min_obs_utc": "2026-09-21T01:00:00Z"
         },
         {
           "id": "10502",
@@ -149,6 +173,14 @@
           "max_obs_utc": "2026-09-21T13:00:00Z",
           "min_c": 8.5,
           "min_obs_utc": "2026-09-21T06:00:00Z"
+        },
+        {
+          "id": "10708",
+          "name": "SAARBRUECKEN",
+          "max_c": 19.0,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 8.2,
+          "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
           "id": "10733",
@@ -175,18 +207,10 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10641",
-          "name": "OFFENBACH-WETTERPARK",
-          "max_c": 18.9,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.4,
-          "min_obs_utc": "2026-09-21T02:00:00Z"
-        },
-        {
           "id": "10312",
           "name": "BELM",
-          "max_c": 18.8,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
+          "max_c": 18.9,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
           "min_c": 10.7,
           "min_obs_utc": "2026-09-21T06:00:00Z"
         },
@@ -205,14 +229,6 @@
           "max_obs_utc": "2026-09-21T14:00:00Z",
           "min_c": 7.3,
           "min_obs_utc": "2026-09-21T00:00:00Z"
-        },
-        {
-          "id": "10708",
-          "name": "SAARBRUECKEN",
-          "max_c": 18.7,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 8.2,
-          "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
           "id": "10325",
@@ -247,6 +263,14 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
+          "id": "10742",
+          "name": "OEHRINGEN",
+          "max_c": 18.6,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.1,
+          "min_obs_utc": "2026-09-21T04:00:00Z"
+        },
+        {
           "id": "10321",
           "name": "DIEPHOLZ",
           "max_c": 18.5,
@@ -255,11 +279,11 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10410",
-          "name": "ESSEN",
+          "id": "10542",
+          "name": "BAD HERSFELD",
           "max_c": 18.5,
-          "max_obs_utc": "2026-09-21T12:00:00Z",
-          "min_c": 10.5,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.7,
           "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
@@ -279,6 +303,14 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
+          "id": "10343",
+          "name": "CELLE",
+          "max_c": 18.4,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.7,
+          "min_obs_utc": "2026-09-21T03:00:00Z"
+        },
+        {
           "id": "10424",
           "name": "WERL",
           "max_c": 18.4,
@@ -287,20 +319,12 @@
           "min_obs_utc": "2026-09-21T00:00:00Z"
         },
         {
-          "id": "10343",
-          "name": "CELLE",
-          "max_c": 18.2,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 11.7,
-          "min_obs_utc": "2026-09-21T03:00:00Z"
-        },
-        {
-          "id": "10704",
-          "name": "BERUS",
-          "max_c": 18.2,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.2,
-          "min_obs_utc": "2026-09-21T01:00:00Z"
+          "id": "10519",
+          "name": "BONN-ROLEBER",
+          "max_c": 18.3,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 10.2,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10776",
@@ -319,20 +343,20 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
+          "id": "10361",
+          "name": "MAGDEBURG",
+          "max_c": 18.1,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 12.1,
+          "min_obs_utc": "2026-09-21T06:00:00Z"
+        },
+        {
           "id": "10532",
           "name": "GIESSEN",
           "max_c": 18.1,
           "max_obs_utc": "2026-09-21T14:00:00Z",
           "min_c": 9.4,
           "min_obs_utc": "2026-09-21T02:00:00Z"
-        },
-        {
-          "id": "10542",
-          "name": "BAD HERSFELD",
-          "max_c": 18.1,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.7,
-          "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
           "id": "10365",
@@ -375,12 +399,12 @@
           "min_obs_utc": "2026-09-21T01:00:00Z"
         },
         {
-          "id": "10519",
-          "name": "BONN-ROLEBER",
+          "id": "10724",
+          "name": "WEINBIET",
           "max_c": 18.0,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 10.2,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.1,
+          "min_obs_utc": "2026-09-21T02:00:00Z"
         },
         {
           "id": "10393",
@@ -415,6 +439,14 @@
           "min_obs_utc": "2026-09-21T00:00:00Z"
         },
         {
+          "id": "10384",
+          "name": "BERLIN-TEMPELHOF",
+          "max_c": 17.8,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 12.5,
+          "min_obs_utc": "2026-09-21T01:00:00Z"
+        },
+        {
           "id": "10385",
           "name": "BERLIN-BRANDENBURG",
           "max_c": 17.8,
@@ -429,14 +461,6 @@
           "max_obs_utc": "2026-09-21T14:00:00Z",
           "min_c": 11.4,
           "min_obs_utc": "2026-09-21T02:00:00Z"
-        },
-        {
-          "id": "10742",
-          "name": "OEHRINGEN",
-          "max_c": 17.8,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.1,
-          "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
           "id": "10454",
@@ -455,19 +479,19 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10361",
-          "name": "MAGDEBURG",
-          "max_c": 17.6,
-          "max_obs_utc": "2026-09-21T10:00:00Z",
-          "min_c": 12.1,
-          "min_obs_utc": "2026-09-21T06:00:00Z"
-        },
-        {
           "id": "10379",
           "name": "POTSDAM",
           "max_c": 17.6,
           "max_obs_utc": "2026-09-21T12:00:00Z",
           "min_c": 12.0,
+          "min_obs_utc": "2026-09-21T03:00:00Z"
+        },
+        {
+          "id": "10658",
+          "name": "KISSINGEN",
+          "max_c": 17.6,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.3,
           "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
@@ -495,12 +519,12 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10384",
-          "name": "BERLIN-TEMPELHOF",
-          "max_c": 17.4,
-          "max_obs_utc": "2026-09-21T11:00:00Z",
-          "min_c": 12.5,
-          "min_obs_utc": "2026-09-21T01:00:00Z"
+          "id": "10739",
+          "name": "STUTTGART-SCHN.",
+          "max_c": 17.5,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.5,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10435",
@@ -511,20 +535,20 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
+          "id": "10460",
+          "name": "ARTERN",
+          "max_c": 17.4,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 10.3,
+          "min_obs_utc": "2026-09-21T03:00:00Z"
+        },
+        {
           "id": "10476",
           "name": "HOLZDORF",
           "max_c": 17.4,
           "max_obs_utc": "2026-09-21T13:00:00Z",
           "min_c": 11.2,
           "min_obs_utc": "2026-09-21T05:00:00Z"
-        },
-        {
-          "id": "10724",
-          "name": "WEINBIET",
-          "max_c": 17.4,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.1,
-          "min_obs_utc": "2026-09-21T02:00:00Z"
         },
         {
           "id": "10444",
@@ -543,20 +567,20 @@
           "min_obs_utc": "2026-09-21T02:00:00Z"
         },
         {
-          "id": "10739",
-          "name": "STUTTGART-SCHN.",
-          "max_c": 17.3,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 11.5,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
-        },
-        {
           "id": "10865",
           "name": "MUENCHEN STADT",
           "max_c": 17.3,
           "max_obs_utc": "2026-09-21T14:00:00Z",
           "min_c": 11.5,
           "min_obs_utc": "2026-09-21T06:00:00Z"
+        },
+        {
+          "id": "10126",
+          "name": "WITTMUNDHAVEN",
+          "max_c": 17.2,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 13.1,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10261",
@@ -591,20 +615,12 @@
           "min_obs_utc": "2026-09-21T06:00:00Z"
         },
         {
-          "id": "10658",
-          "name": "KISSINGEN",
+          "id": "10616",
+          "name": "HAHN",
           "max_c": 17.2,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.3,
-          "min_obs_utc": "2026-09-21T03:00:00Z"
-        },
-        {
-          "id": "10126",
-          "name": "WITTMUNDHAVEN",
-          "max_c": 17.1,
-          "max_obs_utc": "2026-09-21T11:00:00Z",
-          "min_c": 13.1,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 8.0,
+          "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
           "id": "10246",
@@ -631,6 +647,14 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
+          "id": "10471",
+          "name": "LEIPZIG",
+          "max_c": 17.1,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.9,
+          "min_obs_utc": "2026-09-21T04:00:00Z"
+        },
+        {
           "id": "10480",
           "name": "OSCHATZ",
           "max_c": 17.1,
@@ -653,14 +677,6 @@
           "max_obs_utc": "2026-09-21T13:00:00Z",
           "min_c": 12.7,
           "min_obs_utc": "2026-09-21T02:00:00Z"
-        },
-        {
-          "id": "10460",
-          "name": "ARTERN",
-          "max_c": 17.0,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 10.3,
-          "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
           "id": "10738",
@@ -711,12 +727,12 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10471",
-          "name": "LEIPZIG",
+          "id": "10565",
+          "name": "OSTERFELD",
           "max_c": 16.9,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.9,
-          "min_obs_utc": "2026-09-21T04:00:00Z"
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.1,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10646",
@@ -767,6 +783,14 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
+          "id": "10469",
+          "name": "LEIPZIG/SCHKEUDITZ",
+          "max_c": 16.7,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.2,
+          "min_obs_utc": "2026-09-21T00:00:00Z"
+        },
+        {
           "id": "10506",
           "name": "NUERBURG-BARWEILER",
           "max_c": 16.7,
@@ -791,12 +815,44 @@
           "min_obs_utc": "2026-09-21T06:00:00Z"
         },
         {
-          "id": "10469",
-          "name": "LEIPZIG/SCHKEUDITZ",
+          "id": "10870",
+          "name": "MUENCHEN-FL.",
+          "max_c": 16.7,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.1,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
+        },
+        {
+          "id": "10946",
+          "name": "KEMPTEN",
+          "max_c": 16.7,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.1,
+          "min_obs_utc": "2026-09-21T04:00:00Z"
+        },
+        {
+          "id": "10765",
+          "name": "ROTH",
           "max_c": 16.6,
-          "max_obs_utc": "2026-09-21T12:00:00Z",
-          "min_c": 9.2,
-          "min_obs_utc": "2026-09-21T00:00:00Z"
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.1,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
+        },
+        {
+          "id": "10837",
+          "name": "LAUPHEIM",
+          "max_c": 16.6,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.6,
+          "min_obs_utc": "2026-09-21T06:00:00Z"
+        },
+        {
+          "id": "10850",
+          "name": "HARBURG",
+          "max_c": 16.6,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.0,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10948",
@@ -847,6 +903,22 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
+          "id": "10788",
+          "name": "STRAUBING",
+          "max_c": 16.5,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.0,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
+        },
+        {
+          "id": "10853",
+          "name": "NEUBURG/DONAU",
+          "max_c": 16.5,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 10.0,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
+        },
+        {
           "id": "10945",
           "name": "LEUTKIRCH-HERLAZHFN.",
           "max_c": 16.5,
@@ -879,12 +951,12 @@
           "min_obs_utc": "2026-09-21T01:00:00Z"
         },
         {
-          "id": "10616",
-          "name": "HAHN",
+          "id": "10761",
+          "name": "WEISSENBURG-EMETZH.",
           "max_c": 16.4,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
-          "min_c": 8.0,
-          "min_obs_utc": "2026-09-21T04:00:00Z"
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.6,
+          "min_obs_utc": "2026-09-21T06:00:00Z"
         },
         {
           "id": "10815",
@@ -927,22 +999,6 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10870",
-          "name": "MUENCHEN-FL.",
-          "max_c": 16.3,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 11.1,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
-        },
-        {
-          "id": "10946",
-          "name": "KEMPTEN",
-          "max_c": 16.3,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 11.1,
-          "min_obs_utc": "2026-09-21T04:00:00Z"
-        },
-        {
           "id": "10022",
           "name": "LECK",
           "max_c": 16.2,
@@ -975,19 +1031,19 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
-          "id": "10788",
-          "name": "STRAUBING",
+          "id": "10671",
+          "name": "LAUTERTAL-OBERLAUTER",
           "max_c": 16.2,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 11.0,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 7.3,
+          "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10850",
-          "name": "HARBURG",
+          "id": "10771",
+          "name": "KUEMMERSBRUCK",
           "max_c": 16.2,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.0,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.8,
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
@@ -1011,8 +1067,8 @@
           "name": "LEUCHTTURM A. WESER",
           "max_c": 16.1,
           "max_obs_utc": "2026-09-21T02:00:00Z",
-          "min_c": 15.6,
-          "min_obs_utc": "2026-09-21T08:00:00Z"
+          "min_c": 15.4,
+          "min_obs_utc": "2026-09-21T15:00:00Z"
         },
         {
           "id": "10152",
@@ -1039,12 +1095,20 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10565",
-          "name": "OSTERFELD",
+          "id": "10418",
+          "name": "LUEDENSCHEID",
           "max_c": 16.1,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.1,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 8.3,
+          "min_obs_utc": "2026-09-21T00:00:00Z"
+        },
+        {
+          "id": "10490",
+          "name": "DOBERLUG-KIRCHHAIN",
+          "max_c": 16.1,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.3,
+          "min_obs_utc": "2026-09-21T01:00:00Z"
         },
         {
           "id": "10648",
@@ -1053,14 +1117,6 @@
           "max_obs_utc": "2026-09-21T14:00:00Z",
           "min_c": 9.3,
           "min_obs_utc": "2026-09-21T03:00:00Z"
-        },
-        {
-          "id": "10765",
-          "name": "ROTH",
-          "max_c": 16.1,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
-          "min_c": 9.1,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10856",
@@ -1079,11 +1135,11 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
-          "id": "10771",
-          "name": "KUEMMERSBRUCK",
+          "id": "10458",
+          "name": "HARZGERODE",
           "max_c": 16.0,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.8,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 8.7,
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
@@ -1093,6 +1149,14 @@
           "max_obs_utc": "2026-09-21T12:00:00Z",
           "min_c": 10.7,
           "min_obs_utc": "2026-09-21T05:00:00Z"
+        },
+        {
+          "id": "10954",
+          "name": "ALTENSTADT",
+          "max_c": 16.0,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.8,
+          "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
           "id": "10038",
@@ -1119,12 +1183,12 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
-          "id": "10837",
-          "name": "LAUPHEIM",
+          "id": "10449",
+          "name": "LEINEFELDE",
           "max_c": 15.9,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 11.6,
-          "min_obs_utc": "2026-09-21T06:00:00Z"
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.4,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10037",
@@ -1133,6 +1197,14 @@
           "max_obs_utc": "2026-09-21T13:00:00Z",
           "min_c": 11.7,
           "min_obs_utc": "2026-09-21T05:00:00Z"
+        },
+        {
+          "id": "10046",
+          "name": "KIEL-H.",
+          "max_c": 15.8,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.3,
+          "min_obs_utc": "2026-09-21T06:00:00Z"
         },
         {
           "id": "10142",
@@ -1159,14 +1231,6 @@
           "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
-          "id": "10671",
-          "name": "LAUTERTAL-OBERLAUTER",
-          "max_c": 15.8,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 7.3,
-          "min_obs_utc": "2026-09-21T04:00:00Z"
-        },
-        {
           "id": "10743",
           "name": "NIEDERSTETTEN",
           "max_c": 15.8,
@@ -1175,28 +1239,12 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10418",
-          "name": "LUEDENSCHEID",
+          "id": "10567",
+          "name": "GERA",
           "max_c": 15.7,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
-          "min_c": 8.3,
-          "min_obs_utc": "2026-09-21T00:00:00Z"
-        },
-        {
-          "id": "10449",
-          "name": "LEINEFELDE",
-          "max_c": 15.7,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.4,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 8.8,
           "min_obs_utc": "2026-09-21T05:00:00Z"
-        },
-        {
-          "id": "10490",
-          "name": "DOBERLUG-KIRCHHAIN",
-          "max_c": 15.7,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
-          "min_c": 11.3,
-          "min_obs_utc": "2026-09-21T01:00:00Z"
         },
         {
           "id": "10840",
@@ -1263,27 +1311,11 @@
           "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
-          "id": "10761",
-          "name": "WEISSENBURG-EMETZH.",
-          "max_c": 15.6,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.6,
-          "min_obs_utc": "2026-09-21T06:00:00Z"
-        },
-        {
-          "id": "10046",
-          "name": "KIEL-H.",
+          "id": "10747",
+          "name": "KAISERSBACH-CRONHUET",
           "max_c": 15.5,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 11.3,
-          "min_obs_utc": "2026-09-21T06:00:00Z"
-        },
-        {
-          "id": "10853",
-          "name": "NEUBURG/DONAU",
-          "max_c": 15.5,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
-          "min_c": 10.0,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 7.1,
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
@@ -1293,30 +1325,6 @@
           "max_obs_utc": "2026-09-21T13:00:00Z",
           "min_c": 14.1,
           "min_obs_utc": "2026-09-21T03:00:00Z"
-        },
-        {
-          "id": "10458",
-          "name": "HARZGERODE",
-          "max_c": 15.4,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 8.7,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
-        },
-        {
-          "id": "10567",
-          "name": "GERA",
-          "max_c": 15.4,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 8.8,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
-        },
-        {
-          "id": "10747",
-          "name": "KAISERSBACH-CRONHUET",
-          "max_c": 15.4,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 7.1,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10818",
@@ -1335,6 +1343,14 @@
           "min_obs_utc": "2026-09-21T06:00:00Z"
         },
         {
+          "id": "10982",
+          "name": "CHIEMING",
+          "max_c": 15.4,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.3,
+          "min_obs_utc": "2026-09-21T07:00:00Z"
+        },
+        {
           "id": "10488",
           "name": "DRESDEN/FLUGHAFEN",
           "max_c": 15.3,
@@ -1349,14 +1365,6 @@
           "max_obs_utc": "2026-09-21T14:00:00Z",
           "min_c": 10.8,
           "min_obs_utc": "2026-09-21T00:00:00Z"
-        },
-        {
-          "id": "10954",
-          "name": "ALTENSTADT",
-          "max_c": 15.3,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
-          "min_c": 9.8,
-          "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
           "id": "10020",
@@ -1375,14 +1383,6 @@
           "min_obs_utc": "2026-09-21T06:00:00Z"
         },
         {
-          "id": "10982",
-          "name": "CHIEMING",
-          "max_c": 15.2,
-          "max_obs_utc": "2026-09-21T12:00:00Z",
-          "min_c": 11.3,
-          "min_obs_utc": "2026-09-21T07:00:00Z"
-        },
-        {
           "id": "10499",
           "name": "GOERLITZ",
           "max_c": 15.1,
@@ -1397,6 +1397,14 @@
           "max_obs_utc": "2026-09-21T13:00:00Z",
           "min_c": 9.9,
           "min_obs_utc": "2026-09-21T03:00:00Z"
+        },
+        {
+          "id": "10526",
+          "name": "B.MARIENBG.",
+          "max_c": 14.8,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 7.6,
+          "min_obs_utc": "2026-09-21T06:00:00Z"
         },
         {
           "id": "10688",
@@ -1415,12 +1423,12 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
-          "id": "10526",
-          "name": "B.MARIENBG.",
+          "id": "10564",
+          "name": "SCHLEIZ",
           "max_c": 14.4,
-          "max_obs_utc": "2026-09-21T11:00:00Z",
-          "min_c": 7.6,
-          "min_obs_utc": "2026-09-21T06:00:00Z"
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 8.9,
+          "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
           "id": "10895",
@@ -1429,6 +1437,22 @@
           "max_obs_utc": "2026-09-21T14:00:00Z",
           "min_c": 10.5,
           "min_obs_utc": "2026-09-21T06:00:00Z"
+        },
+        {
+          "id": "10685",
+          "name": "HOF",
+          "max_c": 14.3,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 7.3,
+          "min_obs_utc": "2026-09-21T04:00:00Z"
+        },
+        {
+          "id": "10777",
+          "name": "GELBELSEE",
+          "max_c": 14.3,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 8.8,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10782",
@@ -1463,36 +1487,12 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10564",
-          "name": "SCHLEIZ",
-          "max_c": 13.9,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 8.9,
-          "min_obs_utc": "2026-09-21T04:00:00Z"
-        },
-        {
           "id": "10577",
           "name": "CHEMNITZ",
           "max_c": 13.8,
           "max_obs_utc": "2026-09-21T13:00:00Z",
           "min_c": 8.4,
           "min_obs_utc": "2026-09-21T03:00:00Z"
-        },
-        {
-          "id": "10685",
-          "name": "HOF",
-          "max_c": 13.7,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 7.3,
-          "min_obs_utc": "2026-09-21T04:00:00Z"
-        },
-        {
-          "id": "10777",
-          "name": "GELBELSEE",
-          "max_c": 13.7,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
-          "min_c": 8.8,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10635",
@@ -1513,8 +1513,8 @@
         {
           "id": "10452",
           "name": "BRAUNLAGE",
-          "max_c": 13.0,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
+          "max_c": 13.2,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
           "min_c": 8.1,
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
@@ -1551,20 +1551,20 @@
           "min_obs_utc": "2026-09-21T02:00:00Z"
         },
         {
+          "id": "10544",
+          "name": "WASSERKUPPE",
+          "max_c": 11.4,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 5.9,
+          "min_obs_utc": "2026-09-21T03:00:00Z"
+        },
+        {
           "id": "10552",
           "name": "SCHMUECKE",
           "max_c": 11.4,
           "max_obs_utc": "2026-09-21T14:00:00Z",
           "min_c": 5.9,
           "min_obs_utc": "2026-09-21T02:00:00Z"
-        },
-        {
-          "id": "10544",
-          "name": "WASSERKUPPE",
-          "max_c": 11.0,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
-          "min_c": 5.9,
-          "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
           "id": "10574",
@@ -1593,8 +1593,8 @@
         {
           "id": "10453",
           "name": "BROCKEN",
-          "max_c": 7.5,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
+          "max_c": 7.8,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
           "min_c": 4.4,
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
@@ -1619,8 +1619,8 @@
           "name": "ZUGSPITZE",
           "max_c": 0.6,
           "max_obs_utc": "2026-09-21T00:00:00Z",
-          "min_c": -1.0,
-          "min_obs_utc": "2026-09-21T12:00:00Z"
+          "min_c": -2.4,
+          "min_obs_utc": "2026-09-21T15:00:00Z"
         }
       ]
     },
@@ -1646,6 +1646,22 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
+          "id": "10805",
+          "name": "LAHR",
+          "max_c": 20.5,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.5,
+          "min_obs_utc": "2026-09-21T03:00:00Z"
+        },
+        {
+          "id": "10609",
+          "name": "TRIER",
+          "max_c": 20.4,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 8.0,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
+        },
+        {
           "id": "10803",
           "name": "FREIBURG",
           "max_c": 20.4,
@@ -1654,20 +1670,20 @@
           "min_obs_utc": "2026-09-21T06:00:00Z"
         },
         {
-          "id": "10805",
-          "name": "LAHR",
-          "max_c": 20.4,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 11.5,
-          "min_obs_utc": "2026-09-21T03:00:00Z"
-        },
-        {
           "id": "10315",
           "name": "MUENSTER/OSNABR.",
           "max_c": 20.3,
           "max_obs_utc": "2026-09-21T12:00:00Z",
           "min_c": 12.2,
           "min_obs_utc": "2026-09-21T03:00:00Z"
+        },
+        {
+          "id": "10400",
+          "name": "DUESSELDORF",
+          "max_c": 20.2,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.1,
+          "min_obs_utc": "2026-09-21T01:00:00Z"
         },
         {
           "id": "10520",
@@ -1718,28 +1734,20 @@
           "min_obs_utc": "2026-09-21T02:00:00Z"
         },
         {
-          "id": "10609",
-          "name": "TRIER",
-          "max_c": 19.6,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 8.0,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
-        },
-        {
-          "id": "10400",
-          "name": "DUESSELDORF",
-          "max_c": 19.5,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.1,
-          "min_obs_utc": "2026-09-21T01:00:00Z"
-        },
-        {
           "id": "10637",
           "name": "FRANKFURT/M",
           "max_c": 19.4,
           "max_obs_utc": "2026-09-21T13:00:00Z",
           "min_c": 9.4,
           "min_obs_utc": "2026-09-21T06:00:00Z"
+        },
+        {
+          "id": "10641",
+          "name": "OFFENBACH-WETTERPARK",
+          "max_c": 19.4,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.4,
+          "min_obs_utc": "2026-09-21T02:00:00Z"
         },
         {
           "id": "10929",
@@ -1750,12 +1758,28 @@
           "min_obs_utc": "2026-09-21T06:00:00Z"
         },
         {
+          "id": "10410",
+          "name": "ESSEN",
+          "max_c": 19.3,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 10.5,
+          "min_obs_utc": "2026-09-21T03:00:00Z"
+        },
+        {
           "id": "10655",
           "name": "WUERZBURG",
           "max_c": 19.1,
           "max_obs_utc": "2026-09-21T13:00:00Z",
           "min_c": 9.8,
           "min_obs_utc": "2026-09-21T04:00:00Z"
+        },
+        {
+          "id": "10704",
+          "name": "BERUS",
+          "max_c": 19.1,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.2,
+          "min_obs_utc": "2026-09-21T01:00:00Z"
         },
         {
           "id": "10502",
@@ -1772,6 +1796,14 @@
           "max_obs_utc": "2026-09-21T13:00:00Z",
           "min_c": 8.5,
           "min_obs_utc": "2026-09-21T06:00:00Z"
+        },
+        {
+          "id": "10708",
+          "name": "SAARBRUECKEN",
+          "max_c": 19.0,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 8.2,
+          "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
           "id": "10733",
@@ -1798,18 +1830,10 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10641",
-          "name": "OFFENBACH-WETTERPARK",
-          "max_c": 18.9,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.4,
-          "min_obs_utc": "2026-09-21T02:00:00Z"
-        },
-        {
           "id": "10312",
           "name": "BELM",
-          "max_c": 18.8,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
+          "max_c": 18.9,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
           "min_c": 10.7,
           "min_obs_utc": "2026-09-21T06:00:00Z"
         },
@@ -1828,14 +1852,6 @@
           "max_obs_utc": "2026-09-21T14:00:00Z",
           "min_c": 7.3,
           "min_obs_utc": "2026-09-21T00:00:00Z"
-        },
-        {
-          "id": "10708",
-          "name": "SAARBRUECKEN",
-          "max_c": 18.7,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 8.2,
-          "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
           "id": "10325",
@@ -1870,6 +1886,14 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
+          "id": "10742",
+          "name": "OEHRINGEN",
+          "max_c": 18.6,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.1,
+          "min_obs_utc": "2026-09-21T04:00:00Z"
+        },
+        {
           "id": "10321",
           "name": "DIEPHOLZ",
           "max_c": 18.5,
@@ -1878,11 +1902,11 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10410",
-          "name": "ESSEN",
+          "id": "10542",
+          "name": "BAD HERSFELD",
           "max_c": 18.5,
-          "max_obs_utc": "2026-09-21T12:00:00Z",
-          "min_c": 10.5,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.7,
           "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
@@ -1902,6 +1926,14 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
+          "id": "10343",
+          "name": "CELLE",
+          "max_c": 18.4,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.7,
+          "min_obs_utc": "2026-09-21T03:00:00Z"
+        },
+        {
           "id": "10424",
           "name": "WERL",
           "max_c": 18.4,
@@ -1910,20 +1942,12 @@
           "min_obs_utc": "2026-09-21T00:00:00Z"
         },
         {
-          "id": "10343",
-          "name": "CELLE",
-          "max_c": 18.2,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 11.7,
-          "min_obs_utc": "2026-09-21T03:00:00Z"
-        },
-        {
-          "id": "10704",
-          "name": "BERUS",
-          "max_c": 18.2,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.2,
-          "min_obs_utc": "2026-09-21T01:00:00Z"
+          "id": "10519",
+          "name": "BONN-ROLEBER",
+          "max_c": 18.3,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 10.2,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10776",
@@ -1942,20 +1966,20 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
+          "id": "10361",
+          "name": "MAGDEBURG",
+          "max_c": 18.1,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 12.1,
+          "min_obs_utc": "2026-09-21T06:00:00Z"
+        },
+        {
           "id": "10532",
           "name": "GIESSEN",
           "max_c": 18.1,
           "max_obs_utc": "2026-09-21T14:00:00Z",
           "min_c": 9.4,
           "min_obs_utc": "2026-09-21T02:00:00Z"
-        },
-        {
-          "id": "10542",
-          "name": "BAD HERSFELD",
-          "max_c": 18.1,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.7,
-          "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
           "id": "10365",
@@ -1998,12 +2022,12 @@
           "min_obs_utc": "2026-09-21T01:00:00Z"
         },
         {
-          "id": "10519",
-          "name": "BONN-ROLEBER",
+          "id": "10724",
+          "name": "WEINBIET",
           "max_c": 18.0,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 10.2,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.1,
+          "min_obs_utc": "2026-09-21T02:00:00Z"
         },
         {
           "id": "10393",
@@ -2038,6 +2062,14 @@
           "min_obs_utc": "2026-09-21T00:00:00Z"
         },
         {
+          "id": "10384",
+          "name": "BERLIN-TEMPELHOF",
+          "max_c": 17.8,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 12.5,
+          "min_obs_utc": "2026-09-21T01:00:00Z"
+        },
+        {
           "id": "10385",
           "name": "BERLIN-BRANDENBURG",
           "max_c": 17.8,
@@ -2052,14 +2084,6 @@
           "max_obs_utc": "2026-09-21T14:00:00Z",
           "min_c": 11.4,
           "min_obs_utc": "2026-09-21T02:00:00Z"
-        },
-        {
-          "id": "10742",
-          "name": "OEHRINGEN",
-          "max_c": 17.8,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.1,
-          "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
           "id": "10454",
@@ -2078,19 +2102,19 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10361",
-          "name": "MAGDEBURG",
-          "max_c": 17.6,
-          "max_obs_utc": "2026-09-21T10:00:00Z",
-          "min_c": 12.1,
-          "min_obs_utc": "2026-09-21T06:00:00Z"
-        },
-        {
           "id": "10379",
           "name": "POTSDAM",
           "max_c": 17.6,
           "max_obs_utc": "2026-09-21T12:00:00Z",
           "min_c": 12.0,
+          "min_obs_utc": "2026-09-21T03:00:00Z"
+        },
+        {
+          "id": "10658",
+          "name": "KISSINGEN",
+          "max_c": 17.6,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.3,
           "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
@@ -2118,12 +2142,12 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10384",
-          "name": "BERLIN-TEMPELHOF",
-          "max_c": 17.4,
-          "max_obs_utc": "2026-09-21T11:00:00Z",
-          "min_c": 12.5,
-          "min_obs_utc": "2026-09-21T01:00:00Z"
+          "id": "10739",
+          "name": "STUTTGART-SCHN.",
+          "max_c": 17.5,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.5,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10435",
@@ -2134,20 +2158,20 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
+          "id": "10460",
+          "name": "ARTERN",
+          "max_c": 17.4,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 10.3,
+          "min_obs_utc": "2026-09-21T03:00:00Z"
+        },
+        {
           "id": "10476",
           "name": "HOLZDORF",
           "max_c": 17.4,
           "max_obs_utc": "2026-09-21T13:00:00Z",
           "min_c": 11.2,
           "min_obs_utc": "2026-09-21T05:00:00Z"
-        },
-        {
-          "id": "10724",
-          "name": "WEINBIET",
-          "max_c": 17.4,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.1,
-          "min_obs_utc": "2026-09-21T02:00:00Z"
         },
         {
           "id": "10444",
@@ -2166,20 +2190,20 @@
           "min_obs_utc": "2026-09-21T02:00:00Z"
         },
         {
-          "id": "10739",
-          "name": "STUTTGART-SCHN.",
-          "max_c": 17.3,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 11.5,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
-        },
-        {
           "id": "10865",
           "name": "MUENCHEN STADT",
           "max_c": 17.3,
           "max_obs_utc": "2026-09-21T14:00:00Z",
           "min_c": 11.5,
           "min_obs_utc": "2026-09-21T06:00:00Z"
+        },
+        {
+          "id": "10126",
+          "name": "WITTMUNDHAVEN",
+          "max_c": 17.2,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 13.1,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10261",
@@ -2214,20 +2238,12 @@
           "min_obs_utc": "2026-09-21T06:00:00Z"
         },
         {
-          "id": "10658",
-          "name": "KISSINGEN",
+          "id": "10616",
+          "name": "HAHN",
           "max_c": 17.2,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.3,
-          "min_obs_utc": "2026-09-21T03:00:00Z"
-        },
-        {
-          "id": "10126",
-          "name": "WITTMUNDHAVEN",
-          "max_c": 17.1,
-          "max_obs_utc": "2026-09-21T11:00:00Z",
-          "min_c": 13.1,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 8.0,
+          "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
           "id": "10246",
@@ -2254,6 +2270,14 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
+          "id": "10471",
+          "name": "LEIPZIG",
+          "max_c": 17.1,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.9,
+          "min_obs_utc": "2026-09-21T04:00:00Z"
+        },
+        {
           "id": "10480",
           "name": "OSCHATZ",
           "max_c": 17.1,
@@ -2276,14 +2300,6 @@
           "max_obs_utc": "2026-09-21T13:00:00Z",
           "min_c": 12.7,
           "min_obs_utc": "2026-09-21T02:00:00Z"
-        },
-        {
-          "id": "10460",
-          "name": "ARTERN",
-          "max_c": 17.0,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 10.3,
-          "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
           "id": "10738",
@@ -2334,12 +2350,12 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10471",
-          "name": "LEIPZIG",
+          "id": "10565",
+          "name": "OSTERFELD",
           "max_c": 16.9,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.9,
-          "min_obs_utc": "2026-09-21T04:00:00Z"
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.1,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10646",
@@ -2390,6 +2406,14 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
+          "id": "10469",
+          "name": "LEIPZIG/SCHKEUDITZ",
+          "max_c": 16.7,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.2,
+          "min_obs_utc": "2026-09-21T00:00:00Z"
+        },
+        {
           "id": "10506",
           "name": "NUERBURG-BARWEILER",
           "max_c": 16.7,
@@ -2414,12 +2438,44 @@
           "min_obs_utc": "2026-09-21T06:00:00Z"
         },
         {
-          "id": "10469",
-          "name": "LEIPZIG/SCHKEUDITZ",
+          "id": "10870",
+          "name": "MUENCHEN-FL.",
+          "max_c": 16.7,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.1,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
+        },
+        {
+          "id": "10946",
+          "name": "KEMPTEN",
+          "max_c": 16.7,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.1,
+          "min_obs_utc": "2026-09-21T04:00:00Z"
+        },
+        {
+          "id": "10765",
+          "name": "ROTH",
           "max_c": 16.6,
-          "max_obs_utc": "2026-09-21T12:00:00Z",
-          "min_c": 9.2,
-          "min_obs_utc": "2026-09-21T00:00:00Z"
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.1,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
+        },
+        {
+          "id": "10837",
+          "name": "LAUPHEIM",
+          "max_c": 16.6,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.6,
+          "min_obs_utc": "2026-09-21T06:00:00Z"
+        },
+        {
+          "id": "10850",
+          "name": "HARBURG",
+          "max_c": 16.6,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.0,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10948",
@@ -2470,6 +2526,22 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
+          "id": "10788",
+          "name": "STRAUBING",
+          "max_c": 16.5,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.0,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
+        },
+        {
+          "id": "10853",
+          "name": "NEUBURG/DONAU",
+          "max_c": 16.5,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 10.0,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
+        },
+        {
           "id": "10945",
           "name": "LEUTKIRCH-HERLAZHFN.",
           "max_c": 16.5,
@@ -2502,12 +2574,12 @@
           "min_obs_utc": "2026-09-21T01:00:00Z"
         },
         {
-          "id": "10616",
-          "name": "HAHN",
+          "id": "10761",
+          "name": "WEISSENBURG-EMETZH.",
           "max_c": 16.4,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
-          "min_c": 8.0,
-          "min_obs_utc": "2026-09-21T04:00:00Z"
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.6,
+          "min_obs_utc": "2026-09-21T06:00:00Z"
         },
         {
           "id": "10815",
@@ -2550,22 +2622,6 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10870",
-          "name": "MUENCHEN-FL.",
-          "max_c": 16.3,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 11.1,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
-        },
-        {
-          "id": "10946",
-          "name": "KEMPTEN",
-          "max_c": 16.3,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 11.1,
-          "min_obs_utc": "2026-09-21T04:00:00Z"
-        },
-        {
           "id": "10022",
           "name": "LECK",
           "max_c": 16.2,
@@ -2598,19 +2654,19 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
-          "id": "10788",
-          "name": "STRAUBING",
+          "id": "10671",
+          "name": "LAUTERTAL-OBERLAUTER",
           "max_c": 16.2,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 11.0,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 7.3,
+          "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10850",
-          "name": "HARBURG",
+          "id": "10771",
+          "name": "KUEMMERSBRUCK",
           "max_c": 16.2,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.0,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.8,
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
@@ -2634,8 +2690,8 @@
           "name": "LEUCHTTURM A. WESER",
           "max_c": 16.1,
           "max_obs_utc": "2026-09-21T02:00:00Z",
-          "min_c": 15.6,
-          "min_obs_utc": "2026-09-21T08:00:00Z"
+          "min_c": 15.4,
+          "min_obs_utc": "2026-09-21T15:00:00Z"
         },
         {
           "id": "10152",
@@ -2662,12 +2718,20 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10565",
-          "name": "OSTERFELD",
+          "id": "10418",
+          "name": "LUEDENSCHEID",
           "max_c": 16.1,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.1,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 8.3,
+          "min_obs_utc": "2026-09-21T00:00:00Z"
+        },
+        {
+          "id": "10490",
+          "name": "DOBERLUG-KIRCHHAIN",
+          "max_c": 16.1,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.3,
+          "min_obs_utc": "2026-09-21T01:00:00Z"
         },
         {
           "id": "10648",
@@ -2676,14 +2740,6 @@
           "max_obs_utc": "2026-09-21T14:00:00Z",
           "min_c": 9.3,
           "min_obs_utc": "2026-09-21T03:00:00Z"
-        },
-        {
-          "id": "10765",
-          "name": "ROTH",
-          "max_c": 16.1,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
-          "min_c": 9.1,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10856",
@@ -2702,11 +2758,11 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
-          "id": "10771",
-          "name": "KUEMMERSBRUCK",
+          "id": "10458",
+          "name": "HARZGERODE",
           "max_c": 16.0,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.8,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 8.7,
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
@@ -2716,6 +2772,14 @@
           "max_obs_utc": "2026-09-21T12:00:00Z",
           "min_c": 10.7,
           "min_obs_utc": "2026-09-21T05:00:00Z"
+        },
+        {
+          "id": "10954",
+          "name": "ALTENSTADT",
+          "max_c": 16.0,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.8,
+          "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
           "id": "10038",
@@ -2742,12 +2806,12 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
-          "id": "10837",
-          "name": "LAUPHEIM",
+          "id": "10449",
+          "name": "LEINEFELDE",
           "max_c": 15.9,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 11.6,
-          "min_obs_utc": "2026-09-21T06:00:00Z"
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 9.4,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10037",
@@ -2756,6 +2820,14 @@
           "max_obs_utc": "2026-09-21T13:00:00Z",
           "min_c": 11.7,
           "min_obs_utc": "2026-09-21T05:00:00Z"
+        },
+        {
+          "id": "10046",
+          "name": "KIEL-H.",
+          "max_c": 15.8,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.3,
+          "min_obs_utc": "2026-09-21T06:00:00Z"
         },
         {
           "id": "10142",
@@ -2782,14 +2854,6 @@
           "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
-          "id": "10671",
-          "name": "LAUTERTAL-OBERLAUTER",
-          "max_c": 15.8,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 7.3,
-          "min_obs_utc": "2026-09-21T04:00:00Z"
-        },
-        {
           "id": "10743",
           "name": "NIEDERSTETTEN",
           "max_c": 15.8,
@@ -2798,28 +2862,12 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10418",
-          "name": "LUEDENSCHEID",
+          "id": "10567",
+          "name": "GERA",
           "max_c": 15.7,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
-          "min_c": 8.3,
-          "min_obs_utc": "2026-09-21T00:00:00Z"
-        },
-        {
-          "id": "10449",
-          "name": "LEINEFELDE",
-          "max_c": 15.7,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.4,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 8.8,
           "min_obs_utc": "2026-09-21T05:00:00Z"
-        },
-        {
-          "id": "10490",
-          "name": "DOBERLUG-KIRCHHAIN",
-          "max_c": 15.7,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
-          "min_c": 11.3,
-          "min_obs_utc": "2026-09-21T01:00:00Z"
         },
         {
           "id": "10840",
@@ -2886,27 +2934,11 @@
           "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
-          "id": "10761",
-          "name": "WEISSENBURG-EMETZH.",
-          "max_c": 15.6,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 9.6,
-          "min_obs_utc": "2026-09-21T06:00:00Z"
-        },
-        {
-          "id": "10046",
-          "name": "KIEL-H.",
+          "id": "10747",
+          "name": "KAISERSBACH-CRONHUET",
           "max_c": 15.5,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 11.3,
-          "min_obs_utc": "2026-09-21T06:00:00Z"
-        },
-        {
-          "id": "10853",
-          "name": "NEUBURG/DONAU",
-          "max_c": 15.5,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
-          "min_c": 10.0,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 7.1,
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
@@ -2916,30 +2948,6 @@
           "max_obs_utc": "2026-09-21T13:00:00Z",
           "min_c": 14.1,
           "min_obs_utc": "2026-09-21T03:00:00Z"
-        },
-        {
-          "id": "10458",
-          "name": "HARZGERODE",
-          "max_c": 15.4,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 8.7,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
-        },
-        {
-          "id": "10567",
-          "name": "GERA",
-          "max_c": 15.4,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 8.8,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
-        },
-        {
-          "id": "10747",
-          "name": "KAISERSBACH-CRONHUET",
-          "max_c": 15.4,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 7.1,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10818",
@@ -2958,6 +2966,14 @@
           "min_obs_utc": "2026-09-21T06:00:00Z"
         },
         {
+          "id": "10982",
+          "name": "CHIEMING",
+          "max_c": 15.4,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 11.3,
+          "min_obs_utc": "2026-09-21T07:00:00Z"
+        },
+        {
           "id": "10488",
           "name": "DRESDEN/FLUGHAFEN",
           "max_c": 15.3,
@@ -2972,14 +2988,6 @@
           "max_obs_utc": "2026-09-21T14:00:00Z",
           "min_c": 10.8,
           "min_obs_utc": "2026-09-21T00:00:00Z"
-        },
-        {
-          "id": "10954",
-          "name": "ALTENSTADT",
-          "max_c": 15.3,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
-          "min_c": 9.8,
-          "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
           "id": "10020",
@@ -2998,14 +3006,6 @@
           "min_obs_utc": "2026-09-21T06:00:00Z"
         },
         {
-          "id": "10982",
-          "name": "CHIEMING",
-          "max_c": 15.2,
-          "max_obs_utc": "2026-09-21T12:00:00Z",
-          "min_c": 11.3,
-          "min_obs_utc": "2026-09-21T07:00:00Z"
-        },
-        {
           "id": "10499",
           "name": "GOERLITZ",
           "max_c": 15.1,
@@ -3020,6 +3020,14 @@
           "max_obs_utc": "2026-09-21T13:00:00Z",
           "min_c": 9.9,
           "min_obs_utc": "2026-09-21T03:00:00Z"
+        },
+        {
+          "id": "10526",
+          "name": "B.MARIENBG.",
+          "max_c": 14.8,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 7.6,
+          "min_obs_utc": "2026-09-21T06:00:00Z"
         },
         {
           "id": "10688",
@@ -3038,12 +3046,12 @@
           "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
-          "id": "10526",
-          "name": "B.MARIENBG.",
+          "id": "10564",
+          "name": "SCHLEIZ",
           "max_c": 14.4,
-          "max_obs_utc": "2026-09-21T11:00:00Z",
-          "min_c": 7.6,
-          "min_obs_utc": "2026-09-21T06:00:00Z"
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 8.9,
+          "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
           "id": "10895",
@@ -3052,6 +3060,22 @@
           "max_obs_utc": "2026-09-21T14:00:00Z",
           "min_c": 10.5,
           "min_obs_utc": "2026-09-21T06:00:00Z"
+        },
+        {
+          "id": "10685",
+          "name": "HOF",
+          "max_c": 14.3,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 7.3,
+          "min_obs_utc": "2026-09-21T04:00:00Z"
+        },
+        {
+          "id": "10777",
+          "name": "GELBELSEE",
+          "max_c": 14.3,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 8.8,
+          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10782",
@@ -3086,36 +3110,12 @@
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
         {
-          "id": "10564",
-          "name": "SCHLEIZ",
-          "max_c": 13.9,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 8.9,
-          "min_obs_utc": "2026-09-21T04:00:00Z"
-        },
-        {
           "id": "10577",
           "name": "CHEMNITZ",
           "max_c": 13.8,
           "max_obs_utc": "2026-09-21T13:00:00Z",
           "min_c": 8.4,
           "min_obs_utc": "2026-09-21T03:00:00Z"
-        },
-        {
-          "id": "10685",
-          "name": "HOF",
-          "max_c": 13.7,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
-          "min_c": 7.3,
-          "min_obs_utc": "2026-09-21T04:00:00Z"
-        },
-        {
-          "id": "10777",
-          "name": "GELBELSEE",
-          "max_c": 13.7,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
-          "min_c": 8.8,
-          "min_obs_utc": "2026-09-21T05:00:00Z"
         },
         {
           "id": "10635",
@@ -3136,8 +3136,8 @@
         {
           "id": "10452",
           "name": "BRAUNLAGE",
-          "max_c": 13.0,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
+          "max_c": 13.2,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
           "min_c": 8.1,
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
@@ -3174,20 +3174,20 @@
           "min_obs_utc": "2026-09-21T02:00:00Z"
         },
         {
+          "id": "10544",
+          "name": "WASSERKUPPE",
+          "max_c": 11.4,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
+          "min_c": 5.9,
+          "min_obs_utc": "2026-09-21T03:00:00Z"
+        },
+        {
           "id": "10552",
           "name": "SCHMUECKE",
           "max_c": 11.4,
           "max_obs_utc": "2026-09-21T14:00:00Z",
           "min_c": 5.9,
           "min_obs_utc": "2026-09-21T02:00:00Z"
-        },
-        {
-          "id": "10544",
-          "name": "WASSERKUPPE",
-          "max_c": 11.0,
-          "max_obs_utc": "2026-09-21T13:00:00Z",
-          "min_c": 5.9,
-          "min_obs_utc": "2026-09-21T03:00:00Z"
         },
         {
           "id": "10574",
@@ -3216,8 +3216,8 @@
         {
           "id": "10453",
           "name": "BROCKEN",
-          "max_c": 7.5,
-          "max_obs_utc": "2026-09-21T14:00:00Z",
+          "max_c": 7.8,
+          "max_obs_utc": "2026-09-21T15:00:00Z",
           "min_c": 4.4,
           "min_obs_utc": "2026-09-21T04:00:00Z"
         },
@@ -3242,8 +3242,8 @@
           "name": "ZUGSPITZE",
           "max_c": 0.6,
           "max_obs_utc": "2026-09-21T00:00:00Z",
-          "min_c": -1.0,
-          "min_obs_utc": "2026-09-21T12:00:00Z"
+          "min_c": -2.4,
+          "min_obs_utc": "2026-09-21T15:00:00Z"
         }
       ]
     },
