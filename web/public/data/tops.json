@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-21T17:07:41Z",
+  "generated_utc": "2026-09-21T18:07:48Z",
   "periods": {
     "day": {
       "key": "2026-09-21",
@@ -1619,8 +1619,8 @@
           "name": "ZUGSPITZE",
           "max_c": 0.6,
           "max_obs_utc": "2026-09-21T00:00:00Z",
-          "min_c": -2.4,
-          "min_obs_utc": "2026-09-21T15:00:00Z"
+          "min_c": -2.7,
+          "min_obs_utc": "2026-09-21T17:00:00Z"
         }
       ]
     },
@@ -3242,8 +3242,8 @@
           "name": "ZUGSPITZE",
           "max_c": 0.6,
           "max_obs_utc": "2026-09-21T00:00:00Z",
-          "min_c": -2.4,
-          "min_obs_utc": "2026-09-21T15:00:00Z"
+          "min_c": -2.7,
+          "min_obs_utc": "2026-09-21T17:00:00Z"
         }
       ]
     },
