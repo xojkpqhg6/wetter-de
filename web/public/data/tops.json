@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-25T17:07:46Z",
+  "generated_utc": "2026-09-25T18:07:51Z",
   "periods": {
     "day": {
       "key": "2026-09-25",
@@ -103,6 +103,14 @@
           "min_obs_utc": "2026-09-25T02:00:00Z"
         },
         {
+          "id": "10505",
+          "name": "AACHEN-ORSBACH",
+          "max_c": 22.1,
+          "max_obs_utc": "2026-09-25T17:00:00Z",
+          "min_c": 9.5,
+          "min_obs_utc": "2026-09-25T02:00:00Z"
+        },
+        {
           "id": "10706",
           "name": "THOLEY",
           "max_c": 22.1,
@@ -125,14 +133,6 @@
           "max_obs_utc": "2026-09-25T15:00:00Z",
           "min_c": 3.5,
           "min_obs_utc": "2026-09-25T05:00:00Z"
-        },
-        {
-          "id": "10505",
-          "name": "AACHEN-ORSBACH",
-          "max_c": 21.9,
-          "max_obs_utc": "2026-09-25T15:00:00Z",
-          "min_c": 9.5,
-          "min_obs_utc": "2026-09-25T02:00:00Z"
         },
         {
           "id": "10502",
@@ -1718,6 +1718,14 @@
           "min_obs_utc": "2026-09-25T02:00:00Z"
         },
         {
+          "id": "10505",
+          "name": "AACHEN-ORSBACH",
+          "max_c": 22.1,
+          "max_obs_utc": "2026-09-25T17:00:00Z",
+          "min_c": 9.5,
+          "min_obs_utc": "2026-09-21T01:00:00Z"
+        },
+        {
           "id": "10706",
           "name": "THOLEY",
           "max_c": 22.1,
@@ -1748,14 +1756,6 @@
           "max_obs_utc": "2026-09-25T15:00:00Z",
           "min_c": 3.5,
           "min_obs_utc": "2026-09-25T05:00:00Z"
-        },
-        {
-          "id": "10505",
-          "name": "AACHEN-ORSBACH",
-          "max_c": 21.9,
-          "max_obs_utc": "2026-09-25T15:00:00Z",
-          "min_c": 9.5,
-          "min_obs_utc": "2026-09-21T01:00:00Z"
         },
         {
           "id": "10733",
