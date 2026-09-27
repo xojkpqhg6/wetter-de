@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-27T21:07:53Z",
+  "generated_utc": "2026-09-27T22:04:32Z",
   "periods": {
     "day": {
       "key": "2026-09-27",
@@ -1543,19 +1543,19 @@
           "min_obs_utc": "2026-09-27T00:00:00Z"
         },
         {
+          "id": "10042",
+          "name": "OLPENITZ",
+          "max_c": 17.4,
+          "max_obs_utc": "2026-09-27T21:00:00Z",
+          "min_c": 7.3,
+          "min_obs_utc": "2026-09-27T00:00:00Z"
+        },
+        {
           "id": "10574",
           "name": "CARLSFELD",
           "max_c": 17.2,
           "max_obs_utc": "2026-09-27T14:00:00Z",
           "min_c": 8.1,
-          "min_obs_utc": "2026-09-27T00:00:00Z"
-        },
-        {
-          "id": "10042",
-          "name": "OLPENITZ",
-          "max_c": 17.1,
-          "max_obs_utc": "2026-09-27T15:00:00Z",
-          "min_c": 7.3,
           "min_obs_utc": "2026-09-27T00:00:00Z"
         },
         {
