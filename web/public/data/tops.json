@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-27T19:07:46Z",
+  "generated_utc": "2026-09-27T20:07:50Z",
   "periods": {
     "day": {
       "key": "2026-09-27",
@@ -1561,8 +1561,8 @@
         {
           "id": "10097",
           "name": "GREIFSWALDER OIE",
-          "max_c": 16.7,
-          "max_obs_utc": "2026-09-27T13:00:00Z",
+          "max_c": 16.8,
+          "max_obs_utc": "2026-09-27T19:00:00Z",
           "min_c": 12.5,
           "min_obs_utc": "2026-09-27T00:00:00Z"
         },
@@ -1603,8 +1603,8 @@
           "name": "FICHTELBERG",
           "max_c": 14.9,
           "max_obs_utc": "2026-09-27T13:00:00Z",
-          "min_c": 10.2,
-          "min_obs_utc": "2026-09-27T18:00:00Z"
+          "min_c": 9.6,
+          "min_obs_utc": "2026-09-27T19:00:00Z"
         }
       ]
     },
