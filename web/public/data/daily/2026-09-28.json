@@ -1066,12 +1066,12 @@
       "samples": 24
     },
     "10615": {
-      "max_c": 17.4,
-      "max_obs_utc": "2026-09-28T06:00:00Z",
+      "max_c": 25.7,
+      "max_obs_utc": "2026-09-28T14:00:00Z",
       "min_c": 16.4,
       "min_obs_utc": "2026-09-28T04:00:00Z",
       "name": "DEUSELBACH",
-      "samples": 7
+      "samples": 19
     },
     "10616": {
       "max_c": 24.9,
@@ -1610,5 +1610,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-09-29T06:07:54Z"
+  "updated_utc": "2026-09-29T09:07:56Z"
 }
