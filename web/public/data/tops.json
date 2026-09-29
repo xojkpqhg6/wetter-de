@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-29T20:07:50Z",
+  "generated_utc": "2026-09-29T20:42:56Z",
   "periods": {
     "day": {
       "key": "2026-09-29",
@@ -1091,8 +1091,8 @@
           "name": "BRAUNLAGE",
           "max_c": 23.4,
           "max_obs_utc": "2026-09-29T12:00:00Z",
-          "min_c": 16.7,
-          "min_obs_utc": "2026-09-29T05:00:00Z"
+          "min_c": 16.0,
+          "min_obs_utc": "2026-09-29T20:00:00Z"
         },
         {
           "id": "10875",
