@@ -522,12 +522,12 @@
       "samples": 24
     },
     "10361": {
-      "max_c": 24.9,
-      "max_obs_utc": "2026-09-28T11:00:00Z",
+      "max_c": 26.2,
+      "max_obs_utc": "2026-09-28T13:00:00Z",
       "min_c": 12.2,
       "min_obs_utc": "2026-09-28T06:00:00Z",
       "name": "MAGDEBURG",
-      "samples": 19
+      "samples": 24
     },
     "10365": {
       "max_c": 26.3,
@@ -959,7 +959,7 @@
       "min_c": 15.3,
       "min_obs_utc": "2026-09-28T06:00:00Z",
       "name": "ERFURT",
-      "samples": 18
+      "samples": 24
     },
     "10557": {
       "max_c": 22.7,
@@ -1610,5 +1610,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-09-29T00:07:55Z"
+  "updated_utc": "2026-09-29T06:07:54Z"
 }
