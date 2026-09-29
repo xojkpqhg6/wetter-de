@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-29T16:07:58Z",
+  "generated_utc": "2026-09-29T17:07:52Z",
   "periods": {
     "day": {
       "key": "2026-09-29",
@@ -967,6 +967,14 @@
           "min_obs_utc": "2026-09-29T05:00:00Z"
         },
         {
+          "id": "10200",
+          "name": "EMDEN-FLUGPLATZ",
+          "max_c": 23.9,
+          "max_obs_utc": "2026-09-29T16:00:00Z",
+          "min_c": 15.2,
+          "min_obs_utc": "2026-09-29T04:00:00Z"
+        },
+        {
           "id": "10480",
           "name": "OSCHATZ",
           "max_c": 23.9,
@@ -1111,14 +1119,6 @@
           "min_obs_utc": "2026-09-29T04:00:00Z"
         },
         {
-          "id": "10200",
-          "name": "EMDEN-FLUGPLATZ",
-          "max_c": 23.1,
-          "max_obs_utc": "2026-09-29T15:00:00Z",
-          "min_c": 15.2,
-          "min_obs_utc": "2026-09-29T04:00:00Z"
-        },
-        {
           "id": "10544",
           "name": "WASSERKUPPE",
           "max_c": 23.1,
@@ -1157,6 +1157,14 @@
           "max_obs_utc": "2026-09-29T14:00:00Z",
           "min_c": 16.9,
           "min_obs_utc": "2026-09-29T03:00:00Z"
+        },
+        {
+          "id": "10554",
+          "name": "ERFURT",
+          "max_c": 22.7,
+          "max_obs_utc": "2026-09-29T16:00:00Z",
+          "min_c": 12.4,
+          "min_obs_utc": "2026-09-29T06:00:00Z"
         },
         {
           "id": "10564",
@@ -1455,14 +1463,6 @@
           "min_obs_utc": "2026-09-29T04:00:00Z"
         },
         {
-          "id": "10554",
-          "name": "ERFURT",
-          "max_c": 19.6,
-          "max_obs_utc": "2026-09-29T09:00:00Z",
-          "min_c": 12.4,
-          "min_obs_utc": "2026-09-29T06:00:00Z"
-        },
-        {
           "id": "10131",
           "name": "CUXHAVEN",
           "max_c": 19.5,
@@ -1543,6 +1543,14 @@
           "min_obs_utc": "2026-09-29T00:00:00Z"
         },
         {
+          "id": "10097",
+          "name": "GREIFSWALDER OIE",
+          "max_c": 17.9,
+          "max_obs_utc": "2026-09-29T16:00:00Z",
+          "min_c": 15.3,
+          "min_obs_utc": "2026-09-29T04:00:00Z"
+        },
+        {
           "id": "10908",
           "name": "FELDBERG/S.",
           "max_c": 17.9,
@@ -1557,14 +1565,6 @@
           "max_obs_utc": "2026-09-29T12:00:00Z",
           "min_c": 15.8,
           "min_obs_utc": "2026-09-29T02:00:00Z"
-        },
-        {
-          "id": "10097",
-          "name": "GREIFSWALDER OIE",
-          "max_c": 17.8,
-          "max_obs_utc": "2026-09-29T11:00:00Z",
-          "min_c": 15.3,
-          "min_obs_utc": "2026-09-29T04:00:00Z"
         },
         {
           "id": "10091",
@@ -2694,6 +2694,14 @@
           "min_obs_utc": "2026-09-28T05:00:00Z"
         },
         {
+          "id": "10200",
+          "name": "EMDEN-FLUGPLATZ",
+          "max_c": 23.9,
+          "max_obs_utc": "2026-09-29T16:00:00Z",
+          "min_c": 13.0,
+          "min_obs_utc": "2026-09-28T00:00:00Z"
+        },
+        {
           "id": "10788",
           "name": "STRAUBING",
           "max_c": 23.9,
@@ -2844,14 +2852,6 @@
           "max_obs_utc": "2026-09-28T13:00:00Z",
           "min_c": 11.8,
           "min_obs_utc": "2026-09-28T06:00:00Z"
-        },
-        {
-          "id": "10200",
-          "name": "EMDEN-FLUGPLATZ",
-          "max_c": 23.1,
-          "max_obs_utc": "2026-09-29T15:00:00Z",
-          "min_c": 13.0,
-          "min_obs_utc": "2026-09-28T00:00:00Z"
         },
         {
           "id": "10962",
