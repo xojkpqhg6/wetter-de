@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-30T16:08:01Z",
+  "generated_utc": "2026-09-30T17:07:53Z",
   "periods": {
     "day": {
       "key": "2026-09-30",
@@ -1367,6 +1367,14 @@
           "min_obs_utc": "2026-09-30T06:00:00Z"
         },
         {
+          "id": "10124",
+          "name": "LEUCHTTURM A. WESER",
+          "max_c": 21.6,
+          "max_obs_utc": "2026-09-30T16:00:00Z",
+          "min_c": 16.0,
+          "min_obs_utc": "2026-09-30T06:00:00Z"
+        },
+        {
           "id": "10685",
           "name": "HOF",
           "max_c": 21.6,
@@ -1397,14 +1405,6 @@
           "max_obs_utc": "2026-09-30T15:00:00Z",
           "min_c": 11.9,
           "min_obs_utc": "2026-09-30T05:00:00Z"
-        },
-        {
-          "id": "10124",
-          "name": "LEUCHTTURM A. WESER",
-          "max_c": 21.2,
-          "max_obs_utc": "2026-09-30T14:00:00Z",
-          "min_c": 16.0,
-          "min_obs_utc": "2026-09-30T06:00:00Z"
         },
         {
           "id": "10168",
@@ -3086,6 +3086,14 @@
           "min_obs_utc": "2026-09-28T06:00:00Z"
         },
         {
+          "id": "10124",
+          "name": "LEUCHTTURM A. WESER",
+          "max_c": 21.6,
+          "max_obs_utc": "2026-09-30T16:00:00Z",
+          "min_c": 15.6,
+          "min_obs_utc": "2026-09-28T22:00:00Z"
+        },
+        {
           "id": "10161",
           "name": "BOLTENHAGEN",
           "max_c": 21.6,
@@ -3116,14 +3124,6 @@
           "max_obs_utc": "2026-09-28T14:00:00Z",
           "min_c": 12.6,
           "min_obs_utc": "2026-09-29T00:00:00Z"
-        },
-        {
-          "id": "10124",
-          "name": "LEUCHTTURM A. WESER",
-          "max_c": 21.2,
-          "max_obs_utc": "2026-09-30T14:00:00Z",
-          "min_c": 15.6,
-          "min_obs_utc": "2026-09-28T22:00:00Z"
         },
         {
           "id": "10033",
