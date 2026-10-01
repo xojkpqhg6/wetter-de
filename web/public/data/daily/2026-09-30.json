@@ -1287,7 +1287,7 @@
       "min_c": 12.4,
       "min_obs_utc": "2026-09-30T04:00:00Z",
       "name": "NIEDERSTETTEN",
-      "samples": 23
+      "samples": 24
     },
     "10747": {
       "max_c": 27.0,
@@ -1618,5 +1618,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-10-01T01:07:50Z"
+  "updated_utc": "2026-10-01T04:07:44Z"
 }
