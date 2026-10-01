@@ -127,7 +127,7 @@
       "min_c": 16.0,
       "min_obs_utc": "2026-09-30T06:00:00Z",
       "name": "LEUCHTTURM A. WESER",
-      "samples": 23
+      "samples": 24
     },
     "10126": {
       "max_c": 23.8,
@@ -959,7 +959,7 @@
       "min_c": 12.3,
       "min_obs_utc": "2026-09-30T05:00:00Z",
       "name": "ERFURT",
-      "samples": 23
+      "samples": 24
     },
     "10557": {
       "max_c": 21.5,
@@ -1495,7 +1495,7 @@
       "min_c": 7.2,
       "min_obs_utc": "2026-09-30T06:00:00Z",
       "name": "WEIHENSTEPHAN",
-      "samples": 23
+      "samples": 24
     },
     "10865": {
       "max_c": 24.7,
@@ -1618,5 +1618,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-09-30T23:44:01Z"
+  "updated_utc": "2026-10-01T01:07:50Z"
 }
