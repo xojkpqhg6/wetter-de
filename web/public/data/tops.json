@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-02T16:07:44Z",
+  "generated_utc": "2026-10-02T17:07:52Z",
   "periods": {
     "day": {
       "key": "2026-10-02",
@@ -1595,8 +1595,8 @@
           "name": "FICHTELBERG",
           "max_c": 12.6,
           "max_obs_utc": "2026-10-02T01:00:00Z",
-          "min_c": 10.7,
-          "min_obs_utc": "2026-10-02T15:00:00Z"
+          "min_c": 10.6,
+          "min_obs_utc": "2026-10-02T16:00:00Z"
         },
         {
           "id": "10453",
@@ -4817,8 +4817,8 @@
           "name": "FICHTELBERG",
           "max_c": 17.8,
           "max_obs_utc": "2026-10-01T10:00:00Z",
-          "min_c": 10.7,
-          "min_obs_utc": "2026-10-02T15:00:00Z"
+          "min_c": 10.6,
+          "min_obs_utc": "2026-10-02T16:00:00Z"
         },
         {
           "id": "10020",
