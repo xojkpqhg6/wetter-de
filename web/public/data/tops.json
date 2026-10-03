@@ -1,10 +1,10 @@
 {
-  "generated_utc": "2026-10-03T16:07:55Z",
+  "generated_utc": "2026-10-03T17:07:49Z",
   "periods": {
     "day": {
       "key": "2026-10-03",
       "station_count": 200,
-      "hidden": 1,
+      "hidden": 2,
       "stations": [
         {
           "id": "10929",
@@ -431,6 +431,14 @@
           "min_obs_utc": "2026-10-03T05:00:00Z"
         },
         {
+          "id": "10860",
+          "name": "INGOLSTADT",
+          "max_c": 20.5,
+          "max_obs_utc": "2026-10-03T16:00:00Z",
+          "min_c": 13.8,
+          "min_obs_utc": "2026-10-03T04:00:00Z"
+        },
+        {
           "id": "10872",
           "name": "GOTTFRIEDING",
           "max_c": 20.5,
@@ -469,14 +477,6 @@
           "max_obs_utc": "2026-10-03T14:00:00Z",
           "min_c": 13.6,
           "min_obs_utc": "2026-10-03T06:00:00Z"
-        },
-        {
-          "id": "10860",
-          "name": "INGOLSTADT",
-          "max_c": 20.4,
-          "max_obs_utc": "2026-10-03T15:00:00Z",
-          "min_c": 13.8,
-          "min_obs_utc": "2026-10-03T04:00:00Z"
         },
         {
           "id": "10424",
