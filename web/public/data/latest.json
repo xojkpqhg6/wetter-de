@@ -1,6 +1,6 @@
 {
-  "generated_utc": "2026-10-03T08:02:03Z",
-  "station_count": 196,
+  "generated_utc": "2026-10-03T08:07:57Z",
+  "station_count": 200,
   "stations": [
     {
       "id": "10015",
@@ -509,6 +509,12 @@
     {
       "id": "10361",
       "name": "MAGDEBURG",
+      "temp_c": 12.2,
+      "obs_utc": "2026-10-03T07:00:00Z"
+    },
+    {
+      "id": "10743",
+      "name": "NIEDERSTETTEN",
       "temp_c": 12.2,
       "obs_utc": "2026-10-03T07:00:00Z"
     },
@@ -1071,6 +1077,12 @@
       "obs_utc": "2026-10-03T07:00:00Z"
     },
     {
+      "id": "10442",
+      "name": "ALFELD",
+      "temp_c": 9.2,
+      "obs_utc": "2026-10-03T07:00:00Z"
+    },
+    {
       "id": "10618",
       "name": "IDAR-OBERSTEIN",
       "temp_c": 9.2,
@@ -1101,6 +1113,12 @@
       "obs_utc": "2026-10-03T07:00:00Z"
     },
     {
+      "id": "10418",
+      "name": "LUEDENSCHEID",
+      "temp_c": 9.0,
+      "obs_utc": "2026-10-03T07:00:00Z"
+    },
+    {
       "id": "10453",
       "name": "BROCKEN",
       "temp_c": 9.0,
@@ -1121,6 +1139,12 @@
     {
       "id": "10261",
       "name": "SEEHAUSEN",
+      "temp_c": 8.6,
+      "obs_utc": "2026-10-03T07:00:00Z"
+    },
+    {
+      "id": "10271",
+      "name": "NEURUPPIN-ALT RUPPIN",
       "temp_c": 8.6,
       "obs_utc": "2026-10-03T07:00:00Z"
     },

@@ -383,7 +383,7 @@
       "min_c": 8.1,
       "min_obs_utc": "2026-10-03T06:00:00Z",
       "name": "NEURUPPIN-ALT RUPPIN",
-      "samples": 7
+      "samples": 8
     },
     "10281": {
       "max_c": 9.9,
@@ -623,7 +623,7 @@
       "min_c": 7.6,
       "min_obs_utc": "2026-10-03T04:00:00Z",
       "name": "LUEDENSCHEID",
-      "samples": 7
+      "samples": 8
     },
     "10424": {
       "max_c": 10.7,
@@ -679,7 +679,7 @@
       "min_c": 7.5,
       "min_obs_utc": "2026-10-03T04:00:00Z",
       "name": "ALFELD",
-      "samples": 7
+      "samples": 8
     },
     "10444": {
       "max_c": 10.1,
@@ -1279,7 +1279,7 @@
       "min_c": 12.0,
       "min_obs_utc": "2026-10-03T05:00:00Z",
       "name": "NIEDERSTETTEN",
-      "samples": 7
+      "samples": 8
     },
     "10747": {
       "max_c": 12.5,
@@ -1610,5 +1610,5 @@
       "samples": 8
     }
   },
-  "updated_utc": "2026-10-03T08:02:03Z"
+  "updated_utc": "2026-10-03T08:07:57Z"
 }
