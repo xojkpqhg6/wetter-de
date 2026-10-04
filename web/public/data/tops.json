@@ -1,10 +1,10 @@
 {
-  "generated_utc": "2026-10-04T16:07:44Z",
+  "generated_utc": "2026-10-04T17:08:11Z",
   "periods": {
     "day": {
       "key": "2026-10-04",
       "station_count": 201,
-      "hidden": 0,
+      "hidden": 1,
       "stations": [
         {
           "id": "10729",
@@ -127,6 +127,14 @@
           "min_obs_utc": "2026-10-04T03:00:00Z"
         },
         {
+          "id": "10609",
+          "name": "TRIER",
+          "max_c": 21.6,
+          "max_obs_utc": "2026-10-04T16:00:00Z",
+          "min_c": 10.7,
+          "min_obs_utc": "2026-10-04T04:00:00Z"
+        },
+        {
           "id": "10739",
           "name": "STUTTGART-SCHN.",
           "max_c": 21.6,
@@ -191,12 +199,12 @@
           "min_obs_utc": "2026-10-04T05:00:00Z"
         },
         {
-          "id": "10609",
-          "name": "TRIER",
+          "id": "10628",
+          "name": "GEISENHEIM",
           "max_c": 21.2,
-          "max_obs_utc": "2026-10-04T14:00:00Z",
-          "min_c": 10.7,
-          "min_obs_utc": "2026-10-04T04:00:00Z"
+          "max_obs_utc": "2026-10-04T16:00:00Z",
+          "min_c": 10.0,
+          "min_obs_utc": "2026-10-04T06:00:00Z"
         },
         {
           "id": "10641",
@@ -428,14 +436,6 @@
           "max_c": 20.4,
           "max_obs_utc": "2026-10-04T14:00:00Z",
           "min_c": 12.5,
-          "min_obs_utc": "2026-10-04T06:00:00Z"
-        },
-        {
-          "id": "10628",
-          "name": "GEISENHEIM",
-          "max_c": 20.4,
-          "max_obs_utc": "2026-10-04T13:00:00Z",
-          "min_c": 10.0,
           "min_obs_utc": "2026-10-04T06:00:00Z"
         },
         {
@@ -1551,20 +1551,20 @@
           "min_obs_utc": "2026-10-04T06:00:00Z"
         },
         {
+          "id": "10427",
+          "name": "K.ASTEN",
+          "max_c": 14.4,
+          "max_obs_utc": "2026-10-04T16:00:00Z",
+          "min_c": 10.6,
+          "min_obs_utc": "2026-10-04T02:00:00Z"
+        },
+        {
           "id": "10552",
           "name": "SCHMUECKE",
           "max_c": 14.4,
           "max_obs_utc": "2026-10-04T13:00:00Z",
           "min_c": 8.5,
           "min_obs_utc": "2026-10-04T00:00:00Z"
-        },
-        {
-          "id": "10427",
-          "name": "K.ASTEN",
-          "max_c": 14.3,
-          "max_obs_utc": "2026-10-04T12:00:00Z",
-          "min_c": 10.6,
-          "min_obs_utc": "2026-10-04T02:00:00Z"
         },
         {
           "id": "10908",
