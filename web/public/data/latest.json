@@ -1,6 +1,6 @@
 {
-  "generated_utc": "2026-10-05T15:56:52Z",
-  "station_count": 200,
+  "generated_utc": "2026-10-05T16:08:13Z",
+  "station_count": 199,
   "stations": [
     {
       "id": "10520",
@@ -204,12 +204,6 @@
       "id": "10872",
       "name": "GOTTFRIEDING",
       "temp_c": 21.5,
-      "obs_utc": "2026-10-05T15:00:00Z"
-    },
-    {
-      "id": "10210",
-      "name": "FRIESOYTHE-ALTENOYTH",
-      "temp_c": 21.4,
       "obs_utc": "2026-10-05T15:00:00Z"
     },
     {
