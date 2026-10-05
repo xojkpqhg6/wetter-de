@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-05T19:08:05Z",
+  "generated_utc": "2026-10-05T20:18:23Z",
   "periods": {
     "day": {
       "key": "2026-10-05",
@@ -267,8 +267,8 @@
           "name": "KONSTANZ",
           "max_c": 21.8,
           "max_obs_utc": "2026-10-05T14:00:00Z",
-          "min_c": 14.1,
-          "min_obs_utc": "2026-10-05T06:00:00Z"
+          "min_c": 13.6,
+          "min_obs_utc": "2026-10-05T19:00:00Z"
         },
         {
           "id": "10261",
@@ -1323,8 +1323,8 @@
           "name": "LEUTKIRCH-HERLAZHFN.",
           "max_c": 18.9,
           "max_obs_utc": "2026-10-05T14:00:00Z",
-          "min_c": 10.2,
-          "min_obs_utc": "2026-10-05T18:00:00Z"
+          "min_c": 9.9,
+          "min_obs_utc": "2026-10-05T19:00:00Z"
         },
         {
           "id": "10037",
@@ -1435,8 +1435,8 @@
           "name": "OBERSTDORF",
           "max_c": 18.3,
           "max_obs_utc": "2026-10-05T14:00:00Z",
-          "min_c": 11.4,
-          "min_obs_utc": "2026-10-05T00:00:00Z"
+          "min_c": 10.5,
+          "min_obs_utc": "2026-10-05T19:00:00Z"
         },
         {
           "id": "10452",
@@ -1531,8 +1531,8 @@
           "name": "CARLSFELD",
           "max_c": 17.1,
           "max_obs_utc": "2026-10-05T12:00:00Z",
-          "min_c": 8.0,
-          "min_obs_utc": "2026-10-05T18:00:00Z"
+          "min_c": 6.3,
+          "min_obs_utc": "2026-10-05T19:00:00Z"
         },
         {
           "id": "10534",
@@ -1882,8 +1882,8 @@
           "name": "KONSTANZ",
           "max_c": 21.8,
           "max_obs_utc": "2026-10-05T14:00:00Z",
-          "min_c": 14.1,
-          "min_obs_utc": "2026-10-05T06:00:00Z"
+          "min_c": 13.6,
+          "min_obs_utc": "2026-10-05T19:00:00Z"
         },
         {
           "id": "10261",
@@ -2938,8 +2938,8 @@
           "name": "LEUTKIRCH-HERLAZHFN.",
           "max_c": 18.9,
           "max_obs_utc": "2026-10-05T14:00:00Z",
-          "min_c": 10.2,
-          "min_obs_utc": "2026-10-05T18:00:00Z"
+          "min_c": 9.9,
+          "min_obs_utc": "2026-10-05T19:00:00Z"
         },
         {
           "id": "10037",
@@ -3050,8 +3050,8 @@
           "name": "OBERSTDORF",
           "max_c": 18.3,
           "max_obs_utc": "2026-10-05T14:00:00Z",
-          "min_c": 11.4,
-          "min_obs_utc": "2026-10-05T00:00:00Z"
+          "min_c": 10.5,
+          "min_obs_utc": "2026-10-05T19:00:00Z"
         },
         {
           "id": "10452",
@@ -3146,8 +3146,8 @@
           "name": "CARLSFELD",
           "max_c": 17.1,
           "max_obs_utc": "2026-10-05T12:00:00Z",
-          "min_c": 8.0,
-          "min_obs_utc": "2026-10-05T18:00:00Z"
+          "min_c": 6.3,
+          "min_obs_utc": "2026-10-05T19:00:00Z"
         },
         {
           "id": "10534",
@@ -3198,6 +3198,14 @@
           "min_obs_utc": "2026-10-05T05:00:00Z"
         },
         {
+          "id": "10836",
+          "name": "STOETTEN",
+          "max_c": 14.8,
+          "max_obs_utc": "2026-10-05T19:00:00Z",
+          "min_c": null,
+          "min_obs_utc": ""
+        },
+        {
           "id": "10453",
           "name": "BROCKEN",
           "max_c": 14.5,
@@ -3212,14 +3220,6 @@
           "max_obs_utc": "2026-10-05T15:00:00Z",
           "min_c": 9.3,
           "min_obs_utc": "2026-10-05T06:00:00Z"
-        },
-        {
-          "id": "10836",
-          "name": "STOETTEN",
-          "max_c": 12.8,
-          "max_obs_utc": "2026-10-05T00:00:00Z",
-          "min_c": null,
-          "min_obs_utc": ""
         },
         {
           "id": "10791",
@@ -4689,8 +4689,8 @@
           "name": "CARLSFELD",
           "max_c": 19.3,
           "max_obs_utc": "2026-10-01T13:00:00Z",
-          "min_c": 7.4,
-          "min_obs_utc": "2026-10-04T21:00:00Z"
+          "min_c": 6.3,
+          "min_obs_utc": "2026-10-05T19:00:00Z"
         },
         {
           "id": "10037",
