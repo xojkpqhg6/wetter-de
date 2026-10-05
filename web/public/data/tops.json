@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-05T18:08:02Z",
+  "generated_utc": "2026-10-05T19:08:05Z",
   "periods": {
     "day": {
       "key": "2026-10-05",
@@ -1323,8 +1323,8 @@
           "name": "LEUTKIRCH-HERLAZHFN.",
           "max_c": 18.9,
           "max_obs_utc": "2026-10-05T14:00:00Z",
-          "min_c": 11.2,
-          "min_obs_utc": "2026-10-05T06:00:00Z"
+          "min_c": 10.2,
+          "min_obs_utc": "2026-10-05T18:00:00Z"
         },
         {
           "id": "10037",
@@ -1531,8 +1531,8 @@
           "name": "CARLSFELD",
           "max_c": 17.1,
           "max_obs_utc": "2026-10-05T12:00:00Z",
-          "min_c": 8.4,
-          "min_obs_utc": "2026-10-05T05:00:00Z"
+          "min_c": 8.0,
+          "min_obs_utc": "2026-10-05T18:00:00Z"
         },
         {
           "id": "10534",
@@ -1611,8 +1611,8 @@
           "name": "ZUGSPITZE",
           "max_c": 2.3,
           "max_obs_utc": "2026-10-05T01:00:00Z",
-          "min_c": 0.0,
-          "min_obs_utc": "2026-10-05T15:00:00Z"
+          "min_c": -0.6,
+          "min_obs_utc": "2026-10-05T18:00:00Z"
         }
       ]
     },
@@ -2938,8 +2938,8 @@
           "name": "LEUTKIRCH-HERLAZHFN.",
           "max_c": 18.9,
           "max_obs_utc": "2026-10-05T14:00:00Z",
-          "min_c": 11.2,
-          "min_obs_utc": "2026-10-05T06:00:00Z"
+          "min_c": 10.2,
+          "min_obs_utc": "2026-10-05T18:00:00Z"
         },
         {
           "id": "10037",
@@ -3146,8 +3146,8 @@
           "name": "CARLSFELD",
           "max_c": 17.1,
           "max_obs_utc": "2026-10-05T12:00:00Z",
-          "min_c": 8.4,
-          "min_obs_utc": "2026-10-05T05:00:00Z"
+          "min_c": 8.0,
+          "min_obs_utc": "2026-10-05T18:00:00Z"
         },
         {
           "id": "10534",
@@ -3234,8 +3234,8 @@
           "name": "ZUGSPITZE",
           "max_c": 2.3,
           "max_obs_utc": "2026-10-05T01:00:00Z",
-          "min_c": 0.0,
-          "min_obs_utc": "2026-10-05T15:00:00Z"
+          "min_c": -0.6,
+          "min_obs_utc": "2026-10-05T18:00:00Z"
         }
       ]
     },
@@ -4857,8 +4857,8 @@
           "name": "ZUGSPITZE",
           "max_c": 7.0,
           "max_obs_utc": "2026-10-04T13:00:00Z",
-          "min_c": 0.0,
-          "min_obs_utc": "2026-10-05T15:00:00Z"
+          "min_c": -0.6,
+          "min_obs_utc": "2026-10-05T18:00:00Z"
         }
       ]
     },
