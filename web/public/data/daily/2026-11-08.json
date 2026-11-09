@@ -1375,7 +1375,7 @@
       "min_c": 2.8,
       "min_obs_utc": "2026-11-08T06:00:00Z",
       "name": "STRAUBING",
-      "samples": 20
+      "samples": 24
     },
     "10791": {
       "max_c": 3.3,
@@ -1626,5 +1626,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-11-08T23:41:28Z"
+  "updated_utc": "2026-11-09T06:12:18Z"
 }
