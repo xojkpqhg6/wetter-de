@@ -393,6 +393,14 @@
       "name": "NEURUPPIN-ALT RUPPIN",
       "samples": 24
     },
+    "10281": {
+      "max_c": 4.0,
+      "max_obs_utc": "2026-11-12T15:00:00Z",
+      "min_c": 2.6,
+      "min_obs_utc": "2026-11-12T23:00:00Z",
+      "name": "TROLLENHAGEN",
+      "samples": 10
+    },
     "10282": {
       "max_c": 4.2,
       "max_obs_utc": "2026-11-12T14:00:00Z",
@@ -1618,5 +1626,5 @@
       "samples": 24
     }
   },
-  "updated_utc": "2026-11-13T00:14:52Z"
+  "updated_utc": "2026-11-13T07:52:33Z"
 }
